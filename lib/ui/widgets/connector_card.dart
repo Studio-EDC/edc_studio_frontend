@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,11 +7,13 @@ import 'package:go_router/go_router.dart';
 class ConnectorCard extends StatelessWidget {
   final Connector connector;
   final VoidCallback onToggleState;
+  final VoidCallback onDelete;
 
   const ConnectorCard({
     super.key,
     required this.connector,
     required this.onToggleState,
+    required this.onDelete,
   });
 
   @override
@@ -211,11 +215,13 @@ class ConnectorCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: PopupMenuButton<String>(
-                      onSelected: (value) {
+                      onSelected: (value) async {
                         if (value == 'toggle') {
                           onToggleState();
                         } else if (value == 'update') {
                           context.go('/edc_detail/${connector.id}');
+                        } else if (value == 'delete') {
+                          onDelete();
                         }
                       },
                       itemBuilder: (context) => [

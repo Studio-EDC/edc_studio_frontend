@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/connector_card.dart';
@@ -5,6 +7,7 @@ import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/search_bar.dart';
+import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -132,15 +135,57 @@ class _EDCListPageState extends State<EDCListPage> {
                             if (connector.state == 'running') {
                               showLoader(context);
                               await _edcService.stopConnector(connector.id);
-                              // ignore: use_build_context_synchronously
                               hideLoader(context);
                             } else {
                               showLoader(context);
                               await _edcService.startConnector(connector.id);
-                              // ignore: use_build_context_synchronously
                               hideLoader(context);
                             }
                             _loadConnectors();
+                          },
+                          onDelete: () async {
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Confirm Deletion'),
+                                  content: Text('Are you sure you want to delete "${connector.name}"?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(true),
+                                      child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                            if (confirm == true) {
+                              showLoader(context);
+                              final response = await _edcService.deleteConnectorByID(connector.id);
+                              if (response == true) {
+                                hideLoader(context);
+                                FloatingSnackBar.show(
+                                  context,
+                                  message: 'Connector deleted successfully!',
+                                  type: SnackBarType.success,
+                                  duration: Duration(seconds: 3),
+                                );
+                                _loadConnectors();
+                              } else {
+                                hideLoader(context);
+                                FloatingSnackBar.show(
+                                  context,
+                                  message: 'Error deleting connector.',
+                                  type: SnackBarType.error,
+                                  duration: Duration(seconds: 3),
+                                );
+                              }
+                            }
                           },
                         );
                       },

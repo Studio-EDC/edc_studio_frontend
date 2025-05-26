@@ -5,6 +5,7 @@ import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
+import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -219,8 +220,26 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                       );
                   
                                       showLoader(context);
-                                      await _edcService.createConnector(connector);
-                                      hideLoader(context);
+                                      final response = await _edcService.createConnector(connector);
+                                      if (response != null) {
+                                        hideLoader(context);
+                                        FloatingSnackBar.show(
+                                          context,
+                                          message: 'Connector created successfully!',
+                                          type: SnackBarType.success,
+                                          width: 320,
+                                          duration: Duration(seconds: 3),
+                                        );
+                                      } else {
+                                        hideLoader(context);
+                                        FloatingSnackBar.show(
+                                          context,
+                                          message: 'Error creating connector.',
+                                          type: SnackBarType.error,
+                                          width: 320,
+                                          duration: Duration(seconds: 3),
+                                        );
+                                      }
                                       context.go('/');
                   
                                     }

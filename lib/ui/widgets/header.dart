@@ -26,7 +26,7 @@ class EDCHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navItems = ['EDC List', 'Policies', 'Assets', 'Contracts'];
+    final navItems = ['EDC List', 'Assets', 'Policies', 'Contracts'];
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     return Container(

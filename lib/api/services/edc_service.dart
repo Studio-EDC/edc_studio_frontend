@@ -69,4 +69,14 @@ class EdcService {
       return false;
     }
   }
+
+  /// Delete EDC by id
+  Future<bool> deleteConnectorByID(String id) async {
+    try {
+      await _api.delete('${ApiRoutes.edc}/$id');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

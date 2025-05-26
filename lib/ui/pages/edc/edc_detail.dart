@@ -5,6 +5,7 @@ import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
+import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -246,8 +247,25 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                     );
 
                                     showLoader(context);
-                                    await _edcService.updateConnectorByID(widget.id, updatedConnector);
-                                    hideLoader(context);
+                                    final response = await _edcService.updateConnectorByID(widget.id, updatedConnector);
+                                    if (response == true) {
+                                      FloatingSnackBar.show(
+                                        context,
+                                        message: 'Connector updated successfully!',
+                                        type: SnackBarType.success,
+                                        duration: Duration(seconds: 3),
+                                      );
+                                      hideLoader(context);
+                                    } else {
+                                      FloatingSnackBar.show(
+                                        context,
+                                        message: 'Error updating connector.',
+                                        type: SnackBarType.error,
+                                        duration: Duration(seconds: 3),
+                                      );
+                                      hideLoader(context);
+                                    }
+                                    
                                     context.go('/');
                                   }
                                 },
