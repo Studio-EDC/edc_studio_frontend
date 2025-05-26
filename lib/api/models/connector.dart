@@ -40,6 +40,30 @@ class PortConfig {
   }
 }
 
+class Endpoints {
+  final String management;
+  final String? protocol;
+
+  Endpoints({
+    required this.management,
+    this.protocol,
+  });
+
+  factory Endpoints.fromJson(Map<String, dynamic> json) {
+    return Endpoints(
+      management: json['management'],
+      protocol: json['protocol'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'management': management,
+      'protocol': protocol,
+    };
+  }
+}
+
 class Connector {
   final String id;
   final String name;
@@ -49,7 +73,7 @@ class Connector {
   final PortConfig? ports;
   final String state; // "running" or "stopped"
   final String? keystore_password;
-  final String? endpoint_url;
+  final Endpoints? endpoints_url;
 
   Connector({
     required this.id,
@@ -60,7 +84,7 @@ class Connector {
     this.ports,
     required this.state,
     this.keystore_password,
-    this.endpoint_url
+    this.endpoints_url
   });
 
   factory Connector.fromJson(Map<String, dynamic> json) {
@@ -72,8 +96,8 @@ class Connector {
       mode: json['mode'],
       ports: json['ports'] != null ? PortConfig.fromJson(json['ports']) : null,
       state: json['state'],
-      keystore_password: json['keystore_password'] ?? '',
-      endpoint_url: json['endpoint_url']
+      keystore_password: json['keystore_password'],
+      endpoints_url: json['endpoints_url'] != null ? Endpoints.fromJson(json['endpoints_url']) : null
     );
   }
 
@@ -87,7 +111,7 @@ class Connector {
       'ports': ports?.toJson(),
       'state': state,
       'keystore_password': keystore_password,
-      'endpoint_url': endpoint_url
+      'endpoints_url': endpoints_url?.toJson()
     };
   }
 }

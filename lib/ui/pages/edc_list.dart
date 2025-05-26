@@ -29,10 +29,12 @@ class _EDCListPageState extends State<EDCListPage> {
 
   Future<void> _loadConnectors() async {
     final connectors = await _edcService.getAllConnectors();
-    setState(() {
-      _allConnectors = connectors;
-      _filteredConnectors = connectors;
-    });
+    if (connectors != null) {
+      setState(() {
+        _allConnectors = connectors;
+        _filteredConnectors = connectors;
+      });
+    }
   }
 
   void _filterConnectors(String query) {

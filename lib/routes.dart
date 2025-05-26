@@ -1,3 +1,4 @@
+import 'package:edc_studio/ui/pages/edc_detail.dart';
 import 'package:edc_studio/ui/pages/edc_list.dart';
 import 'package:edc_studio/ui/pages/new_edc.dart';
 import 'package:edc_studio/ui/pages/policies_list.dart';
@@ -20,6 +21,16 @@ final GoRouter router = GoRouter(
         key: state.pageKey,
         child: const NewEDCPage(),
       ),
+    ),
+    GoRoute(
+      path: '/edc_detail/:id',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return _buildFadeTransition(
+          key: state.pageKey,
+          child: EDCDetailPage(id: id),
+        );
+      },
     ),
     GoRoute(
       path: '/policies',

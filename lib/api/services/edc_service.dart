@@ -7,28 +7,66 @@ class EdcService {
   final CommunicationService _api = CommunicationService();
 
   /// Create a new EDC connector
-  Future<String> createConnector(Connector data) async {
-    final result = await _api.post(ApiRoutes.edc, data.toJson());
-    return result['id'];
+  Future<String?> createConnector(Connector data) async {
+    try {
+      final result = await _api.post(ApiRoutes.edc, data.toJson());
+      return result['id'];
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Start an existing EDC connector by ID
-  Future<void> startConnector(String id) async {
-    final path = '${ApiRoutes.edc}/$id/start';
-    await _api.post(path, {});
+  Future<bool> startConnector(String id) async {
+    try {
+      final path = '${ApiRoutes.edc}/$id/start';
+      await _api.post(path, {});
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   /// Stop an existing EDC connector by ID
-  Future<void> stopConnector(String id) async {
-    final path = '${ApiRoutes.edc}/$id/stop';
-    await _api.post(path, {});
+  Future<bool> stopConnector(String id) async {
+    try {
+      final path = '${ApiRoutes.edc}/$id/stop';
+      await _api.post(path, {});
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   /// Get all EDC connectors
-  Future<List<Connector>> getAllConnectors() async {
-    final response = await _api.get(ApiRoutes.edc);
-    return (response as List)
-        .map((json) => Connector.fromJson(json))
-        .toList();
+  Future<List<Connector>?> getAllConnectors() async {
+    try {
+      final response = await _api.get(ApiRoutes.edc);
+      return (response as List)
+          .map((json) => Connector.fromJson(json))
+          .toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Get EDC by id
+  Future<Connector?> getConnectorByID(String id) async {
+    try {
+      final response = await _api.get('${ApiRoutes.edc}/$id');
+      return Connector.fromJson(response);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Update EDC by id
+  Future<bool> updateConnectorByID(String id, Connector connector) async {
+    try {
+      await _api.put('${ApiRoutes.edc}/$id', connector.toJson());
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

@@ -26,7 +26,8 @@ class _NewEDCPageState extends State<NewEDCPage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _keystorePasswordController = TextEditingController();
-  final _endpointUrlController = TextEditingController();
+  final _managementEndpointUrlController = TextEditingController();
+  final _protocolEndpointUrlController = TextEditingController();
 
   final _portControllers = {
     'http': TextEditingController(),
@@ -163,8 +164,16 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 ),
                               ] else if (_mode == 'remote') ...[
                                 TextFormField(
-                                  controller: _endpointUrlController,
-                                  decoration: _inputStyle('Endpoint URL'),
+                                  controller: _managementEndpointUrlController,
+                                  decoration: _inputStyle('Management endpoint URL'),
+                                  keyboardType: TextInputType.url,
+                                ),
+                                if (_connectorType == 'provider')
+                                const SizedBox(height: 16),
+                                if (_connectorType == 'provider')
+                                TextFormField(
+                                  controller: _protocolEndpointUrlController,
+                                  decoration: _inputStyle('Protocol endpoint URL'),
                                   keyboardType: TextInputType.url,
                                 ),
                               ],
@@ -187,6 +196,15 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                           version: int.parse(_portControllers['version']!.text),
                                         );
                                       }
+
+                                      Endpoints? endpoints;
+
+                                      if (_mode == 'remote') {
+                                        endpoints = Endpoints(
+                                          management: _managementEndpointUrlController.text, 
+                                          protocol: _protocolEndpointUrlController.text.isNotEmpty ? _protocolEndpointUrlController.text : null
+                                        );
+                                      }
                   
                                       Connector connector = Connector(
                                         id: '', 
@@ -197,7 +215,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                         ports: portConfig,
                                         keystore_password: _keystorePasswordController.text.isNotEmpty ? _keystorePasswordController.text : null,
                                         state: 'stopped',
-                                        endpoint_url: _endpointUrlController.text
+                                        endpoints_url: endpoints
                                       );
                   
                                       showLoader(context);

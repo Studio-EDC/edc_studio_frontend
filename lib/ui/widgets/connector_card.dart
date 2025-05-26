@@ -1,5 +1,6 @@
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ConnectorCard extends StatelessWidget {
   final Connector connector;
@@ -211,7 +212,11 @@ class ConnectorCard extends StatelessWidget {
                     alignment: Alignment.center,
                     child: PopupMenuButton<String>(
                       onSelected: (value) {
-                        if (value == 'toggle') onToggleState();
+                        if (value == 'toggle') {
+                          onToggleState();
+                        } else if (value == 'update') {
+                          context.go('/edc_detail/${connector.id}');
+                        }
                       },
                       itemBuilder: (context) => [
                         if (connector.mode == 'managed')
