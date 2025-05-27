@@ -49,9 +49,9 @@ class _AssetsListPageState extends State<AssetsListPage> {
   }
 
   List<Connector> _allConnectors = [];
-    String _selectedConnectorId = '';
+  String _selectedConnectorId = '';
 
-    Future<void> _loadConnectors() async {
+  Future<void> _loadConnectors() async {
     final connectors = await _edcService.getAllConnectors();
     if (connectors != null) {
       final providers = connectors.where((c) => c.type == 'provider').toList();
@@ -112,7 +112,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                           items: _allConnectors.map((connector) {
                             return DropdownMenuItem<String>(
                               value: connector.id,
-                              child: Text(connector.name),
+                              child: Text(connector.name, style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                             );
                           }).toList(),
                         ),

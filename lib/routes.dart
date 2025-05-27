@@ -1,4 +1,5 @@
 import 'package:edc_studio/ui/pages/assets/assets_list.dart';
+import 'package:edc_studio/ui/pages/assets/new_asset.dart';
 import 'package:edc_studio/ui/pages/edc/edc_detail.dart';
 import 'package:edc_studio/ui/pages/edc/edc_list.dart';
 import 'package:edc_studio/ui/pages/edc/new_edc.dart';
@@ -45,6 +46,13 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => _buildFadeTransition(
         key: state.pageKey,
         child: const AssetsListPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/new_asset',
+      pageBuilder: (context, state) => _buildFadeTransition(
+        key: state.pageKey,
+        child: const NewAssetPage(),
       ),
     ),
     GoRoute(

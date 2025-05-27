@@ -1,5 +1,5 @@
 class Asset {
-  final String id;
+  final String? id;
   final String assetId;
   final String name;
   final String contentType;
@@ -10,7 +10,7 @@ class Asset {
   final String edc;
 
   Asset({
-    required this.id,
+    this.id,
     required this.assetId,
     required this.name,
     required this.contentType,
