@@ -3,6 +3,7 @@ import 'package:edc_studio/ui/pages/assets/new_asset.dart';
 import 'package:edc_studio/ui/pages/edc/edc_detail.dart';
 import 'package:edc_studio/ui/pages/edc/edc_list.dart';
 import 'package:edc_studio/ui/pages/edc/new_edc.dart';
+import 'package:edc_studio/ui/pages/policies/new_policy.dart';
 import 'package:edc_studio/ui/pages/policies/policies_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -39,6 +40,13 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => _buildFadeTransition(
         key: state.pageKey,
         child: const PoliciesListPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/new_policy',
+      pageBuilder: (context, state) => _buildFadeTransition(
+        key: state.pageKey,
+        child: const NewPolicyPage(),
       ),
     ),
     GoRoute(

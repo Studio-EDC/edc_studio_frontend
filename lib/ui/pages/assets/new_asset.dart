@@ -98,7 +98,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'New EDC',
+                                'New Asset',
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
