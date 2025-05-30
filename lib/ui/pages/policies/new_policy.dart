@@ -317,8 +317,6 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                         policyId: _policyIdController.text, 
                                         policy: policyDef,
                                       );
-
-                                      print(policy.toJson());
                   
                                       showLoader(context);
                                       final response = await _policyService.createPolicy(policy);

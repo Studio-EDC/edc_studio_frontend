@@ -125,12 +125,14 @@ class PolicyDefinition {
 }
 
 class Policy {
+  final String? id;
   final String edc;
   final String policyId;
   final PolicyDefinition policy;
   final Map<String, dynamic> context;
 
   Policy({
+    this.id,
     required this.edc,
     required this.policyId,
     required this.policy,
@@ -139,6 +141,7 @@ class Policy {
 
   factory Policy.fromJson(Map<String, dynamic> json) {
     return Policy(
+      id: json['id'],
       edc: json['edc'],
       policyId: json['policy_id'],
       policy: PolicyDefinition.fromJson(json['policy']),
@@ -149,6 +152,7 @@ class Policy {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'edc': edc,
       'policy_id': policyId,
       'policy': policy.toJson(),

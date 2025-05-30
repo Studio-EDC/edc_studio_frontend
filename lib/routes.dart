@@ -1,5 +1,7 @@
 import 'package:edc_studio/ui/pages/assets/assets_list.dart';
 import 'package:edc_studio/ui/pages/assets/new_asset.dart';
+import 'package:edc_studio/ui/pages/contracts/contracts_list.dart';
+import 'package:edc_studio/ui/pages/contracts/new_contract.dart';
 import 'package:edc_studio/ui/pages/edc/edc_detail.dart';
 import 'package:edc_studio/ui/pages/edc/edc_list.dart';
 import 'package:edc_studio/ui/pages/edc/new_edc.dart';
@@ -65,7 +67,17 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/contracts',
-      builder: (context, state) => const PoliciesListPage(),
+      pageBuilder: (context, state) => _buildFadeTransition(
+        key: state.pageKey,
+        child: const ContractsListPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/new_contract',
+      pageBuilder: (context, state) => _buildFadeTransition(
+        key: state.pageKey,
+        child: const NewContractPage(),
+      ),
     ),
   ],
 );
