@@ -19,6 +19,8 @@ class EDCHeader extends StatelessWidget {
         return '/assets';
       case 'Contracts':
         return '/contracts';
+      case 'Transfers':
+        return '/transfers';
       default:
         return '/';
     }
@@ -26,7 +28,7 @@ class EDCHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navItems = ['EDC List', 'Assets', 'Policies', 'Contracts'];
+    final navItems = ['EDC List', 'Assets', 'Policies', 'Contracts', 'Transfers'];
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     return Container(
