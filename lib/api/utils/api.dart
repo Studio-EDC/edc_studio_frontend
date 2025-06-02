@@ -6,4 +6,5 @@ class ApiRoutes {
   static const assets = '/assets';
   static const policies = '/policies';
   static const contracts = '/contracts';
+  static const transfers = '/transfers';
 }

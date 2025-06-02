@@ -37,6 +37,16 @@ class AssetService {
     }
   }
 
+  /// Get asset by ID
+  Future<Asset?> getAssetByAssetId(String assetId) async {
+    try {
+      final response = await _api.get('${ApiRoutes.assets}/by-asset-id/$assetId');
+      return Asset.fromJson(response);
+    } catch (e) {
+      return null;
+    }
+  }
+
   /// Update asset by ID
   Future<bool> updateAsset(String id, Map<String, dynamic> updates) async {
     try {
