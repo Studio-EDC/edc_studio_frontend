@@ -13,6 +13,7 @@ import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class NewTransferPage extends StatefulWidget {
@@ -135,6 +136,8 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
   String? transferProcessID;
   String? transferState;
+  String? authorization;
+  String? endpoint;
 
 
   @override
@@ -169,7 +172,9 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         negotiateContractId: contractNegotiationId ?? '', 
                         contractAgreementId: contractAgreementId ?? '',
                         transferProcessID: transferProcessID ?? '',
-                        transferFlow: _selectedTransferFlow ?? ''
+                        transferFlow: _selectedTransferFlow ?? '',
+                        endpoint: endpoint,
+                        authorization: authorization
                       );
                       final response = await _transfersService.createTransfer(transfer);
                       if (response != null) {
@@ -592,204 +597,479 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         fontSize: 15,
                       ),
                     ),
-                    content: _selectedTransferFlow == 'push' ?
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Performing a file transfer',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          '• The consumer will initiate a file transfer.\n'
-                          '• The Provider Control Plane retrieves the DataAddress of the actual data source and creates a DataFlowRequest.\n'
-                          '• The Provider Data Plane fetches data from the actual data source.\n'
-                          '• The Provider Data Plane pushes data to the consumer service.',
-                          style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          '1. Start a HTTP server',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'As a pre-requisite, you need to have a logging webserver that runs on port 4000 and logs all the incoming requests. The data will be sent to this server.',
-                          style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
-                        ),
-                        const SizedBox(height: 16),
-                        OutlinedButton.icon(
-                          onPressed: () async {
-                            if (httpLoggerStarted) {
-                              showLoader(context);
-                              final success = await _transfersService.stopHttpLogger();
-                              hideLoader(context);
-
-                              if (success == null) {
-                                FloatingSnackBar.show(
-                                  context,
-                                  message: 'Failed to start HTTP server.',
-                                  type: SnackBarType.error,
-                                  width: 320,
-                                  duration: Duration(seconds: 3),
-                                );
-                              } else {
-                                setState(() {
-                                  httpLoggerStarted = false;
-                                });
-                              }
-                            } else {
-                              showLoader(context);
-                              final success = await _transfersService.startHttpLogger();
-                              hideLoader(context);
-
-                              if (success == null) {
-                                FloatingSnackBar.show(
-                                  context,
-                                  message: 'Failed to start HTTP server.',
-                                  type: SnackBarType.error,
-                                  width: 320,
-                                  duration: Duration(seconds: 3),
-                                );
-                              } else {
-                                setState(() {
-                                  httpLoggerStarted = true;
-                                });
-                              }
-                            }
-                          },
-                          icon: httpLoggerStarted ?  const Icon(Icons.stop, color: Colors.red) : const Icon(Icons.play_arrow, color: Colors.green),
-                          label: Text(
-                            httpLoggerStarted ? 'Stop HTTP server' : 'Start HTTP server',
+                    content: _selectedTransferFlow == 'push' 
+                      ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Performing a file transfer',
                             style: TextStyle(
-                              color: httpLoggerStarted ?  Colors.red : Colors.green,
-                              fontSize: 15,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32),
+                          const SizedBox(height: 12),
+                          Text(
+                            '• The consumer will initiate a file transfer.\n'
+                            '• The Provider Control Plane retrieves the DataAddress of the actual data source and creates a DataFlowRequest.\n'
+                            '• The Provider Data Plane fetches data from the actual data source.\n'
+                            '• The Provider Data Plane pushes data to the consumer service.',
+                            style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                          ),
+                          const SizedBox(height: 24),
+                          Text(
+                            '1. Start a HTTP server',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                           ),
-                        ),
-                        const SizedBox(height: 50),
-                        Text(
-                          '2. Start the transfer',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Theme.of(context).colorScheme.secondary,
+                          const SizedBox(height: 12),
+                          Text(
+                            'As a pre-requisite, you need to have a logging webserver that runs on port 4000 and logs all the incoming requests. The data will be sent to this server.',
+                            style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'By clicking the button below, the system will automatically initiate the data transfer using the previously negotiated contract agreement, selected asset and policy.',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'All necessary information will be included in the request, and the provider will begin sending the data to the configured destination.',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        OutlinedButton.icon(
-                          onPressed: () async {
-                            showLoader(context);
-                            final response = await _transfersService.startTransfer(consumerID ?? '', providerID ?? '', contractAgreementId ?? '');
-                            if (response != null) {
-                              setState(() {
-                                transferProcessID = response['@id'];
-                              });
+                          const SizedBox(height: 16),
+                          OutlinedButton.icon(
+                            onPressed: () async {
+                              if (httpLoggerStarted) {
+                                showLoader(context);
+                                final success = await _transfersService.stopHttpLogger();
+                                hideLoader(context);
 
-                              Map<String, dynamic>? responseCheck;
-                              String state = '';
-
-                              for (int i = 0; i < 10; i++) {
-                                await Future.delayed(const Duration(seconds: 2));
-                                responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
-
-                                if (responseCheck != null) {
+                                if (success == null) {
+                                  FloatingSnackBar.show(
+                                    context,
+                                    message: 'Failed to start HTTP server.',
+                                    type: SnackBarType.error,
+                                    width: 320,
+                                    duration: Duration(seconds: 3),
+                                  );
+                                } else {
                                   setState(() {
-                                    transferState = responseCheck!['state'];
+                                    httpLoggerStarted = false;
                                   });
-                                  state = responseCheck['state'] ?? '';
-                                  if (state == 'COMPLETED') break;
+                                }
+                              } else {
+                                showLoader(context);
+                                final success = await _transfersService.startHttpLogger();
+                                hideLoader(context);
+
+                                if (success == null) {
+                                  FloatingSnackBar.show(
+                                    context,
+                                    message: 'Failed to start HTTP server.',
+                                    type: SnackBarType.error,
+                                    width: 320,
+                                    duration: Duration(seconds: 3),
+                                  );
+                                } else {
+                                  setState(() {
+                                    httpLoggerStarted = true;
+                                  });
                                 }
                               }
+                            },
+                            icon: httpLoggerStarted ?  const Icon(Icons.stop, color: Colors.red) : const Icon(Icons.play_arrow, color: Colors.green),
+                            label: Text(
+                              httpLoggerStarted ? 'Stop HTTP server' : 'Start HTTP server',
+                              style: TextStyle(
+                                color: httpLoggerStarted ?  Colors.red : Colors.green,
+                                fontSize: 15,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                          Text(
+                            '2. Start the transfer',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'By clicking the button below, the system will automatically initiate the data transfer using the previously negotiated contract agreement, selected asset and policy.',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'All necessary information will be included in the request, and the provider will begin sending the data to the configured destination.',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          OutlinedButton.icon(
+                            onPressed: () async {
+                              showLoader(context);
+                              final response = await _transfersService.startTransfer(consumerID ?? '', providerID ?? '', contractAgreementId ?? '');
+                              if (response != null) {
+                                setState(() {
+                                  transferProcessID = response['@id'];
+                                });
 
-                              hideLoader(context);
-                            } else {
-                              hideLoader(context);
-                              FloatingSnackBar.show(
-                                context,
-                                message: 'Failed to finalize transfer process.',
-                                type: SnackBarType.error,
-                                width: 320,
-                                duration: Duration(seconds: 3),
-                              );
-                            }
-                          },
-                          label: Text(
-                            'Start the transfer',
+                                Map<String, dynamic>? responseCheck;
+                                String state = '';
+
+                                for (int i = 0; i < 10; i++) {
+                                  await Future.delayed(const Duration(seconds: 2));
+                                  responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
+
+                                  if (responseCheck != null) {
+                                    setState(() {
+                                      transferState = responseCheck!['state'];
+                                    });
+                                    state = responseCheck['state'] ?? '';
+                                    if (state == 'COMPLETED') break;
+                                  }
+                                }
+
+                                hideLoader(context);
+                              } else {
+                                hideLoader(context);
+                                FloatingSnackBar.show(
+                                  context,
+                                  message: 'Failed to finalize transfer process.',
+                                  type: SnackBarType.error,
+                                  width: 320,
+                                  duration: Duration(seconds: 3),
+                                );
+                              }
+                            },
+                            label: Text(
+                              'Start the transfer',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 15,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                          if (transferProcessID != null)
+                          Text(
+                            'Transfer process ID obtained: $transferProcessID',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
-                            ),
+                            )
                           ),
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          if (transferProcessID != null)
+                          const SizedBox(height: 16),
+                          if (transferState != null)
+                          Text(
+                            'Transfer state obtained: $transferState',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 15,
+                            )
                           ),
+                          if (transferState != null)
+                          const SizedBox(height: 16),
+                          if (transferState == 'COMPLETED')
+                          LinkWidget(url: 'http://localhost:4000/data'),
+                          if (transferState != null)
+                          const SizedBox(height: 50),
+                        ],
+                      ) 
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Performing a file transfer',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              '• Provide a simple Http Proxy data plane implementation.\n'
+                              '• Perform a file transfer initiated by the consumer.\n'
+                              '• The provider will send an EndpointDataReference to the consumer.\n'
+                              '• The consumer will call the endpoint and fetch the data.',
+                              style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                            ),
+                            const SizedBox(height: 24),
+                            Text(
+                              '1. Start the transfer',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'By clicking the button below, the system will automatically initiate the data transfer using the previously negotiated contract agreement, selected asset and policy.',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            OutlinedButton.icon(
+                              onPressed: () async {
+                                showLoader(context);
+                                final response = await _transfersService.startTransferPull(
+                                  consumerID ?? '', 
+                                  providerID ?? '', 
+                                  contractAgreementId ?? '',
+                                );
+
+                                if (!context.mounted) return;
+
+                                if (response != null) {
+                                  setState(() {
+                                    transferProcessID = response['@id'];
+                                  });
+
+                                  Map<String, dynamic>? responseCheck;
+                                  String state = '';
+
+                                  for (int i = 0; i < 10; i++) {
+                                    await Future.delayed(const Duration(seconds: 2));
+                                    responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
+
+                                    if (responseCheck != null) {
+                                      setState(() {
+                                        transferState = responseCheck!['state'];
+                                      });
+                                      state = responseCheck['state'] ?? '';
+                                      if (state == 'STARTED') break;
+                                    }
+                                  }
+
+                                  if (!context.mounted) return;
+
+                                  if (responseCheck != null) {
+                                    setState(() {
+                                      transferState = responseCheck!['state'];
+                                    });
+
+                                    final responseData = await _transfersService.checkDataPull(
+                                      consumerID ?? '', 
+                                      response['@id'] ?? '',
+                                    );
+
+                                    if (!context.mounted) return;
+
+                                    if (responseData != null) {
+                                      setState(() {
+                                        final originalEndpoint = responseData['endpoint'] as String;
+                                        endpoint = originalEndpoint.replaceFirstMapped(
+                                          RegExp(r'^http:\/\/edc-provider-[\w\d\-]+'),
+                                          (match) => 'http://localhost',
+                                        );
+                                        authorization = responseData['authorization'];
+                                      });
+                                    } else {
+                                      if (context.mounted) {
+                                        hideLoader(context);
+                                        FloatingSnackBar.show(
+                                          context,
+                                          message: 'Failed to finalize transfer process.',
+                                          type: SnackBarType.error,
+                                          width: 320,
+                                          duration: Duration(seconds: 3),
+                                        );
+                                      }
+                                      return;
+                                    }
+                                  } else {
+                                    if (context.mounted) {
+                                      hideLoader(context);
+                                      FloatingSnackBar.show(
+                                        context,
+                                        message: 'Failed to finalize transfer process.',
+                                        type: SnackBarType.error,
+                                        width: 320,
+                                        duration: Duration(seconds: 3),
+                                      );
+                                    }
+                                    return;
+                                  }
+
+                                  if (context.mounted) {
+                                    hideLoader(context);
+                                  }
+
+                                } else {
+                                  if (context.mounted) {
+                                    hideLoader(context);
+                                    FloatingSnackBar.show(
+                                      context,
+                                      message: 'Failed to finalize transfer process.',
+                                      type: SnackBarType.error,
+                                      width: 320,
+                                      duration: Duration(seconds: 3),
+                                    );
+                                  }
+                                }
+                              },
+                              label: Text(
+                                'Start the transfer',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'For the consumer pull scenario the TP will stay in STARTED state after the data has been transferred successfully.',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 50),
+                            if (transferProcessID != null)
+                            Text(
+                              'Transfer process ID obtained: $transferProcessID',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 15,
+                              )
+                            ),
+                            if (transferProcessID != null)
+                            const SizedBox(height: 16),
+                            if (transferState != null)
+                            Text(
+                              'Transfer state obtained: $transferState',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 15,
+                              )
+                            ),
+                            if (authorization != null)
+                            const SizedBox(height: 16),
+                            if (authorization != null)
+                            Text(
+                              'Authorization obtained:',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                            if (authorization != null)
+                            const SizedBox(height: 12),
+                            if (authorization != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '$authorization',
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.copy, size: 20),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(text: authorization ?? ''));
+                                  },
+                                  tooltip: 'Copy authorization',
+                                ),
+                              ],
+                            ),
+                            if (endpoint != null)
+                            const SizedBox(height: 18),
+                            if (endpoint != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Endpoint: $endpoint',
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.copy, size: 20),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(text: endpoint ?? ''));
+                                  },
+                                  tooltip: 'Copy endpoint',
+                                ),
+                              ],
+                            ),
+                            if (endpoint != null && authorization != null)
+                            const SizedBox(height: 16),
+                            if (endpoint != null && authorization != null)
+                            Text(
+                              'To obtain the data you must do the following:',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                            if (endpoint != null && authorization != null)
+                            const SizedBox(height: 12),
+                            if (endpoint != null && authorization != null)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'curl --location --request GET "$endpoint" --header "Authorization: $authorization"',
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.copy, size: 20),
+                                  onPressed: () {
+                                    Clipboard.setData(
+                                      ClipboardData(text: 'curl --location --request GET "$endpoint" --header "Authorization: $authorization"'),
+                                    );
+                                  },
+                                  tooltip: 'Copy curl command',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 50),
+                          ],
                         ),
-                        const SizedBox(height: 50),
-                        if (transferProcessID != null)
-                        Text(
-                          'Transfer process ID obtained: $transferProcessID',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontSize: 15,
-                          )
-                        ),
-                        if (transferProcessID != null)
-                        const SizedBox(height: 16),
-                        if (transferState != null)
-                        Text(
-                          'Transfer state obtained: $transferState',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontSize: 15,
-                          )
-                        ),
-                        if (transferState != null)
-                        const SizedBox(height: 16),
-                        LinkWidget(url: 'http://localhost:4000/data'),
-                        if (transferState != null)
-                        const SizedBox(height: 50),
-                      ],
-                    ) : 
-                    Column(
-                      children: [],
-                    ),
-                    isActive: _currentStep >= 3,
-                    state: _currentStep > 3 ? StepState.complete : StepState.indexed,
+                      isActive: _currentStep >= 3,
+                      state: _currentStep > 3 ? StepState.complete : StepState.indexed,
                   ),
                 ],
               ),

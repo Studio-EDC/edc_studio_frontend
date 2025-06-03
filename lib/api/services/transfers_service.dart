@@ -121,4 +121,50 @@ class TransfersService {
       return null;
     }
   }
+
+  /// Get all
+  Future<List<TransferPopulated>?> getAll() async {
+    try {
+      final response = await _api.get(ApiRoutes.transfers);
+      final transfers = (response as List)
+          .map((json) => TransferPopulated.fromJson(json))
+          .toList();
+      return transfers;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Start transfer pull
+  Future<dynamic> startTransferPull(String consumer, String provider, String contractAgreementId) async {
+    try {
+      final response = await _api.post(
+        '${ApiRoutes.transfers}/start_transfer_pull', 
+        {
+          "consumer": consumer,
+          "provider": provider,
+          "contract_agreement_id": contractAgreementId
+        }
+      );
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Check transfer
+  Future<dynamic> checkDataPull(String consumer, String transferProcessID) async {
+    try {
+      final response = await _api.post(
+        '${ApiRoutes.transfers}/check_data_pull', 
+        {
+          "consumer": consumer,
+          "transfer_process_id": transferProcessID
+        }
+      );
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
 }

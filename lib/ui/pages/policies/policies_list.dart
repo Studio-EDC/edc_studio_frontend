@@ -3,6 +3,7 @@ import 'package:edc_studio/api/models/policy.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/api/services/policies_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
+import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -69,6 +70,7 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     return Scaffold(
+      endDrawer: const MenuDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
