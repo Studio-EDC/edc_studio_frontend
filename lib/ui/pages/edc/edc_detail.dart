@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
@@ -65,7 +66,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData) {
-                  return const Center(child: Text('Connector not found'));
+                  return Center(child: Text('connector_detail_page.not_found'.tr()));
                 }
 
                 final connector = snapshot.data!;
@@ -113,7 +114,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Connector Details',
+                            Text('connector_detail_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
@@ -121,7 +122,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                             const SizedBox(height: 24),
 
                             // Mode
-                            Text('What is the connector mode?',
+                            Text('connector_detail_page.mode_question'.tr(),
                                 style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                             const SizedBox(height: 8),
                             Row(
@@ -131,14 +132,14 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   groupValue: _mode,
                                   onChanged: (value) => setState(() => _mode = value!),
                                 ),
-                                Text('Managed', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text('connector_detail_page.managed'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                                 const SizedBox(width: 24),
                                 Radio<String>(
                                   value: 'remote',
                                   groupValue: _mode,
                                   onChanged: (value) => setState(() => _mode = value!),
                                 ),
-                                Text('Remote', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text('connector_detail_page.remote'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                               ],
                             ),
                             const SizedBox(height: 24),
@@ -146,19 +147,19 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                             // Name
                             TextFormField(
                               controller: _nameController,
-                              decoration: _inputStyle('Name'),
+                              decoration: _inputStyle('connector_detail_page.name'.tr()),
                             ),
                             const SizedBox(height: 16),
 
                             // Description
                             TextFormField(
                               controller: _descriptionController,
-                              decoration: _inputStyle('Description'),
+                              decoration: _inputStyle('connector_detail_page.description'.tr()),
                             ),
                             const SizedBox(height: 24),
 
                             // Type
-                            Text('Type of connector:', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                            Text('connector_detail_page.connector_type'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -167,14 +168,14 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   groupValue: _connectorType,
                                   onChanged: (value) => setState(() => _connectorType = value!),
                                 ),
-                                Text('Consumer', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text('connector_detail_page.consumer'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                                 const SizedBox(width: 24),
                                 Radio<String>(
                                   value: 'provider',
                                   groupValue: _connectorType,
                                   onChanged: (value) => setState(() => _connectorType = value!),
                                 ),
-                                Text('Provider', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text('connector_detail_page.provider'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                               ],
                             ),
                             const SizedBox(height: 24),
@@ -185,19 +186,19 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                               TextFormField(
                                 controller: _keystorePasswordController,
                                 obscureText: true,
-                                decoration: _inputStyle('Keystore Password'),
+                                decoration: _inputStyle('connector_detail_page.keystore_password'.tr()),
                               ),
                             ] else if (_mode == 'remote') ...[
                               TextFormField(
                                 controller: _managementEndpointUrlController,
-                                decoration: _inputStyle('Management endpoint URL'),
+                                decoration: _inputStyle('connector_detail_page.management_url'.tr()),
                                 keyboardType: TextInputType.url,
                               ),
                               if (_connectorType == 'provider') ...[
                                 const SizedBox(height: 16),
                                 TextFormField(
                                   controller: _protocolEndpointUrlController,
-                                  decoration: _inputStyle('Protocol endpoint URL'),
+                                  decoration: _inputStyle('connector_detail_page.protocol_url'.tr()),
                                   keyboardType: TextInputType.url,
                                 ),
                               ],
@@ -251,7 +252,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                     if (response == true) {
                                       FloatingSnackBar.show(
                                         context,
-                                        message: 'Connector updated successfully!',
+                                        message: 'connector_detail_page.success'.tr(),
                                         type: SnackBarType.success,
                                         duration: Duration(seconds: 3),
                                       );
@@ -259,7 +260,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                     } else {
                                       FloatingSnackBar.show(
                                         context,
-                                        message: 'Error updating connector.',
+                                        message: 'connector_detail_page.error'.tr(),
                                         type: SnackBarType.error,
                                         duration: Duration(seconds: 3),
                                       );
@@ -276,7 +277,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                 ),
-                                child: const Text('Update', style: TextStyle(color: Colors.white, fontSize: 15)),
+                                child: Text('update'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
                               ),
                             )
                           ],
@@ -300,7 +301,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
         spacing: 16,
         runSpacing: 16,
         children: items.map((entry) {
-          final label = '${entry.key[0].toUpperCase()}${entry.key.substring(1)} Port';
+          final label = 'connector_detail_page.ports.${entry.key}'.tr();
           return SizedBox(
             width: double.infinity,
             child: TextFormField(
@@ -317,7 +318,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
 
       for (var i = 0; i < items.length; i += itemsPerRow) {
         final rowItems = items.skip(i).take(itemsPerRow).map((entry) {
-          final label = '${entry.key[0].toUpperCase()}${entry.key.substring(1)} Port';
+          final label = 'connector_detail_page.ports.${entry.key}'.tr();
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.only(right: 16),

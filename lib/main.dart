@@ -1,10 +1,20 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   setPathUrlStrategy();
-  runApp(MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('es'), Locale('ca')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,6 +27,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'EDC Studio',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       routerConfig: _router,
       theme: ThemeData(
         useMaterial3: true,

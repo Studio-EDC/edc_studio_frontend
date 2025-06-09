@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
@@ -80,7 +81,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'New EDC',
+                                'new_connector_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
@@ -89,7 +90,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               const SizedBox(height: 24),
 
                               Text(
-                                'What is the connector mode?',
+                                'connector_detail_page.mode_question'.tr(),
                                 style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                               ),
                               const SizedBox(height: 8),
@@ -100,14 +101,14 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                     groupValue: _mode,
                                     onChanged: (value) => setState(() => _mode = value!),
                                   ),
-                                  Text('Managed', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                  Text('connector_detail_page.managed'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                                   const SizedBox(width: 24),
                                   Radio<String>(
                                     value: 'remote',
                                     groupValue: _mode,
                                     onChanged: (value) => setState(() => _mode = value!),
                                   ),
-                                  Text('Remote', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                  Text('connector_detail_page.remote'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                                 ],
                               ),
                               const SizedBox(height: 24),
@@ -115,7 +116,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               // Name
                               TextFormField(
                                 controller: _nameController,
-                                decoration: _inputStyle('Name'),
+                                decoration: _inputStyle('connector_detail_page.name'.tr()),
                               ),
                   
                               const SizedBox(height: 16),
@@ -123,12 +124,12 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               // Description
                               TextFormField(
                                 controller: _descriptionController,
-                                decoration: _inputStyle('Description'),
+                                decoration: _inputStyle('connector_detail_page.description'.tr()),
                               ),
                               const SizedBox(height: 24),
                   
                               // Radio
-                              Text('Type of connector:', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                              Text('connector_detail_page.connector_type'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                               const SizedBox(height: 8),
                               Row(
                                 children: [
@@ -138,7 +139,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                     onChanged: (value) => setState(() => _connectorType = value!),
                                   ),
                                   Text(
-                                    'Consumer',
+                                    'connector_detail_page.consumer'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                   const SizedBox(width: 24),
@@ -148,7 +149,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                     onChanged: (value) => setState(() => _connectorType = value!),
                                   ),
                                   Text(
-                                    'Provider',
+                                    'connector_detail_page.provider'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                 ],
@@ -161,12 +162,12 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 TextFormField(
                                   controller: _keystorePasswordController,
                                   obscureText: true,
-                                  decoration: _inputStyle('Keystore Password'),
+                                  decoration: _inputStyle('connector_detail_page.keystore_password'.tr()),
                                 ),
                               ] else if (_mode == 'remote') ...[
                                 TextFormField(
                                   controller: _managementEndpointUrlController,
-                                  decoration: _inputStyle('Management endpoint URL'),
+                                  decoration: _inputStyle('connector_detail_page.management_url'.tr()),
                                   keyboardType: TextInputType.url,
                                 ),
                                 if (_connectorType == 'provider')
@@ -174,7 +175,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 if (_connectorType == 'provider')
                                 TextFormField(
                                   controller: _protocolEndpointUrlController,
-                                  decoration: _inputStyle('Protocol endpoint URL'),
+                                  decoration: _inputStyle('connector_detail_page.protocol_url'.tr()),
                                   keyboardType: TextInputType.url,
                                 ),
                               ],
@@ -225,7 +226,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Connector created successfully!',
+                                          message: 'new_connector_page.success'.tr(),
                                           type: SnackBarType.success,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -234,7 +235,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Error creating connector.',
+                                          message: 'new_connector_page.error'.tr(),
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -251,7 +252,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                     ),
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                   ),
-                                  child: const Text('Create', style: TextStyle(color: Colors.white, fontSize: 15)),
+                                  child: Text('create'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
                                 ),
                               )
                             ],

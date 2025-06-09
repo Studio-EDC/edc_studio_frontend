@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/services/assets_service.dart';
@@ -98,7 +99,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'New Asset',
+                                'new_asset_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
@@ -114,7 +115,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                 runSpacing: 16,
                                 children: [
                                   Text(
-                                    'Select the EDC you want to create the asset for:',
+                                    'new_asset_page.select_edc'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                   SizedBox(
@@ -150,7 +151,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                               const SizedBox(height: 16),
 
                               Text(
-                                'Properties:',
+                                'new_asset_page.properties'.tr(),
                                 style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)
                               ),
 
@@ -168,21 +169,21 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _assetIdController,
-                                        decoration: _inputStyle('Asset ID'),
+                                        decoration: _inputStyle('new_asset_page.asset_id'.tr()),
                                       ),
                                     ),
                                     SizedBox(
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _nameController,
-                                        decoration: _inputStyle('Name'),
+                                        decoration: _inputStyle('new_asset_page.name'.tr()),
                                       ),
                                     ),
                                     SizedBox(
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _contentTypeController,
-                                        decoration: _inputStyle('Content-Type'),
+                                        decoration: _inputStyle('new_asset_page.content_type'.tr()),
                                       ),
                                     ),
                                   ],
@@ -193,7 +194,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                               const SizedBox(height: 24),
                   
                               // Radio
-                              Text('Data address:', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                              Text('new_asset_page.data_address'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
 
                               const SizedBox(height: 16),
 
@@ -209,7 +210,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _dataAddressNameController,
-                                        decoration: _inputStyle('Data Address Name'),
+                                        decoration: _inputStyle('new_asset_page.data_address_name'.tr()),
                                       ),
                                     ),
                                     const SizedBox(width: 105),
@@ -219,7 +220,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Data address type:'
+                                            'new_asset_page.data_address_type'.tr()
                                           ),
                                           const SizedBox(height: 8),
                                           RadioListTile<String>(
@@ -227,7 +228,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                             groupValue: dataAddressTypeController,
                                             onChanged: (value) => setState(() => dataAddressTypeController = value!),
                                             title: Text(
-                                              'HttpData',
+                                              'new_asset_page.httpdata'.tr(),
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Theme.of(context).colorScheme.secondary,
@@ -243,7 +244,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                             groupValue: dataAddressTypeController,
                                             onChanged: (value) => setState(() => dataAddressTypeController = value!),
                                             title: Text(
-                                              'File',
+                                              'new_asset_page.file'.tr(),
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Theme.of(context).colorScheme.secondary,
@@ -263,7 +264,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Proxy path:'
+                                            'new_asset_page.proxy_path'.tr(),
                                           ),
                                           const SizedBox(height: 8),
                                           RadioListTile<String>(
@@ -271,7 +272,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                             groupValue: dataAddressProxyController,
                                             onChanged: (value) => setState(() => dataAddressProxyController = value!),
                                             title: Text(
-                                              'True',
+                                              'new_asset_page.true'.tr(),
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Theme.of(context).colorScheme.secondary,
@@ -287,7 +288,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                             groupValue: dataAddressProxyController,
                                             onChanged: (value) => setState(() => dataAddressProxyController = value!),
                                             title: Text(
-                                              'False',
+                                              'new_asset_page.false'.tr(),
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Theme.of(context).colorScheme.secondary,
@@ -306,7 +307,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                               const SizedBox(height: 24),
                               TextFormField(
                                 controller: _baseURLController,
-                                decoration: _inputStyle('Base URL'),
+                                decoration: _inputStyle('new_asset_page.base_url'.tr()),
                               ),
                               
                               const SizedBox(height: 32),
@@ -333,7 +334,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Asset created successfully!',
+                                          message: 'new_asset_page.success'.tr(),
                                           type: SnackBarType.success,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -342,7 +343,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Error creating asset.',
+                                          message: 'new_asset_page.error'.tr(),
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -359,7 +360,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                     ),
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                   ),
-                                  child: const Text('Create', style: TextStyle(color: Colors.white, fontSize: 15)),
+                                  child: Text('create'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
                                 ),
                               )
                   

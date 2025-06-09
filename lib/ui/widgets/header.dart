@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,15 +12,15 @@ class EDCHeader extends StatelessWidget {
 
   String _pageToPath(String page) {
     switch (page) {
-      case 'EDC List':
+      case 'edc_list':
         return '/';
-      case 'Policies':
+      case 'policies':
         return '/policies';
-      case 'Assets':
+      case 'assets':
         return '/assets';
-      case 'Contracts':
+      case 'contracts':
         return '/contracts';
-      case 'Transfers':
+      case 'transfers':
         return '/transfers';
       default:
         return '/';
@@ -28,7 +29,7 @@ class EDCHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navItems = ['EDC List', 'Assets', 'Policies', 'Contracts', 'Transfers'];
+    final navItems = ['edc_list', 'assets', 'policies', 'contracts', 'transfers'];
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     return Container(
@@ -52,6 +53,37 @@ class EDCHeader extends StatelessWidget {
 
           Row(
             children: [
+
+              if (isMobile)
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: context.locale.languageCode,
+                    dropdownColor: Colors.white,
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        context.setLocale(Locale(value));
+                      }
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        value: 'es',
+                        child: Image.asset('assets/flags/es.png', width: 24),
+                      ),
+                      DropdownMenuItem(
+                        value: 'ca',
+                        child: Image.asset('assets/flags/cat.png', width: 24),
+                      ),
+                      DropdownMenuItem(
+                        value: 'en',
+                        child: Image.asset('assets/flags/en.png', width: 24),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
               if (!isMobile)
                 ...navItems.map((item) {
                   final isActive = item == currentPage;
@@ -60,7 +92,7 @@ class EDCHeader extends StatelessWidget {
                     child: TextButton(
                       onPressed: () => context.go(_pageToPath(item)),
                       child: Text(
-                        item,
+                        item.tr(),
                         style: TextStyle(
                           color: isActive
                               ? Colors.white
@@ -79,6 +111,39 @@ class EDCHeader extends StatelessWidget {
                     Scaffold.of(context).openEndDrawer();
                   },
                 ),
+
+              if (isMobile) const SizedBox(width: 20),
+              
+              if (!isMobile)
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: context.locale.languageCode,
+                    dropdownColor: Colors.white,
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        context.setLocale(Locale(value));
+                      }
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        value: 'es',
+                        child: Image.asset('assets/flags/es.png', width: 24),
+                      ),
+                      DropdownMenuItem(
+                        value: 'ca',
+                        child: Image.asset('assets/flags/cat.png', width: 24),
+                      ),
+                      DropdownMenuItem(
+                        value: 'en',
+                        child: Image.asset('assets/flags/en.png', width: 24),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
               if (!isMobile) 
                 const SizedBox(width: 80)
               else 

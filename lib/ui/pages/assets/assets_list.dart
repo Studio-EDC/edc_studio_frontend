@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/services/assets_service.dart';
@@ -77,7 +78,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            EDCHeader(currentPage: 'Assets'),
+            EDCHeader(currentPage: 'assets'),
             Padding(
               padding: isMobile
                   ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
@@ -87,7 +88,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                 children: [
                   const SizedBox(height: 15),
                   Text(
-                    'The provider connector is the one managing assets for which a contract negotiation can be executed. So, select the provider you want to view the assets from:',
+                    'assets_list_page.description'.tr(),
                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(height: 24),
@@ -131,7 +132,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Asset',
+                          hintText: 'assets_list_page.search'.tr(),
                           onChanged: _filterAssets,
                         ),
                         const SizedBox(height: 16),
@@ -139,7 +140,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                           onPressed: () => context.go('/new_asset'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Asset',
+                            'assets_list_page.new_asset'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -158,14 +159,14 @@ class _AssetsListPageState extends State<AssetsListPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Asset',
+                          hintText: 'assets_list_page.search'.tr(),
                           onChanged: _filterAssets,
                         ),
                         OutlinedButton.icon(
                           onPressed: () => context.go('/new_asset'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Asset',
+                            'assets_list_page.new_asset'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -183,9 +184,9 @@ class _AssetsListPageState extends State<AssetsListPage> {
             ),
             Expanded(
               child: _filteredAssets.isEmpty
-                ? const Column(children: [
+                ? Column(children: [
                     SizedBox(height: 100),
-                    Text('No assets found for this provider.')
+                    Text('assets_list_page.no_assets'.tr())
                   ]) 
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
@@ -199,12 +200,12 @@ class _AssetsListPageState extends State<AssetsListPage> {
                           Theme.of(context).colorScheme.tertiary,
                         ),
                         columns: [
-                          DataColumn(label: Text('Asset ID', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Name', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Content-Type', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Base URL', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Proxy', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Actions', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('assets_list_page.asset_id'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('assets_list_page.name'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('assets_list_page.content_type'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('assets_list_page.base_url'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('assets_list_page.proxy'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                         ],
                         rows: _filteredAssets.map((asset) {
                           return DataRow(cells: [
@@ -221,14 +222,14 @@ class _AssetsListPageState extends State<AssetsListPage> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove_red_eye),
-                                  tooltip: 'View',
+                                  tooltip: 'view'.tr(),
                                   onPressed: () {
                                     // Acción de ver detalle
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline),
-                                  tooltip: 'Delete',
+                                  tooltip: 'delete'.tr(),
                                   onPressed: () {
                                     // Acción de eliminar con confirmación
                                   },

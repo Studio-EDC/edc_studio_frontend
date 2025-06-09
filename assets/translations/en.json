@@ -1,0 +1,150 @@
+{
+  "edc_list": "EDC List",
+  "assets": "Assets",
+  "policies": "Policies",
+  "contracts": "Contracts",
+  "transfers": "Transfers",
+  "confirm_deletion_title": "Confirm Deletion",
+  "confirm_deletion_message": "Are you sure you want to delete \"{name}\"?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "view": "View",
+  "create": "Create",
+  "actions": "Actions",
+  "update": "Update",
+  "edc_list_page": {
+    "new_edc": "New EDC",
+    "search": "Search EDC",
+    "not_found": "No connectors found.",
+    "connector_deleted_success": "Connector deleted successfully!",
+    "connector_deleted_error": "Error deleting connector."
+  },
+  "assets_list_page": {
+    "description": "The provider connector is the one managing assets for which a contract negotiation can be executed. So, select the provider you want to view the assets from:",
+    "search": "Search Asset",
+    "new_asset": "New Asset",
+    "no_assets": "No assets found for this provider.",
+    "asset_id": "Asset ID",
+    "name": "Name",
+    "content_type": "Content-Type",
+    "base_url": "Base URL",
+    "proxy": "Proxy"
+  },
+  "new_asset_page": {
+    "title": "New Asset",
+    "select_edc": "Select the EDC you want to create the asset for:",
+    "properties": "Properties:",
+    "asset_id": "Asset ID",
+    "name": "Name",
+    "content_type": "Content-Type",
+    "data_address_name": "Data Address Name",
+    "base_url": "Base URL",
+    "data_address": "Data address:",
+    "data_address_type": "Data address type:",
+    "proxy_path": "Proxy path:",
+    "httpdata": "HttpData",
+    "file": "File",
+    "true": "True",
+    "false": "False",
+    "success": "Asset created successfully!",
+    "error": "Error creating asset."
+  },
+  "contracts_list_page": {
+    "description": "To ensure an exchange between provider and consumer, the provider must create a contract offer for the asset, on the basis of which a contract agreement can be negotiated. The contract definition associates policies to a selection of assets to generate the contract offers that will be put in the catalog. So, select the provider you want to view the contracts from:",
+    "search": "Search Contract",
+    "new_contract": "New Contract",
+    "not_found": "No contracts found for this provider.",
+    "contract_id": "Contract ID",
+    "access_policy_id": "Access policy ID",
+    "contract_policy_id": "Contract policy ID"
+  },
+  "new_contract_page": {
+    "title": "New Contract",
+    "edc_select": "Select the EDC you want to create the asset for:",
+    "select_connector": "Select the connector",
+    "contract_id": "Contract ID",
+    "access_policy": "Select the policy to use as the contract's access policy:",
+    "select_access_policy": "Select access policy",
+    "contract_policy": "Select the policy to use as the contract's contract policy:",
+    "select_contract_policy": "Select contract policy",
+    "select_assets": "Select the assets to include in this contract:",
+    "success": "Contract created successfully!",
+    "error": "Error creating contract."
+  },
+  "connector_detail_page": {
+    "title": "Connector Details",
+    "mode_question": "What is the connector mode?",
+    "managed": "Managed",
+    "remote": "Remote",
+    "name": "Name",
+    "description": "Description",
+    "connector_type": "Type of connector:",
+    "consumer": "Consumer",
+    "provider": "Provider",
+    "keystore_password": "Keystore Password",
+    "management_url": "Management endpoint URL",
+    "protocol_url": "Protocol endpoint URL",
+    "success": "Connector updated successfully!",
+    "error": "Error updating connector.",
+    "not_found": "Connector not found",
+    "ports": {
+      "http": "HTTP Port",
+      "management": "Management Port",
+      "protocol": "Protocol Port",
+      "public": "Public Port",
+      "control": "Control Port",
+      "version": "Version Port"
+    }
+  },
+  "new_connector_page": {
+    "title": "New EDC",
+    "success": "Connector created successfully!",
+    "error": "Error creating connector."
+  },
+  "policies_list_page": {
+    "title": "Policies",
+    "description": "The provider connector is the one managing policies for which a contract negotiation can be executed. So, select the provider you want to view the policies from:",
+    "search": "Search Policy",
+    "new": "New Policy",
+    "no_policies": "No policies found for this provider.",
+    "columns": {
+      "policy_id": "Policy ID",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "delete": "Delete"
+    }
+  },
+  "new_policy_page": {
+    "title": "New Policy",
+    "select_edc": "Select the EDC you want to create the asset for:",
+    "policy_id": "Policy ID",
+    "permissions": "Permissions",
+    "prohibitions": "Prohibitions",
+    "obligations": "Obligations",
+    "new_permission": "New Permission",
+    "new_prohibition": "New Prohibition",
+    "new_obligation": "New Obligation",
+    "action": "Action",
+    "left_operand": "Left Operand",
+    "operator": "Operator",
+    "right_operand": "Right Operand",
+    "success": "Policy created successfully!",
+    "error": "Error creating policy."
+  },
+  "transfers_list_page": {
+    "title": "Transfers",
+    "search_hint": "Search Transfer",
+    "new_transfer": "New Transfer",
+    "no_transfers": "No transfers found for this provider.",
+    "provider": "Provider",
+    "consumer": "Consumer",
+    "asset": "Asset",
+    "flow_type": "Flow type",
+    "view": "View",
+    "push": "Provider push",
+    "pull": "Consumer pull"
+  }
+
+}

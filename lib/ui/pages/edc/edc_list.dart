@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/connector_card.dart';
@@ -60,7 +61,7 @@ class _EDCListPageState extends State<EDCListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            EDCHeader(currentPage: 'EDC List'),
+            EDCHeader(currentPage: 'edc_list'),
             Padding(
               padding: isMobile
                   ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
@@ -70,7 +71,7 @@ class _EDCListPageState extends State<EDCListPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search EDC',
+                          hintText: 'edc_list_page.search'.tr(),
                           onChanged: _filterConnectors,
                         ),
                         const SizedBox(height: 16),
@@ -78,7 +79,7 @@ class _EDCListPageState extends State<EDCListPage> {
                           onPressed: () => context.go('/new_edc'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New EDC',
+                            'edc_list_page.new_edc'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -97,14 +98,14 @@ class _EDCListPageState extends State<EDCListPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search EDC',
+                          hintText: 'edc_list_page.search'.tr(),
                           onChanged: _filterConnectors,
                         ),
                         OutlinedButton.icon(
                           onPressed: () => context.go('/new_edc'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New EDC',
+                            'edc_list_page.new_edc'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -123,7 +124,7 @@ class _EDCListPageState extends State<EDCListPage> {
 
             Expanded(
               child: _filteredConnectors.isEmpty
-                  ? const Center(child: Text('No connectors found.'))
+                  ? Center(child: Text('edc_list_page.not_found'.tr()))
                   : ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: _filteredConnectors.length,
@@ -148,16 +149,21 @@ class _EDCListPageState extends State<EDCListPage> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('Confirm Deletion'),
-                                  content: Text('Are you sure you want to delete "${connector.name}"?'),
+                                  title: Text('confirm_deletion_title'.tr()),
+                                  content: Text(
+                                    'confirm_deletion_message'.tr(namedArgs: {'name': connector.name}),
+                                  ),
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.of(context).pop(false),
-                                      child: const Text('Cancel'),
+                                      child: Text('cancel'.tr()),
                                     ),
                                     TextButton(
                                       onPressed: () => Navigator.of(context).pop(true),
-                                      child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                      child: Text(
+                                        'delete'.tr(),
+                                        style: const TextStyle(color: Colors.red),
+                                      ),
                                     ),
                                   ],
                                 );
@@ -167,22 +173,22 @@ class _EDCListPageState extends State<EDCListPage> {
                             if (confirm == true) {
                               showLoader(context);
                               final response = await _edcService.deleteConnectorByID(connector.id);
+                              hideLoader(context);
+
                               if (response == true) {
-                                hideLoader(context);
                                 FloatingSnackBar.show(
                                   context,
-                                  message: 'Connector deleted successfully!',
+                                  message: 'edc_list_page.connector_deleted_success'.tr(),
                                   type: SnackBarType.success,
-                                  duration: Duration(seconds: 3),
+                                  duration: const Duration(seconds: 3),
                                 );
                                 _loadConnectors();
                               } else {
-                                hideLoader(context);
                                 FloatingSnackBar.show(
                                   context,
-                                  message: 'Error deleting connector.',
+                                  message: 'edc_list_page.connector_deleted_error'.tr(),
                                   type: SnackBarType.error,
-                                  duration: Duration(seconds: 3),
+                                  duration: const Duration(seconds: 3),
                                 );
                               }
                             }

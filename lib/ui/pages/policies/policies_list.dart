@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/policy.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
@@ -75,7 +76,7 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            EDCHeader(currentPage: 'Policies'),
+            EDCHeader(currentPage: 'policies'),
             Padding(
               padding: isMobile
                   ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
@@ -85,7 +86,7 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                 children: [
                   const SizedBox(height: 15),
                   Text(
-                    'The provider connector is the one managing policies for which a contract negotiation can be executed. So, select the provider you want to view the policies from:',
+                    'policies_list_page.description'.tr(),
                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(height: 24),
@@ -129,7 +130,7 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Policy',
+                          hintText: 'policies_list_page.search'.tr(),
                           onChanged: _filterPolicies,
                         ),
                         const SizedBox(height: 16),
@@ -137,7 +138,7 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                           onPressed: () => context.go('/new_policy'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Policy',
+                            'policies_list_page.new'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -156,14 +157,14 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Policy',
+                          hintText: 'policies_list_page.search'.tr(),
                           onChanged: _filterPolicies,
                         ),
                         OutlinedButton.icon(
                           onPressed: () => context.go('/new_policy'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Policy',
+                            'policies_list_page.new'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -182,9 +183,9 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
 
             Expanded(
               child: _filteredPolicies.isEmpty
-                ? const Column(children: [
+                ? Column(children: [
                     SizedBox(height: 100),
-                    Text('No policies found for this provider.')
+                    Text('policies_list_page.no_policies'.tr())
                   ]) 
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
@@ -198,8 +199,8 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                           Theme.of(context).colorScheme.tertiary,
                         ),
                         columns: [
-                          DataColumn(label: Text('Policy ID', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Actions', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('policies_list_page.columns.policy_id'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('policies_list_page.columns.actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                         ],
                         rows: _filteredPolicies.map((policy) {
                           return DataRow(cells: [
@@ -208,14 +209,14 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove_red_eye),
-                                  tooltip: 'View',
+                                  tooltip: 'view'.tr(),
                                   onPressed: () {
                                     // Acción de ver detalle
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline),
-                                  tooltip: 'Delete',
+                                  tooltip: 'delete'.tr(),
                                   onPressed: () {
                                     // Acción de eliminar con confirmación
                                   },

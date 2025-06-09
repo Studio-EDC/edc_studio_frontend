@@ -1,4 +1,5 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/transfer.dart';
 import 'package:edc_studio/api/services/transfers_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
@@ -60,7 +61,7 @@ class _TransfersListPageState extends State<TransfersListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            EDCHeader(currentPage: 'Transfers'),
+            EDCHeader(currentPage: 'transfers'),
             Padding(
               padding: isMobile
                   ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
@@ -70,7 +71,7 @@ class _TransfersListPageState extends State<TransfersListPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Transfer',
+                          hintText: 'transfers_list_page.search_hint'.tr(),
                           onChanged: _filterTransfers,
                         ),
                         const SizedBox(height: 16),
@@ -78,7 +79,7 @@ class _TransfersListPageState extends State<TransfersListPage> {
                           onPressed: () => context.go('/new_transfer'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Transfer',
+                            'transfers_list_page.new_transfer'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -97,14 +98,14 @@ class _TransfersListPageState extends State<TransfersListPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Transfer',
+                          hintText: 'transfers_list_page.search_hint'.tr(),
                           onChanged: _filterTransfers,
                         ),
                         OutlinedButton.icon(
                           onPressed: () => context.go('/new_transfer'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Transfer',
+                            'transfers_list_page.new_transfer'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -123,9 +124,9 @@ class _TransfersListPageState extends State<TransfersListPage> {
 
             Expanded(
               child: _filteredTransfers.isEmpty 
-                ? const Column(children: [
+                ? Column(children: [
                     SizedBox(height: 100),
-                    Text('No transfers found for this provider.')
+                    Text('transfers_list_page.no_transfers'.tr())
                   ]) 
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
@@ -139,23 +140,23 @@ class _TransfersListPageState extends State<TransfersListPage> {
                           Theme.of(context).colorScheme.tertiary,
                         ),
                         columns: [
-                          DataColumn(label: Text('Provider', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Consumer', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Asset', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Flow type', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Actions', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('transfers_list_page.provider'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('transfers_list_page.consumer'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('transfers_list_page.asset'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('transfers_list_page.flow_type'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                         ],
                         rows: _filteredTransfers.map((transfer) {
                           return DataRow(cells: [
                             DataCell(Text(transfer.provider?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Text(transfer.consumer?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Text(transfer.asset?.assetId ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                            DataCell(Text(transfer.transferFlow == 'push' ? 'Provider push' : 'Consumer pull', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataCell(Text(transfer.transferFlow == 'push' ? 'transfers_list_page.push'.tr() : 'transfers_list_page.pull'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Row(
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove_red_eye),
-                                  tooltip: 'View',
+                                  tooltip: 'view'.tr(),
                                   onPressed: () {
                                     // Acción de ver detalle
                                   },

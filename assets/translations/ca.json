@@ -1,0 +1,10 @@
+{
+  "edc_list": "Llista EDC",
+  "assets": "Actius",
+  "policies": "Polítiques",
+  "contracts": "Contractes",
+  "transfers": "Transferències",
+  "edc_list_page": {
+    "new_edc": "New EDC"
+  }
+}

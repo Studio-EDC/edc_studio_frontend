@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/contract.dart';
@@ -119,7 +120,7 @@ class _NewContractPageState extends State<NewContractPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'New Contract',
+                                'new_contract_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
@@ -135,7 +136,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                 runSpacing: 16,
                                 children: [
                                   Text(
-                                    'Select the EDC you want to create the asset for:',
+                                    'new_contract_page.edc_select'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                   SizedBox(
@@ -150,7 +151,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
                                           value: edcIdSelected,
-                                          hint: Text('Select the connector'),
+                                          hint: Text('new_contract_page.select_connector'.tr()),
                                           icon: const Icon(Icons.arrow_drop_down),
                                           isExpanded: true,
                                           onChanged: (value) {
@@ -175,7 +176,7 @@ class _NewContractPageState extends State<NewContractPage> {
 
                               TextFormField(
                                 controller: _contractIdController,
-                                decoration: _inputStyle('Contract ID'),
+                                decoration: _inputStyle('new_contract_page.contract_id'.tr()),
                               ),
 
                               const SizedBox(height: 16),
@@ -188,7 +189,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                 runSpacing: 16,
                                 children: [
                                   Text(
-                                    "Select the policy to use as the contract's access policy:",
+                                    'new_contract_page.access_policy'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                   SizedBox(
@@ -203,7 +204,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
                                           value: _allPolicies.any((p) => p.id == accessPolicyIdSelected) ? accessPolicyIdSelected : null,
-                                          hint: const Text('Select access policy'),
+                                          hint: Text('new_contract_page.select_access_policy'.tr()),
                                           icon: const Icon(Icons.arrow_drop_down),
                                           isExpanded: true,
                                           onChanged: (value) {
@@ -232,7 +233,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                 runSpacing: 16,
                                 children: [
                                   Text(
-                                    "Select the policy to use as the contract's contract policy:",
+                                    'new_contract_page.contract_policy'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                   SizedBox(
@@ -248,7 +249,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                         child: DropdownButton<String>(
                                           value: _allPolicies.any((p) => p.id == contractPolicyIdSelected) ? contractPolicyIdSelected : null,
                                           icon: const Icon(Icons.arrow_drop_down),
-                                          hint: const Text('Select contract policy'),
+                                          hint: Text('new_contract_page.select_contract_policy'.tr()),
                                           isExpanded: true,
                                           onChanged: (value) {
                                             setState(() => contractPolicyIdSelected = value!);
@@ -271,7 +272,7 @@ class _NewContractPageState extends State<NewContractPage> {
 
                               if (_allAssets.isNotEmpty)
                               Text(
-                                "Select the assets to include in this contract:",
+                                'new_contract_page.select_assets'.tr(),
                                 style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                               ),
 
@@ -329,7 +330,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Contract created successfully!',
+                                          message: 'new_contract_page.success'.tr(),
                                           type: SnackBarType.success,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -338,7 +339,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Error creating contract.',
+                                          message: 'new_contract_page.error'.tr(),
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -355,7 +356,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                     ),
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                   ),
-                                  child: const Text('Create', style: TextStyle(color: Colors.white, fontSize: 15)),
+                                  child: Text('create'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
                                 ),
                               )
                             ],

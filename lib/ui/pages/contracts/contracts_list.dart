@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/contract.dart';
 import 'package:edc_studio/api/services/contracts_service.dart';
@@ -77,7 +78,7 @@ class _ContractsListPageState extends State<ContractsListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            EDCHeader(currentPage: 'Contracts'),
+            EDCHeader(currentPage: 'contracts'),
             Padding(
               padding: isMobile
                   ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
@@ -87,7 +88,7 @@ class _ContractsListPageState extends State<ContractsListPage> {
                 children: [
                   const SizedBox(height: 15),
                   Text(
-                    'To ensure an exchange between provider and consumer, the provider must create a contract offer for the asset, on the basis of which a contract agreement can be negotiated. The contract definition associates policies to a selection of assets to generate the contract offers that will be put in the catalog. So, select the provider you want to view the contracts from:',
+                    'contracts_list_page.description'.tr(),
                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                   ),
                   const SizedBox(height: 24),
@@ -131,7 +132,7 @@ class _ContractsListPageState extends State<ContractsListPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Contract',
+                          hintText: 'contracts_list_page.search'.tr(),
                           onChanged: _filterContracts,
                         ),
                         const SizedBox(height: 16),
@@ -139,7 +140,7 @@ class _ContractsListPageState extends State<ContractsListPage> {
                           onPressed: () => context.go('/new_contract'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Contract',
+                            'contracts_list_page.new_contract'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -158,14 +159,14 @@ class _ContractsListPageState extends State<ContractsListPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SearchBarCustom(
-                          hintText: 'Search Contract',
+                          hintText: 'contracts_list_page.search'.tr(),
                           onChanged: _filterContracts,
                         ),
                         OutlinedButton.icon(
                           onPressed: () => context.go('/new_contract'),
                           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                           label: Text(
-                            'New Contract',
+                            'contracts_list_page.new_contract'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -183,9 +184,9 @@ class _ContractsListPageState extends State<ContractsListPage> {
             ),
             Expanded(
               child: _filteredContracts.isEmpty
-                ? const Column(children: [
+                ? Column(children: [
                     SizedBox(height: 100),
-                    Text('No contracts found for this provider.')
+                    Text('contracts_list_page.not_found'.tr())
                   ]) 
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
@@ -199,10 +200,10 @@ class _ContractsListPageState extends State<ContractsListPage> {
                           Theme.of(context).colorScheme.tertiary,
                         ),
                         columns: [
-                          DataColumn(label: Text('Contract ID', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Access policy ID', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Contract policy ID', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('Actions', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('contracts_list_page.contract_id'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('contracts_list_page.access_policy_id'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('contracts_list_page.contract_policy_id'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                         ],
                         rows: _filteredContracts.map((contract) {
                           return DataRow(cells: [
@@ -213,14 +214,14 @@ class _ContractsListPageState extends State<ContractsListPage> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove_red_eye),
-                                  tooltip: 'View',
+                                  tooltip: 'view'.tr(),
                                   onPressed: () {
                                     // Acción de ver detalle
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline),
-                                  tooltip: 'Delete',
+                                  tooltip: 'delete'.tr(),
                                   onPressed: () {
                                     // Acción de eliminar con confirmación
                                   },

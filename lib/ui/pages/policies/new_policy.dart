@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/policy.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
@@ -99,7 +100,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'New Policy',
+                                'new_policy_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
@@ -115,7 +116,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                 runSpacing: 16,
                                 children: [
                                   Text(
-                                    'Select the EDC you want to create the asset for:',
+                                    'new_policy_page.select_edc'.tr(),
                                     style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                                   ),
                                   SizedBox(
@@ -152,12 +153,12 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
 
                               TextFormField(
                                 controller: _policyIdController,
-                                decoration: _inputStyle('Policy ID'),
+                                decoration: _inputStyle('new_policy_page.policy_id'.tr()),
                               ),
 
                               const SizedBox(height: 16),
 
-                              Text('Permissions: ', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                              Text('new_policy_page.permissions'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
 
                               const SizedBox(height: 16),
 
@@ -188,7 +189,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                   }),
                                   icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                                   label: Text(
-                                    'New Permission',
+                                    'new_policy_page.new_permission'.tr(),
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 15,
@@ -205,7 +206,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
 
                               const SizedBox(height: 16),
 
-                              Text('Prohibitions: ', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                              Text('new_policy_page.prohibitions'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
 
                               const SizedBox(height: 16),
 
@@ -236,7 +237,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                   }),
                                   icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                                   label: Text(
-                                    'New Prohibition',
+                                    'new_policy_page.new_prohibition'.tr(),
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 15,
@@ -253,7 +254,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
 
                               const SizedBox(height: 16),
 
-                              Text('Obligations: ', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                              Text('new_policy_page.obligations'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
 
                               const SizedBox(height: 16),
 
@@ -284,7 +285,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                   }),
                                   icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                                   label: Text(
-                                    'New Obligation',
+                                    'new_policy_page.new_obligation'.tr(),
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 15,
@@ -324,7 +325,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Policy created successfully!',
+                                          message: 'new_policy_page.success'.tr(),
                                           type: SnackBarType.success,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -333,7 +334,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Error creating policy.',
+                                          message: 'new_policy_page.error'.tr(),
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -350,7 +351,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                     ),
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                   ),
-                                  child: const Text('Create', style: TextStyle(color: Colors.white, fontSize: 15)),
+                                  child: Text('create'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
                                 ),
                               )
                             ],
@@ -427,7 +428,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
       SizedBox(
         width: 240,
         child: DropdownButtonFormField<String>(
-          decoration: _inputStyle('Action'),
+          decoration: _inputStyle('new_policy_page.action'.tr()),
           value: rule.action.isNotEmpty ? rule.action : null,
           items: ['USE', 'READ', 'WRITE', 'MODIFY', 'DELETE', 'LOG', 'NOTIFY', 'ANONYMIZE']
               .map((action) => DropdownMenuItem(value: action, child: Text(action)))
@@ -443,7 +444,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
       SizedBox(
         width: 240,
         child: TextFormField(
-          decoration: _inputStyle('Left Operand'),
+          decoration: _inputStyle('new_policy_page.left_operand'.tr()),
           initialValue: constraint.leftOperand,
           onChanged: (value) {
             ruleList[index].constraint![0].leftOperand = value;
@@ -456,7 +457,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
       SizedBox(
         width: 240,
         child: TextFormField(
-          decoration: _inputStyle('Operator'),
+          decoration: _inputStyle('new_policy_page.operator'.tr()),
           initialValue: constraint.operator.id,
           onChanged: (value) {
             ruleList[index].constraint![0].operator.id = value;
@@ -469,7 +470,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
       SizedBox(
         width: 240,
         child: TextFormField(
-          decoration: _inputStyle('Right Operand'),
+          decoration: _inputStyle('new_policy_page.right_operand'.tr()),
           initialValue: constraint.rightOperand,
           onChanged: (value) {
             ruleList[index].constraint![0].rightOperand = value;
