@@ -37,6 +37,7 @@ class _NewContractPageState extends State<NewContractPage> {
   final _contractIdController = TextEditingController();
 
   String? edcIdSelected;
+  String edcStateSelected = '';
   String? accessPolicyIdSelected;
   String? contractPolicyIdSelected;
 
@@ -155,7 +156,11 @@ class _NewContractPageState extends State<NewContractPage> {
                                           icon: const Icon(Icons.arrow_drop_down),
                                           isExpanded: true,
                                           onChanged: (value) {
-                                            setState(() => edcIdSelected = value!);
+                                            setState(() {
+                                              edcIdSelected = value!;
+                                              final selected = _allConnectors.firstWhere((c) => c.id == value);
+                                              edcStateSelected = selected.state;
+                                            });
                                             _loadPolicies(value!);
                                             _loadAssets(value);
                                           },
@@ -170,6 +175,18 @@ class _NewContractPageState extends State<NewContractPage> {
                                     ),
                                   ),
                                 ],
+                              ),
+
+                              if (edcStateSelected == 'stopped')
+                              const SizedBox(height: 16),
+
+                              if (edcStateSelected == 'stopped')
+                              Text(
+                                'new_contract_page.create_req'.tr(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red
+                                ),
                               ),
 
                               const SizedBox(height: 16),

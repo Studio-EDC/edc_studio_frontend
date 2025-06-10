@@ -52,7 +52,8 @@
     "true": "True",
     "false": "False",
     "success": "Asset created successfully!",
-    "error": "Error creating asset."
+    "error": "Error creating asset.",
+    "create_req": "To create the asset, the connector must be running. Go to the EDC list page and start it before creating the asset."
   },
   "contracts_list_page": {
     "description": "To ensure an exchange between provider and consumer, the provider must create a contract offer for the asset, on the basis of which a contract agreement can be negotiated. The contract definition associates policies to a selection of assets to generate the contract offers that will be put in the catalog. So, select the provider you want to view the contracts from:",
@@ -74,7 +75,8 @@
     "select_contract_policy": "Select contract policy",
     "select_assets": "Select the assets to include in this contract:",
     "success": "Contract created successfully!",
-    "error": "Error creating contract."
+    "error": "Error creating contract.",
+    "create_req": "To create the contract, the connector must be running. Go to the EDC list page and start it before creating the contract."
   },
   "connector_detail_page": {
     "title": "Connector Details",
@@ -136,7 +138,8 @@
     "operator": "Operator",
     "right_operand": "Right Operand",
     "success": "Policy created successfully!",
-    "error": "Error creating policy."
+    "error": "Error creating policy.",
+    "create_req": "To create the policy, the connector must be running. Go to the EDC list page and start it before creating the policy."
   },
   "transfers_list_page": {
     "title": "Transfers",
@@ -203,6 +206,7 @@
     "info": "All necessary information will be included in the request, and the provider will begin sending the data to the configured destination.",
     "pull_flow_steps": "• Provide a simple Http Proxy data plane implementation.\n• Perform a file transfer initiated by the consumer.\n• The provider will send an EndpointDataReference to the consumer.\n• The consumer will call the endpoint and fetch the data.",
     "start_transfer_2": "1. Start the transfer",
-    "see_data": "You can see the data here: "
+    "see_data": "You can see the data here: ",
+    "create_req": "To create the transfer, the connector must be running. Go to the EDC list page and start it before creating the transfer."
   }
 }

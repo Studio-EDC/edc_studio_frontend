@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/models/connector.dart';
@@ -35,6 +34,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
   final _baseURLController = TextEditingController();
 
   String edcIdSelected = '';
+  String edcStateSelected = '';
   String dataAddressTypeController = 'HttpData';
   String dataAddressProxyController = 'True';
 
@@ -49,6 +49,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
         setState(() {
           _allConnectors = providers;
           edcIdSelected = providers[0].id;
+          edcStateSelected = providers[0].state;
         });
       }
     }
@@ -133,7 +134,11 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                           icon: const Icon(Icons.arrow_drop_down),
                                           isExpanded: true,
                                           onChanged: (value) {
-                                            setState(() => edcIdSelected = value!);
+                                            setState(() {
+                                              edcIdSelected = value!;
+                                              final selected = _allConnectors.firstWhere((c) => c.id == value);
+                                              edcStateSelected = selected.state;
+                                            });
                                           },
                                           items: _allConnectors.map((connector) {
                                             return DropdownMenuItem<String>(
@@ -146,6 +151,18 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                     ),
                                   ),
                                 ],
+                              ),
+
+                              if (edcStateSelected == 'stopped')
+                              const SizedBox(height: 16),
+
+                              if (edcStateSelected == 'stopped')
+                              Text(
+                                'new_asset_page.create_req'.tr(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red
+                                ),
                               ),
 
                               const SizedBox(height: 16),

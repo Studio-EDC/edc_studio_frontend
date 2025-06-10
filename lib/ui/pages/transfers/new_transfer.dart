@@ -37,6 +37,9 @@ class _NewTransferPageState extends State<NewTransferPage> {
   String? providerID;
   String? consumerID;
 
+  String providerStateSelected = '';
+  String consumerStateSelected = '';
+
   Future<void> _loadProviders() async {
     final connectors = await _edcService.getAllConnectors();
     if (connectors != null) {
@@ -258,7 +261,11 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                     icon: const Icon(Icons.arrow_drop_down),
                                     isExpanded: true,
                                     onChanged: (value) {
-                                      setState(() => providerID = value!);
+                                      setState(() {
+                                        providerID = value!;
+                                        final selected = _allProviders.firstWhere((c) => c.id == value);
+                                        providerStateSelected = selected.state;
+                                      });
                                     },
                                     items: _allProviders.map((connector) {
                                       return DropdownMenuItem<String>(
@@ -271,6 +278,17 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               ),
                             ),
                           ],
+                        ),
+                        if (providerStateSelected == 'stopped')
+                        const SizedBox(height: 16),
+
+                        if (providerStateSelected == 'stopped')
+                        Text(
+                          'new_transfer_page.create_req'.tr(),
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.red
+                          ),
                         ),
                         const SizedBox(height: 50),
                         Wrap(
@@ -300,7 +318,11 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                     icon: const Icon(Icons.arrow_drop_down),
                                     isExpanded: true,
                                     onChanged: (value) {
-                                      setState(() => consumerID = value!);
+                                      setState(() {
+                                        consumerID = value!;
+                                        final selected = _allConsumers.firstWhere((c) => c.id == value);
+                                        consumerStateSelected = selected.state;
+                                      });
                                     },
                                     items: _allConsumers.map((connector) {
                                       return DropdownMenuItem<String>(
@@ -313,6 +335,18 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               ),
                             ),
                           ],
+                        ),
+
+                        if (consumerStateSelected == 'stopped')
+                        const SizedBox(height: 16),
+
+                        if (consumerStateSelected == 'stopped')
+                        Text(
+                          'new_transfer_page.create_req'.tr(),
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.red
+                          ),
                         ),
                         const SizedBox(height: 50),
                         OutlinedButton.icon(

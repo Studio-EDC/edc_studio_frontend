@@ -31,6 +31,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
   final _policyIdController = TextEditingController();
 
   String edcIdSelected = '';
+  String edcStateSelected = '';
 
   List<Connector> _allConnectors = [];
   List<Rule> permissions = [];
@@ -46,6 +47,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
         setState(() {
           _allConnectors = providers;
           edcIdSelected = providers[0].id;
+          edcStateSelected = providers[0].state;
         });
       }
     }
@@ -134,7 +136,11 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                           icon: const Icon(Icons.arrow_drop_down),
                                           isExpanded: true,
                                           onChanged: (value) {
-                                            setState(() => edcIdSelected = value!);
+                                            setState(() {
+                                              edcIdSelected = value!;
+                                              final selected = _allConnectors.firstWhere((c) => c.id == value);
+                                              edcStateSelected = selected.state;
+                                            });
                                           },
                                           items: _allConnectors.map((connector) {
                                             return DropdownMenuItem<String>(
@@ -147,6 +153,18 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                     ),
                                   ),
                                 ],
+                              ),
+
+                              if (edcStateSelected == 'stopped')
+                              const SizedBox(height: 16),
+
+                              if (edcStateSelected == 'stopped')
+                              Text(
+                                'new_policy_page.create_req'.tr(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red
+                                ),
                               ),
 
                               const SizedBox(height: 16),

@@ -52,7 +52,8 @@
     "true": "Cert",
     "false": "Fals",
     "success": "Actiu creat correctament!",
-    "error": "Error en crear l'actiu."
+    "error": "Error en crear l'actiu.",   
+    "create_req": "Per crear l'actiu, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear l'actiu."
   },
   "contracts_list_page": {
     "description": "Per garantir un intercanvi entre el proveïdor i el consumidor, el proveïdor ha de crear una oferta de contracte per a l'actiu, sobre la base de la qual es pot negociar un acord. La definició del contracte associa polítiques a una selecció d'actius per generar les ofertes que es mostraran al catàleg. Selecciona el proveïdor del qual vols veure els contractes:",
@@ -74,7 +75,8 @@
     "select_contract_policy": "Selecciona política de contracte",
     "select_assets": "Selecciona els actius que es volen incloure en aquest contracte:",
     "success": "Contracte creat correctament!",
-    "error": "Error en crear el contracte."
+    "error": "Error en crear el contracte.",  
+    "create_req": "Per crear el contracte, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear el contracte."
   },
   "connector_detail_page": {
     "title": "Detalls del connector",
@@ -136,7 +138,8 @@
     "operator": "Operador",
     "right_operand": "Operador dret",
     "success": "Política creada correctament!",
-    "error": "Error en crear la política."
+    "error": "Error en crear la política.",
+    "create_req": "Per crear la política, el connector ha d'estar en execució. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear la política."
   },
   "transfers_list_page": {
     "title": "Transferències",
@@ -203,6 +206,7 @@
     "info": "Tota la informació necessària s'inclourà en la sol·licitud i el proveïdor començarà a enviar les dades al destí configurat.",
     "pull_flow_steps": "• Proporciona una implementació simple d'un proxy HTTP al Data Plane.\n• Realitza una transferència de fitxer iniciada pel consumidor.\n• El proveïdor enviarà un EndpointDataReference al consumidor.\n• El consumidor cridarà a l'endpoint i recuperarà les dades.",
     "start_transfer_2": "1. Inicia la transferència",
-    "see_data": "Pots veure les dades aquí: "
+    "see_data": "Pots veure les dades aquí: ",
+    "create_req": "Per crear la transferència, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear la transferència."
   }
 }
