@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, dead_code, deprecated_member_use
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/transfer.dart';
@@ -181,7 +182,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         hideLoader(context);
                         FloatingSnackBar.show(
                           context,
-                          message: 'Transfer created successfully!',
+                          message: 'new_transfer_page.success'.tr(),
                           type: SnackBarType.success,
                           width: 320,
                           duration: Duration(seconds: 3),
@@ -190,7 +191,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         hideLoader(context);
                         FloatingSnackBar.show(
                           context,
-                          message: 'Error creating transfer.',
+                          message: 'new_transfer_page.error'.tr(),
                           type: SnackBarType.error,
                           width: 320,
                           duration: Duration(seconds: 3),
@@ -200,7 +201,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                       hideLoader(context);
                       FloatingSnackBar.show(
                         context,
-                        message: 'Error creating transfer.',
+                        message: 'new_transfer_page.error'.tr(),
                         type: SnackBarType.error,
                         width: 320,
                         duration: Duration(seconds: 3),
@@ -220,7 +221,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                 steps: [
                   Step(
                     title: Text(
-                      'Select consumer, provider and asset',
+                      'new_transfer_page.select_all'.tr(),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 15,
@@ -238,7 +239,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           runSpacing: 16,
                           children: [
                             Text(
-                              'Select the provider you want to start the transfer:',
+                              'new_transfer_page.select_provider'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                             ),
                             SizedBox(
@@ -253,7 +254,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: providerID,
-                                    hint: Text('Select the provider', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                    hint: Text('new_transfer_page.select_prov'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                                     icon: const Icon(Icons.arrow_drop_down),
                                     isExpanded: true,
                                     onChanged: (value) {
@@ -280,7 +281,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           runSpacing: 16,
                           children: [
                             Text(
-                              'Select the consumer you want to start the transfer:',
+                              'new_transfer_page.select_consumer'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                             ),
                             SizedBox(
@@ -295,7 +296,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: consumerID,
-                                    hint: Text('Select the consumer', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                    hint: Text('new_transfer_page.select_cons'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
                                     icon: const Icon(Icons.arrow_drop_down),
                                     isExpanded: true,
                                     onChanged: (value) {
@@ -334,7 +335,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               hideLoader(context);
                               FloatingSnackBar.show(
                                 context,
-                                message: 'Error requesting catalog.',
+                                message: 'new_transfer_page.error_catalog'.tr(),
                                 type: SnackBarType.error,
                                 width: 320,
                                 duration: Duration(seconds: 3),
@@ -342,7 +343,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             }
                           },
                           label: Text(
-                            'Request the catalog',
+                            'new_transfer_page.request_catalog'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -362,7 +363,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           children: [
                             const SizedBox(height: 16),
                             Text(
-                              'Select an asset:',
+                              'new_transfer_page.select_asset'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                             ),
                             const SizedBox(height: 8),
@@ -394,7 +395,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           children: [
                             const SizedBox(height: 16),
                             Text(
-                              'Select a policy:',
+                              'new_transfer_page.select_policy'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                             ),
                             const SizedBox(height: 8),
@@ -421,7 +422,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                   ),
                   Step(
                     title: Text(
-                      'Negotiate contract',
+                      'new_transfer_page.negotiate'.tr(),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 15,
@@ -432,21 +433,21 @@ class _NewTransferPageState extends State<NewTransferPage> {
                       children: [
                         const SizedBox(height: 16),
                         Text(
-                          'In order to request any data, a contract must first be negotiated between the provider and the consumer. '
-                          'This process results in a contract agreement.',
+                          '${'new_transfer_page.negotiate_explanation.1'.tr()}'
+                          '${'new_transfer_page.negotiate_explanation.2'.tr()}',
                           style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'The consumer now needs to initiate the contract negotiation sequence with the provider. This sequence proceeds as follows:',
+                          'new_transfer_page.negotiate_explanation.3'.tr(),
                           style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          '1. The consumer sends a contract offer to the provider (currently, this offer must exactly match the provider’s own offer).\n'
-                          '2. The provider validates the received offer against its own.\n'
-                          '3. Based on the validation result, the provider either sends back a contract agreement or a rejection.\n'
-                          '4. If validation is successful, both the provider and the consumer store the resulting agreement for future reference.',
+                          '${'new_transfer_page.negotiate_explanation.4'.tr()}\n'
+                          '${'new_transfer_page.negotiate_explanation.5'.tr()}\n'
+                          '${'new_transfer_page.negotiate_explanation.6'.tr()}\n'
+                          '${'new_transfer_page.negotiate_explanation.7'.tr()}',
                           style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                         ),
                         const SizedBox(height: 50),
@@ -491,7 +492,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               } else {
                                 FloatingSnackBar.show(
                                   context,
-                                  message: 'Failed to finalize contract negotiation.',
+                                  message: 'new_transfer_page.error_contract'.tr(),
                                   type: SnackBarType.error,
                                   width: 320,
                                   duration: const Duration(seconds: 3),
@@ -501,7 +502,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               hideLoader(context);
                               FloatingSnackBar.show(
                                 context,
-                                message: 'Error negotiating contract.',
+                                message: 'new_transfer_page.error_neg_contract'.tr(),
                                 type: SnackBarType.error,
                                 width: 320,
                                 duration: const Duration(seconds: 3),
@@ -509,7 +510,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             }
                           },
                           label: Text(
-                            'Negotiate contract',
+                            'new_transfer_page.negotiate'.tr(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -525,7 +526,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         const SizedBox(height: 50),
                         if (contractNegotiationId != null)
                         Text(
-                          'Contract negotitation ID obtained: $contractNegotiationId',
+                          '${'new_transfer_page.neg_id'.tr()} $contractNegotiationId',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
@@ -535,7 +536,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         const SizedBox(height: 16),
                         if (contractAgreementId != null)
                         Text(
-                          'Contract agreement ID obtained: $contractAgreementId',
+                          '${'new_transfer_page.cont_id'.tr()} $contractAgreementId',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
@@ -545,7 +546,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         const SizedBox(height: 16),
                         if (contractState != null)
                         Text(
-                          'Contract state obtained: $contractState',
+                          '${'new_transfer_page.cont_state'.tr()} $contractState',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
@@ -560,7 +561,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                   ),
                   Step(
                     title: Text(
-                      'Select the Http transfer flow',
+                      'new_transfer_page.select_http'.tr(),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 15,
@@ -591,7 +592,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                   ),
                   Step(
                     title: Text(
-                      'Obtain the data',
+                      'new_transfer_page.obtain_data'.tr(),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 15,
@@ -602,7 +603,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Performing a file transfer',
+                            'new_transfer_page.file_transfer'.tr(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -611,15 +612,12 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            '• The consumer will initiate a file transfer.\n'
-                            '• The Provider Control Plane retrieves the DataAddress of the actual data source and creates a DataFlowRequest.\n'
-                            '• The Provider Data Plane fetches data from the actual data source.\n'
-                            '• The Provider Data Plane pushes data to the consumer service.',
+                            'new_transfer_page.push_flow_steps'.tr(),
                             style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            '1. Start a HTTP server',
+                            'new_transfer_page.start_http_server'.tr(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -628,7 +626,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'As a pre-requisite, you need to have a logging webserver that runs on port 4000 and logs all the incoming requests. The data will be sent to this server.',
+                            'new_transfer_page.pre_requisit'.tr(),
                             style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                           ),
                           const SizedBox(height: 16),
@@ -642,7 +640,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 if (success == null) {
                                   FloatingSnackBar.show(
                                     context,
-                                    message: 'Failed to start HTTP server.',
+                                    message: 'new_transfer_page.error_start_http'.tr(),
                                     type: SnackBarType.error,
                                     width: 320,
                                     duration: Duration(seconds: 3),
@@ -660,7 +658,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 if (success == null) {
                                   FloatingSnackBar.show(
                                     context,
-                                    message: 'Failed to start HTTP server.',
+                                    message: 'new_transfer_page.error_start_http'.tr(),
                                     type: SnackBarType.error,
                                     width: 320,
                                     duration: Duration(seconds: 3),
@@ -674,7 +672,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             },
                             icon: httpLoggerStarted ?  const Icon(Icons.stop, color: Colors.red) : const Icon(Icons.play_arrow, color: Colors.green),
                             label: Text(
-                              httpLoggerStarted ? 'Stop HTTP server' : 'Start HTTP server',
+                              httpLoggerStarted ? 'new_transfer_page.stop'.tr() : 'new_transfer_page.start'.tr(),
                               style: TextStyle(
                                 color: httpLoggerStarted ?  Colors.red : Colors.green,
                                 fontSize: 15,
@@ -689,7 +687,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           ),
                           const SizedBox(height: 50),
                           Text(
-                            '2. Start the transfer',
+                            'new_transfer_page.start_transfer_numbered'.tr(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -698,7 +696,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'By clicking the button below, the system will automatically initiate the data transfer using the previously negotiated contract agreement, selected asset and policy.',
+                            'new_transfer_page.click'.tr(),
                             style: TextStyle(
                               fontSize: 15,
                               color: Theme.of(context).colorScheme.secondary,
@@ -706,7 +704,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'All necessary information will be included in the request, and the provider will begin sending the data to the configured destination.',
+                            'new_transfer_page.info'.tr(),
                             style: TextStyle(
                               fontSize: 15,
                               color: Theme.of(context).colorScheme.secondary,
@@ -743,7 +741,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 hideLoader(context);
                                 FloatingSnackBar.show(
                                   context,
-                                  message: 'Failed to finalize transfer process.',
+                                  message: 'new_transfer_page.error_transfer_process'.tr(),
                                   type: SnackBarType.error,
                                   width: 320,
                                   duration: Duration(seconds: 3),
@@ -751,7 +749,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               }
                             },
                             label: Text(
-                              'Start the transfer',
+                              'new_transfer_page.start_transfer'.tr(),
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 15,
@@ -767,7 +765,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           const SizedBox(height: 50),
                           if (transferProcessID != null)
                           Text(
-                            'Transfer process ID obtained: $transferProcessID',
+                            '${'new_transfer_page.transfer_process_id'.tr()} $transferProcessID',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -777,7 +775,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           const SizedBox(height: 16),
                           if (transferState != null)
                           Text(
-                            'Transfer state obtained: $transferState',
+                            '${'new_transfer_page.transfer_state'.tr()} $transferState',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 15,
@@ -795,7 +793,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Performing a file transfer',
+                              'new_transfer_page.file_transfer'.tr(),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -804,15 +802,12 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              '• Provide a simple Http Proxy data plane implementation.\n'
-                              '• Perform a file transfer initiated by the consumer.\n'
-                              '• The provider will send an EndpointDataReference to the consumer.\n'
-                              '• The consumer will call the endpoint and fetch the data.',
+                              'new_transfer_page.pull_flow_steps'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                             ),
                             const SizedBox(height: 24),
                             Text(
-                              '1. Start the transfer',
+                              'new_transfer_page.start_transfer_2'.tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -821,7 +816,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'By clicking the button below, the system will automatically initiate the data transfer using the previously negotiated contract agreement, selected asset and policy.',
+                              'new_transfer_page.click'.tr(),
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Theme.of(context).colorScheme.secondary,
@@ -888,7 +883,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'Failed to finalize transfer process.',
+                                          message: 'new_transfer_page.error_transfer_process'.tr(),
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -901,7 +896,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                       hideLoader(context);
                                       FloatingSnackBar.show(
                                         context,
-                                        message: 'Failed to finalize transfer process.',
+                                        message: 'new_transfer_page.error_transfer_process'.tr(),
                                         type: SnackBarType.error,
                                         width: 320,
                                         duration: Duration(seconds: 3),
@@ -919,7 +914,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                     hideLoader(context);
                                     FloatingSnackBar.show(
                                       context,
-                                      message: 'Failed to finalize transfer process.',
+                                      message: 'new_transfer_page.error_transfer_process'.tr(),
                                       type: SnackBarType.error,
                                       width: 320,
                                       duration: Duration(seconds: 3),
@@ -928,7 +923,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 }
                               },
                               label: Text(
-                                'Start the transfer',
+                                'new_transfer_page.start_transfer'.tr(),
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.secondary,
                                   fontSize: 15,
@@ -943,7 +938,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'For the consumer pull scenario the TP will stay in STARTED state after the data has been transferred successfully.',
+                              'new_transfer_page.tp_started_note'.tr(),
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 15,
@@ -952,7 +947,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             const SizedBox(height: 50),
                             if (transferProcessID != null)
                             Text(
-                              'Transfer process ID obtained: $transferProcessID',
+                              '${'new_transfer_page.transfer_process_id'.tr()} $transferProcessID',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 15,
@@ -962,7 +957,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             const SizedBox(height: 16),
                             if (transferState != null)
                             Text(
-                              'Transfer state obtained: $transferState',
+                              '${'new_transfer_page.transfer_state'.tr()} $transferState',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 15,
@@ -972,7 +967,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             const SizedBox(height: 16),
                             if (authorization != null)
                             Text(
-                              'Authorization obtained:',
+                              'new_transfer_page.authorization_obtained'.tr(),
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 15,
@@ -999,7 +994,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                   onPressed: () {
                                     Clipboard.setData(ClipboardData(text: authorization ?? ''));
                                   },
-                                  tooltip: 'Copy authorization',
+                                  tooltip: 'new_transfer_page.copy_authorization'.tr(),
                                 ),
                               ],
                             ),
@@ -1011,7 +1006,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    'Endpoint: $endpoint',
+                                    '${'new_transfer_page.endpoint'.tr()} $endpoint',
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 15,
@@ -1024,7 +1019,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                   onPressed: () {
                                     Clipboard.setData(ClipboardData(text: endpoint ?? ''));
                                   },
-                                  tooltip: 'Copy endpoint',
+                                  tooltip: 'new_transfer_page.copy_endpoint'.tr(),
                                 ),
                               ],
                             ),
@@ -1032,7 +1027,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             const SizedBox(height: 16),
                             if (endpoint != null && authorization != null)
                             Text(
-                              'To obtain the data you must do the following:',
+                              'new_transfer_page.obtain_data_instruction'.tr(),
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 15,
@@ -1061,7 +1056,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                       ClipboardData(text: 'curl --location --request GET "$endpoint" --header "Authorization: $authorization"'),
                                     );
                                   },
-                                  tooltip: 'Copy curl command',
+                                  tooltip: 'new_transfer_page.copy_curl_command'.tr(),
                                 ),
                               ],
                             ),

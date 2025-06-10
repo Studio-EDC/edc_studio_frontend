@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,11 +20,11 @@ class MenuDrawer extends StatelessWidget {
               height: 100,
             ),
           ),
-          _buildNavTile(context, icon: Icons.list, label: 'EDC List', route: '/'),
-          _buildNavTile(context, icon: Icons.layers, label: 'Assets', route: '/assets'),
-          _buildNavTile(context, icon: Icons.policy, label: 'Policies', route: '/policies'),
-          _buildNavTile(context, icon: Icons.assignment, label: 'Contracts', route: '/contracts'),
-          _buildNavTile(context, icon: Icons.swap_horiz, label: 'Transfers', route: '/transfers'),
+          _buildNavTile(context, icon: Icons.list, label: 'edc_list'.tr(), route: '/'),
+          _buildNavTile(context, icon: Icons.layers, label: 'assets'.tr(), route: '/assets'),
+          _buildNavTile(context, icon: Icons.policy, label: 'policies'.tr(), route: '/policies'),
+          _buildNavTile(context, icon: Icons.assignment, label: 'contracts'.tr(), route: '/contracts'),
+          _buildNavTile(context, icon: Icons.swap_horiz, label: 'transfers'.tr(), route: '/transfers'),
         ],
       ),
     );

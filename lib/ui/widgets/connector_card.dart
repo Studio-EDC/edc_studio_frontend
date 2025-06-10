@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -77,7 +78,7 @@ class ConnectorCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          isRunning ? 'Running' : 'Stopped',
+                          isRunning ? 'edc_list_page.running'.tr() : 'edc_list_page.stopped'.tr(),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
@@ -102,7 +103,7 @@ class ConnectorCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                isRunning ? 'Stop' : 'Start',
+                                isRunning ? 'edc_list_page.stop'.tr() : 'edc_list_page.start'.tr(),
                                 style: TextStyle(
                                   color: isRunning ? Colors.red : Colors.green,
                                   fontSize: 15,
@@ -118,7 +119,7 @@ class ConnectorCard extends StatelessWidget {
                               Icon(Icons.info_outline, color: Theme.of(context).colorScheme.secondary, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                'See details',
+                                'edc_list_page.see_details'.tr(),
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.secondary,
                                   fontSize: 15,
@@ -134,7 +135,7 @@ class ConnectorCard extends StatelessWidget {
                               Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.secondary, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                'Delete',
+                                'delete'.tr(),
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.secondary,
                                   fontSize: 15,
@@ -197,7 +198,7 @@ class ConnectorCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          isRunning ? 'Running' : 'Stopped',
+                          isRunning ? 'edc_list_page.running'.tr() : 'edc_list_page.stopped'.tr(),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
@@ -237,7 +238,7 @@ class ConnectorCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                isRunning ? 'Stop' : 'Start',
+                                isRunning ? 'edc_list_page.stop'.tr() : 'edc_list_page.start'.tr(),
                                 style: TextStyle(
                                   color: isRunning ? Colors.red : Colors.green,
                                   fontSize: 15,
@@ -253,7 +254,7 @@ class ConnectorCard extends StatelessWidget {
                               Icon(Icons.info_outline, color: Theme.of(context).colorScheme.secondary, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                'See details',
+                                'edc_list_page.see_details'.tr(),
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.secondary,
                                   fontSize: 15,
@@ -269,7 +270,7 @@ class ConnectorCard extends StatelessWidget {
                               Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.secondary, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                'Delete',
+                                'delete'.tr(),
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.secondary,
                                   fontSize: 15,

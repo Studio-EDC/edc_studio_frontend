@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -29,7 +30,7 @@ class LinkWidget extends StatelessWidget {
           fontSize: 15,
         ),
         children: [
-          TextSpan(text: 'You can see the data here: ', style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+          TextSpan(text: 'new_transfer_page.see_data'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
           TextSpan(
             text: url,
             style: TextStyle(
