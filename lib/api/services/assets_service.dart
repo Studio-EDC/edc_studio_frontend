@@ -9,7 +9,7 @@ class AssetService {
   Future<String?> createAsset(Asset asset) async {
     try {
       final response = await _api.post(ApiRoutes.assets, asset.toJson());
-      return response['id'];
+      return response;
     } catch (e) {
       return null;
     }
@@ -38,9 +38,9 @@ class AssetService {
   }
 
   /// Get asset by ID
-  Future<Asset?> getAssetByAssetId(String assetId) async {
+  Future<Asset?> getAssetByAssetId(String edcId, String assetId) async {
     try {
-      final response = await _api.get('${ApiRoutes.assets}/by-asset-id/$assetId');
+      final response = await _api.get('${ApiRoutes.assets}/by-asset-id/$edcId/$assetId');
       return Asset.fromJson(response);
     } catch (e) {
       return null;
@@ -48,9 +48,9 @@ class AssetService {
   }
 
   /// Update asset by ID
-  Future<bool> updateAsset(String id, Map<String, dynamic> updates) async {
+  Future<bool> updateAsset(String edcId, Asset asset) async {
     try {
-      await _api.put('${ApiRoutes.assets}/$id', updates);
+      await _api.put('${ApiRoutes.assets}/$edcId', asset.toJson());
       return true;
     } catch (e) {
       return false;
@@ -58,9 +58,9 @@ class AssetService {
   }
 
   /// Delete asset by ID
-  Future<bool> deleteAsset(String id) async {
+  Future<bool> deleteAsset(String assetId, String edcId) async {
     try {
-      await _api.delete('${ApiRoutes.assets}/$id');
+      await _api.delete('${ApiRoutes.assets}/$assetId/$edcId');
       return true;
     } catch (e) {
       return false;

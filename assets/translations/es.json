@@ -28,12 +28,14 @@
     "description": "El conector proveedor es el que gestiona los recursos para los que se puede ejecutar una negociación de contrato. Así que selecciona el proveedor del que deseas ver los recursos:",
     "search": "Buscar recurso",
     "new_asset": "Nuevo recurso",
-    "no_assets": "No se encontraron recursos para este proveedor.",
+    "no_assets": "No se encontraron activos para este proveedor. ¿Estás seguro de que el conector está en funcionamiento?",
     "asset_id": "ID del recurso",
     "name": "Nombre",
     "content_type": "Tipo de contenido",
     "base_url": "URL base",
-    "proxy": "Proxy"
+    "proxy": "Proxy",
+    "deleted_success": "¡Activo eliminado correctamente!",
+    "deleted_error": "Error al eliminar el activo."
   },
   "new_asset_page": {
     "title": "Nuevo recurso",
@@ -54,6 +56,10 @@
     "success": "¡Recurso creado correctamente!",
     "error": "Error al crear el recurso.",
     "create_req": "Para crear el activo, el conector debe estar en ejecución. Vaya a la página de lista de EDC e inícielo antes de crear el activo."
+  },
+  "update_asset_page": {
+    "success": "Activo actualizado correctamente.",
+    "error": "Error al actualizar el activo."
   },
   "contracts_list_page": {
     "description": "Para garantizar un intercambio entre proveedor y consumidor, el proveedor debe crear una oferta de contrato para el recurso, sobre la base de la cual se puede negociar un acuerdo de contrato. La definición del contrato asocia políticas a una selección de recursos para generar las ofertas que se pondrán en el catálogo. Así que selecciona el proveedor del que deseas ver los contratos:",

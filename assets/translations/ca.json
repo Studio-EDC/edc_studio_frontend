@@ -17,7 +17,7 @@
     "search": "Cerca EDC",
     "not_found": "No s'han trobat connectors.",
     "connector_deleted_success": "Connector eliminat correctament!",
-    "connector_deleted_error": "Error en eliminar el connector.",
+    "connector_deleted_error": "Error al eliminar el connector.",
     "running": "Actiu",
     "stopped": "Aturat",
     "stop": "Atura",
@@ -28,12 +28,14 @@
     "description": "El connector proveïdor és qui gestiona els actius per als quals es pot executar una negociació de contracte. Selecciona el proveïdor del qual vols veure els actius:",
     "search": "Cerca actiu",
     "new_asset": "Nou actiu",
-    "no_assets": "No s'han trobat actius per a aquest proveïdor.",
+    "no_assets": "No s'han trobat actius per a aquest proveïdor. Estàs segur que el connector està en funcionament?",
     "asset_id": "ID de l'actiu",
     "name": "Nom",
     "content_type": "Tipus de contingut",
     "base_url": "URL base",
-    "proxy": "Proxy"
+    "proxy": "Proxy",
+    "deleted_success": "¡Actiu eliminat correctament!",
+    "deleted_error": "Error al eliminar el actiu."
   },
   "new_asset_page": {
     "title": "Nou actiu",
@@ -54,6 +56,10 @@
     "success": "Actiu creat correctament!",
     "error": "Error en crear l'actiu.",   
     "create_req": "Per crear l'actiu, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear l'actiu."
+  },
+  "update_asset_page": {
+    "success": "Actiu actualitzat correctament.",
+    "error": "Error al actualitzar l'actiu."
   },
   "contracts_list_page": {
     "description": "Per garantir un intercanvi entre el proveïdor i el consumidor, el proveïdor ha de crear una oferta de contracte per a l'actiu, sobre la base de la qual es pot negociar un acord. La definició del contracte associa polítiques a una selecció d'actius per generar les ofertes que es mostraran al catàleg. Selecciona el proveïdor del qual vols veure els contractes:",

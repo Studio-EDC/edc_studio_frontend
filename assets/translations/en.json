@@ -28,12 +28,14 @@
     "description": "The provider connector is the one managing assets for which a contract negotiation can be executed. So, select the provider you want to view the assets from:",
     "search": "Search Asset",
     "new_asset": "New Asset",
-    "no_assets": "No assets found for this provider.",
+    "no_assets": "No assets found for this provider. Are you sure the connector is running?",
     "asset_id": "Asset ID",
     "name": "Name",
     "content_type": "Content-Type",
     "base_url": "Base URL",
-    "proxy": "Proxy"
+    "proxy": "Proxy",
+    "deleted_success": "Asset deleted successfully!",
+    "deleted_error": "Error deleting asset."
   },
   "new_asset_page": {
     "title": "New Asset",
@@ -54,6 +56,10 @@
     "success": "Asset created successfully!",
     "error": "Error creating asset.",
     "create_req": "To create the asset, the connector must be running. Go to the EDC list page and start it before creating the asset."
+  },
+  "update_asset_page": {
+    "success": "Asset updated successfully.",
+    "error": "Error updating asset."
   },
   "contracts_list_page": {
     "description": "To ensure an exchange between provider and consumer, the provider must create a contract offer for the asset, on the basis of which a contract agreement can be negotiated. The contract definition associates policies to a selection of assets to generate the contract offers that will be put in the catalog. So, select the provider you want to view the contracts from:",
