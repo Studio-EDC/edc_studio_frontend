@@ -102,7 +102,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'new_asset_page.title'.tr(),
+                                'update_asset_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,

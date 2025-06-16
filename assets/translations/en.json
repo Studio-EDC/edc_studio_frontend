@@ -59,7 +59,8 @@
   },
   "update_asset_page": {
     "success": "Asset updated successfully.",
-    "error": "Error updating asset."
+    "error": "Error updating asset.",
+    "title": "Asset details"
   },
   "contracts_list_page": {
     "description": "To ensure an exchange between provider and consumer, the provider must create a contract offer for the asset, on the basis of which a contract agreement can be negotiated. The contract definition associates policies to a selection of assets to generate the contract offers that will be put in the catalog. So, select the provider you want to view the contracts from:",
@@ -122,12 +123,17 @@
     "no_policies": "No policies found for this provider.",
     "columns": {
       "policy_id": "Policy ID",
-      "actions": "Actions"
+      "actions": "Actions",
+      "num_permissions": "Num permissions",
+      "num_prohibitions": "Num prohibitions",
+      "num_obligations": "Num obligations"
     },
     "actions": {
       "view": "View",
       "delete": "Delete"
-    }
+    },
+    "deleted_success": "Policy deleted successfully!",
+    "deleted_error": "Error deleting policy."
   },
   "new_policy_page": {
     "title": "New Policy",
@@ -146,6 +152,11 @@
     "success": "Policy created successfully!",
     "error": "Error creating policy.",
     "create_req": "To create the policy, the connector must be running. Go to the EDC list page and start it before creating the policy."
+  },
+  "update_policy_page": {
+    "success": "Policy updated successfully!",
+    "error": "Error updating policy.",
+    "title": "Policy details"
   },
   "transfers_list_page": {
     "title": "Transfers",

@@ -9,7 +9,7 @@ class PoliciesService {
   Future<String?> createPolicy(Policy policy) async {
     try {
       final response = await _api.post(ApiRoutes.policies, policy.toJson());
-      return response['id'];
+      return response;
     } catch (e) {
       return null;
     }
@@ -24,6 +24,33 @@ class PoliciesService {
           .toList();
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<Policy?> getPolicyByPolicyId(String edcId, String assetId) async {
+    try {
+      final response = await _api.get('${ApiRoutes.policies}/by-policy-id/$edcId/$assetId');
+      return Policy.fromJson(response);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> updatePolicy(String edcId, Policy policy) async {
+    try {
+      await _api.put('${ApiRoutes.policies}/$edcId', policy.toJson());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> deletePolicy(String policyId, String edcId) async {
+    try {
+      await _api.delete('${ApiRoutes.policies}/$policyId/$edcId');
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

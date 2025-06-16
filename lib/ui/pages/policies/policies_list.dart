@@ -1,11 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/policy.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/api/services/policies_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
+import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/search_bar.dart';
+import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -200,25 +204,77 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
                         ),
                         columns: [
                           DataColumn(label: Text('policies_list_page.columns.policy_id'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('policies_list_page.columns.num_permissions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('policies_list_page.columns.num_prohibitions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          DataColumn(label: Text('policies_list_page.columns.num_obligations'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                           DataColumn(label: Text('policies_list_page.columns.actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                         ],
                         rows: _filteredPolicies.map((policy) {
                           return DataRow(cells: [
                             DataCell(Text(policy.policyId, style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataCell(Text(policy.policy.permission!.length.toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataCell(Text(policy.policy.prohibition!.length.toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataCell(Text(policy.policy.obligation!.length.toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Row(
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove_red_eye),
                                   tooltip: 'view'.tr(),
                                   onPressed: () {
-                                    // Acción de ver detalle
+                                    context.go('/policy-detail/${policy.edc}/${policy.policyId}');
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline),
                                   tooltip: 'delete'.tr(),
-                                  onPressed: () {
-                                    // Acción de eliminar con confirmación
+                                  onPressed: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('confirm_deletion_title'.tr()),
+                                          content: Text(
+                                            'confirm_deletion_message'.tr(namedArgs: {'name': policy.policyId}),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(false),
+                                              child: Text('cancel'.tr()),
+                                            ),
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(true),
+                                              child: Text(
+                                                'delete'.tr(),
+                                                style: const TextStyle(color: Colors.red),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+
+                                    if (confirm == true) {
+                                      showLoader(context);
+                                      final response = await _policiesService.deletePolicy(policy.policyId, _selectedConnectorId);
+                                      hideLoader(context);
+
+                                      if (response == true) {
+                                        FloatingSnackBar.show(
+                                          context,
+                                          message: 'policies_list_page.deleted_success'.tr(),
+                                          type: SnackBarType.success,
+                                          duration: const Duration(seconds: 3),
+                                        );
+                                        _loadConnectors();
+                                      } else {
+                                        FloatingSnackBar.show(
+                                          context,
+                                          message: 'policies_list_page.deleted_error'.tr(),
+                                          type: SnackBarType.error,
+                                          duration: const Duration(seconds: 3),
+                                        );
+                                      }
+                                    }
                                   },
                                 ),
                               ],

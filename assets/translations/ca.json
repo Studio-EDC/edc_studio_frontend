@@ -59,7 +59,8 @@
   },
   "update_asset_page": {
     "success": "Actiu actualitzat correctament.",
-    "error": "Error al actualitzar l'actiu."
+    "error": "Error al actualitzar l'actiu.",
+    "title": "Detalls de l'actiu"
   },
   "contracts_list_page": {
     "description": "Per garantir un intercanvi entre el proveïdor i el consumidor, el proveïdor ha de crear una oferta de contracte per a l'actiu, sobre la base de la qual es pot negociar un acord. La definició del contracte associa polítiques a una selecció d'actius per generar les ofertes que es mostraran al catàleg. Selecciona el proveïdor del qual vols veure els contractes:",
@@ -122,12 +123,17 @@
     "no_policies": "No s'han trobat polítiques per a aquest proveïdor.",
     "columns": {
       "policy_id": "ID de la política",
-      "actions": "Accions"
+      "actions": "Accions",
+      "num_permissions": "Núm. de permisos",
+      "num_prohibitions": "Núm. de prohibicions",
+      "num_obligations": "Núm. d'obligacions"
     },
     "actions": {
       "view": "Veure",
       "delete": "Elimina"
-    }
+    },
+    "deleted_success": "Política eliminada correctament!",
+    "deleted_error": "Error al eliminar la política."
   },
   "new_policy_page": {
     "title": "Nova política",
@@ -144,8 +150,13 @@
     "operator": "Operador",
     "right_operand": "Operador dret",
     "success": "Política creada correctament!",
-    "error": "Error en crear la política.",
+    "error": "Error al crear la política.",
     "create_req": "Per crear la política, el connector ha d'estar en execució. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear la política."
+  },
+  "update_policy_page": {
+    "success": "Política actualitzada correctament!",
+    "error": "Error al actualitzar la política.",
+    "title": "Detalls de la política"
   },
   "transfers_list_page": {
     "title": "Transferències",

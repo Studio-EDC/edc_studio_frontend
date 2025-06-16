@@ -8,6 +8,7 @@ import 'package:edc_studio/ui/pages/edc/edc_list.dart';
 import 'package:edc_studio/ui/pages/edc/new_edc.dart';
 import 'package:edc_studio/ui/pages/policies/new_policy.dart';
 import 'package:edc_studio/ui/pages/policies/policies_list.dart';
+import 'package:edc_studio/ui/pages/policies/policy_detail.dart';
 import 'package:edc_studio/ui/pages/transfers/new_transfer.dart';
 import 'package:edc_studio/ui/pages/transfers/transfers_list.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,22 @@ final GoRouter router = GoRouter(
         key: state.pageKey,
         child: const PoliciesListPage(),
       ),
+    ),
+    GoRoute(
+      path: '/policy-detail/:edcId/:assetId',
+      pageBuilder: (context, state) {
+
+        final edcId = state.pathParameters['edcId']!;
+        final policyId = state.pathParameters['assetId']!;
+
+        return _buildFadeTransition(
+          key: state.pageKey,
+          child: PolicyDetailPage(
+            policyId: policyId,
+            edcId: edcId,
+          ),
+        );
+      },
     ),
     GoRoute(
       path: '/new_policy',
