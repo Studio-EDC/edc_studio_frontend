@@ -69,7 +69,9 @@
     "not_found": "No se encontraron contratos para este proveedor.",
     "contract_id": "ID del contrato",
     "access_policy_id": "ID de la política de acceso",
-    "contract_policy_id": "ID de la política de contrato"
+    "contract_policy_id": "ID de la política de contrato",
+    "deleted_success": "¡Contrato eliminado correctamente!",
+    "deleted_error": "Error al eliminar el contrato."
   },
   "new_contract_page": {
     "title": "Nuevo contrato",
@@ -84,6 +86,11 @@
     "success": "¡Contrato creado correctamente!",
     "error": "Error al crear el contrato.",
     "create_req": "Para crear el contrato, el conector debe estar en ejecución. Vaya a la página de lista de EDC e inícielo antes de crear el contrato."
+  },
+  "update_contract_page": {
+    "success": "¡Contrato actualizado correctamente!",
+    "error": "Error al actualizar el contrato.",
+    "title": "Detalles del contrato"
   },
   "connector_detail_page": {
     "title": "Detalles del conector",

@@ -34,7 +34,7 @@
     "content_type": "Tipus de contingut",
     "base_url": "URL base",
     "proxy": "Proxy",
-    "deleted_success": "¡Actiu eliminat correctament!",
+    "deleted_success": "Actiu eliminat correctament!",
     "deleted_error": "Error al eliminar el actiu."
   },
   "new_asset_page": {
@@ -69,7 +69,9 @@
     "not_found": "No s'han trobat contractes per a aquest proveïdor.",
     "contract_id": "ID del contracte",
     "access_policy_id": "ID de la política d'accés",
-    "contract_policy_id": "ID de la política de contracte"
+    "contract_policy_id": "ID de la política de contracte",
+    "deleted_success": "Contracte eliminat correctament!",
+    "deleted_error": "Error al eliminar el contracte."
   },
   "new_contract_page": {
     "title": "Nou contracte",
@@ -84,6 +86,11 @@
     "success": "Contracte creat correctament!",
     "error": "Error en crear el contracte.",  
     "create_req": "Per crear el contracte, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear el contracte."
+  },
+  "update_contract_page": {
+    "success": "Contracte actualitzat correctament!",
+    "error": "Error al actualitzar el contracte.",
+    "title": "Detalls del contracte"
   },
   "connector_detail_page": {
     "title": "Detalls del connector",

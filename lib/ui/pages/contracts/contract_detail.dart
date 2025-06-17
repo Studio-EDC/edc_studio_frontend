@@ -3,7 +3,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
-import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/models/contract.dart';
 import 'package:edc_studio/api/models/policy.dart';
 import 'package:edc_studio/api/services/assets_service.dart';
@@ -17,14 +16,22 @@ import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class NewContractPage extends StatefulWidget {
-  const NewContractPage({super.key});
+class ContractDetailPage extends StatefulWidget {
+
+  final String contractId;
+  final String edcId;
+
+  const ContractDetailPage({
+    super.key,
+    required this.contractId,
+    required this.edcId,
+  });
 
   @override
-  State<NewContractPage> createState() => _NewContractPageState();
+  State<ContractDetailPage> createState() => _ContractDetailPageState();
 }
 
-class _NewContractPageState extends State<NewContractPage> {
+class _ContractDetailPageState extends State<ContractDetailPage> {
 
   final EdcService _edcService = EdcService();
   final PoliciesService _policyService = PoliciesService();
@@ -41,24 +48,31 @@ class _NewContractPageState extends State<NewContractPage> {
   String? accessPolicyIdSelected;
   String? contractPolicyIdSelected;
 
-  List<Connector> _allConnectors = [];
   List<Asset> _allAssets = [];
   List<Policy> _allPolicies = [];
 
   List<String> selectedAssetIds = [];
 
-  Future<void> _loadConnectors() async {
-    final connectors = await _edcService.getAllConnectors();
-    if (connectors != null) {
-      final providers = connectors.where((c) => c.type == 'provider').toList();
+  Future<void> _loadContract() async {
+    final contract = await _contractsService.getContractByContractId(widget.edcId, widget.contractId);
+    final connector = await _edcService.getConnectorByID(widget.edcId);
 
-      if (providers.isNotEmpty) {
-        setState(() {
-          _allConnectors = providers;
-          _loadAssets(edcIdSelected ?? '');
-          _loadPolicies(edcIdSelected ?? '');
-        });
-      }
+    if (contract != null) {
+      setState(() {
+        accessPolicyIdSelected = contract.accessPolicyId;
+        contractPolicyIdSelected = contract.contractPolicyId;
+        _contractIdController.text = contract.contractId;
+        selectedAssetIds.addAll(contract.assetsSelector);
+      });
+      await _loadAssets(widget.edcId);
+      await _loadPolicies(widget.edcId);
+    }
+
+    if (connector != null) {
+      setState(() {
+        edcIdSelected = widget.edcId;
+        edcStateSelected = connector.state;
+      });
     }
   }
 
@@ -79,7 +93,7 @@ class _NewContractPageState extends State<NewContractPage> {
   @override
   void initState() {
     super.initState();
-    _loadConnectors();
+    _loadContract();
   }
 
   @override
@@ -121,61 +135,13 @@ class _NewContractPageState extends State<NewContractPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'new_contract_page.title'.tr(),
+                                'update_contract_page.title'.tr(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                               const SizedBox(height: 24),
-
-                              Wrap(
-                                alignment: WrapAlignment.center,
-                                runAlignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 16,
-                                runSpacing: 16,
-                                children: [
-                                  Text(
-                                    'new_contract_page.edc_select'.tr(),
-                                    style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
-                                  ),
-                                  SizedBox(
-                                    width: isMobile ? null : 300,
-                                    height: 40,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(32),
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          value: edcIdSelected,
-                                          hint: Text('new_contract_page.select_connector'.tr()),
-                                          icon: const Icon(Icons.arrow_drop_down),
-                                          isExpanded: true,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              edcIdSelected = value!;
-                                              final selected = _allConnectors.firstWhere((c) => c.id == value);
-                                              edcStateSelected = selected.state;
-                                            });
-                                            _loadPolicies(value!);
-                                            _loadAssets(value);
-                                          },
-                                          items: _allConnectors.map((connector) {
-                                            return DropdownMenuItem<String>(
-                                              value: connector.id,
-                                              child: Text(connector.name, style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
 
                               if (edcStateSelected == 'stopped')
                               const SizedBox(height: 16),
@@ -189,10 +155,12 @@ class _NewContractPageState extends State<NewContractPage> {
                                 ),
                               ),
 
+                              if (edcStateSelected == 'stopped')
                               const SizedBox(height: 16),
 
                               TextFormField(
                                 controller: _contractIdController,
+                                readOnly: true,
                                 decoration: _inputStyle('new_contract_page.contract_id'.tr()),
                               ),
 
@@ -340,16 +308,14 @@ class _NewContractPageState extends State<NewContractPage> {
                                           "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
                                         }
                                       );
-
-                                      print(contract.toJson());
                   
                                       showLoader(context);
-                                      final response = await _contractsService.createContract(contract);
-                                      if (response != null) {
+                                      final response = await _contractsService.updateContract(edcIdSelected ?? '', contract);
+                                      if (response) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_contract_page.success'.tr(),
+                                          message: 'update_contract_page.success'.tr(),
                                           type: SnackBarType.success,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -358,7 +324,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_contract_page.error'.tr(),
+                                          message: 'update_contract_page.error'.tr(),
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -375,7 +341,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                     ),
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                   ),
-                                  child: Text('create'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
+                                  child: Text('update'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
                                 ),
                               )
                             ],

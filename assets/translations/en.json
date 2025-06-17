@@ -69,7 +69,9 @@
     "not_found": "No contracts found for this provider.",
     "contract_id": "Contract ID",
     "access_policy_id": "Access policy ID",
-    "contract_policy_id": "Contract policy ID"
+    "contract_policy_id": "Contract policy ID",
+    "deleted_success": "Contract deleted successfully!",
+    "deleted_error": "Error deleting contract."
   },
   "new_contract_page": {
     "title": "New Contract",
@@ -84,6 +86,11 @@
     "success": "Contract created successfully!",
     "error": "Error creating contract.",
     "create_req": "To create the contract, the connector must be running. Go to the EDC list page and start it before creating the contract."
+  },
+  "update_contract_page": {
+    "success": "Contract updated successfully!",
+    "error": "Error updating contract.",
+    "title": "Contract details"
   },
   "connector_detail_page": {
     "title": "Connector Details",
