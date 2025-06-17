@@ -169,7 +169,7 @@
     "title": "Transferències",
     "search_hint": "Cerca transferència",
     "new_transfer": "Nova transferència",
-    "no_transfers": "No s'han trobat transferències per a aquest proveïdor.",
+    "no_transfers": "No s'han trobat transferències.",
     "provider": "Proveïdor",
     "consumer": "Consumidor",
     "asset": "Actiu",

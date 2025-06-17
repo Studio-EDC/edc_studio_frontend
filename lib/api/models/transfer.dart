@@ -1,4 +1,3 @@
-import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/models/connector.dart';
 
 class Transfer {
@@ -70,7 +69,7 @@ class TransferPopulated {
   final String? transferFlow;
   final Connector? consumer;
   final Connector? provider;
-  final Asset? asset;
+  final String? asset;
   final String? endpoint;
   final String? authorization;
 
@@ -98,7 +97,7 @@ class TransferPopulated {
       transferFlow: json['transfer_flow'],
       consumer: json['consumer'] != null ? Connector.fromJson(json['consumer']) : null,
       provider: json['provider'] != null ? Connector.fromJson(json['provider']) : null,
-      asset: json['asset'] != null ? Asset.fromJson(json['asset']) : null,
+      asset: json['asset'],
       endpoint: json['endpoint'],
       authorization: json['authorization'],
     );
@@ -109,7 +108,7 @@ class TransferPopulated {
       'id': id,
       'consumer': consumer?.toJson(),
       'provider': provider?.toJson(),
-      'asset': asset?.toJson(),
+      'asset': asset,
       'has_policy_id': hasPolicyId,
       'negotiate_contract_id': negotiateContractId,
       'contract_agreement_id': contractAgreementId,

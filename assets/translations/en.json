@@ -35,7 +35,7 @@
     "base_url": "Base URL",
     "proxy": "Proxy",
     "deleted_success": "Asset deleted successfully!",
-    "deleted_error": "Error deleting asset."
+    "deleted_error": "Error deleting asset"
   },
   "new_asset_page": {
     "title": "New Asset",
@@ -169,7 +169,7 @@
     "title": "Transfers",
     "search_hint": "Search Transfer",
     "new_transfer": "New Transfer",
-    "no_transfers": "No transfers found for this provider.",
+    "no_transfers": "No transfers found.",
     "provider": "Provider",
     "consumer": "Consumer",
     "asset": "Asset",

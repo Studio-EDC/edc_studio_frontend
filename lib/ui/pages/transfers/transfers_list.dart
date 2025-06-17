@@ -29,6 +29,7 @@ class _TransfersListPageState extends State<TransfersListPage> {
         _allTransfers = transfers;
         _filteredTransfers = transfers;
       });
+      print(transfers);
     }
   }
 
@@ -38,7 +39,7 @@ class _TransfersListPageState extends State<TransfersListPage> {
           .where((transfer) =>
               transfer.consumer!.name.toLowerCase().contains(query.toLowerCase()) ||
               transfer.provider!.name.toLowerCase().contains(query.toLowerCase()) ||
-              transfer.asset!.assetId.toLowerCase().contains(query.toLowerCase()) ||
+              transfer.asset!.toLowerCase().contains(query.toLowerCase()) ||
               transfer.transferFlow!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
@@ -150,7 +151,7 @@ class _TransfersListPageState extends State<TransfersListPage> {
                           return DataRow(cells: [
                             DataCell(Text(transfer.provider?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Text(transfer.consumer?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                            DataCell(Text(transfer.asset?.assetId ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataCell(Text(transfer.asset ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Text(transfer.transferFlow == 'push' ? 'transfers_list_page.push'.tr() : 'transfers_list_page.pull'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
                             DataCell(Row(
                               children: [

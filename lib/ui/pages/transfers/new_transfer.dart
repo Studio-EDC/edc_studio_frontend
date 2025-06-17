@@ -166,12 +166,12 @@ class _NewTransferPageState extends State<NewTransferPage> {
                 onStepContinue: () async {
                   if (_currentStep == 3) {
                     showLoader(context);
-                    Asset? asset = await _assetsService.getAssetByAssetId(_selectedAssetId ?? '', '');
+                    Asset? asset = await _assetsService.getAssetByAssetId(providerID ?? '', _selectedAssetId ?? '');
                     if (asset != null) {
                       Transfer transfer = Transfer(
                         consumer: consumerID ?? '', 
                         provider: providerID ?? '', 
-                        asset: asset.id ?? '', 
+                        asset: asset.assetId, 
                         hasPolicyId: _selectedHasPolicyId ?? '', 
                         negotiateContractId: contractNegotiationId ?? '', 
                         contractAgreementId: contractAgreementId ?? '',
@@ -180,6 +180,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         endpoint: endpoint,
                         authorization: authorization
                       );
+                      print(transfer.toJson());
                       final response = await _transfersService.createTransfer(transfer);
                       if (response != null) {
                         hideLoader(context);

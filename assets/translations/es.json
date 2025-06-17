@@ -169,7 +169,7 @@
     "title": "Transferencias",
     "search_hint": "Buscar transferencia",
     "new_transfer": "Nueva transferencia",
-    "no_transfers": "No se encontraron transferencias para este proveedor.",
+    "no_transfers": "No se encontraron transferencias.",
     "provider": "Proveedor",
     "consumer": "Consumidor",
     "asset": "Recurso",

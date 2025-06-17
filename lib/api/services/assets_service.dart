@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
+import 'package:edc_studio/api/utils/handle_message.dart';
+import 'package:http/http.dart' as http;
 
 class AssetService {
   final CommunicationService _api = CommunicationService();
@@ -58,12 +62,12 @@ class AssetService {
   }
 
   /// Delete asset by ID
-  Future<bool> deleteAsset(String assetId, String edcId) async {
+  Future<String?> deleteAsset(String assetId, String edcId) async {
     try {
       await _api.delete('${ApiRoutes.assets}/$assetId/$edcId');
-      return true;
-    } catch (e) {
-      return false;
+      return null; 
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 

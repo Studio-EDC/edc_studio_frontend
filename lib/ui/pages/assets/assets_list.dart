@@ -263,7 +263,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                                       final response = await _assetsService.deleteAsset(asset.assetId, _selectedConnectorId);
                                       hideLoader(context);
 
-                                      if (response == true) {
+                                      if (response == null) {
                                         FloatingSnackBar.show(
                                           context,
                                           message: 'assets_list_page.deleted_success'.tr(),
@@ -274,9 +274,10 @@ class _AssetsListPageState extends State<AssetsListPage> {
                                       } else {
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'assets_list_page.deleted_error'.tr(),
+                                          message: '${'assets_list_page.deleted_error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           duration: const Duration(seconds: 3),
+                                          width: 600
                                         );
                                       }
                                     }
