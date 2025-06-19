@@ -12,7 +12,6 @@ import 'package:edc_studio/ui/widgets/link.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -166,8 +165,8 @@ class _NewTransferPageState extends State<NewTransferPage> {
                 onStepContinue: () async {
                   if (_currentStep == 3) {
                     showLoader(context);
-                    Asset? asset = await _assetsService.getAssetByAssetId(providerID ?? '', _selectedAssetId ?? '');
-                    if (asset != null) {
+                    Object asset = await _assetsService.getAssetByAssetId(providerID ?? '', _selectedAssetId ?? '');
+                    if (asset is Asset) {
                       Transfer transfer = Transfer(
                         consumer: consumerID ?? '', 
                         provider: providerID ?? '', 
@@ -180,9 +179,8 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         endpoint: endpoint,
                         authorization: authorization
                       );
-                      print(transfer.toJson());
                       final response = await _transfersService.createTransfer(transfer);
-                      if (response != null) {
+                      if (response == null) {
                         hideLoader(context);
                         FloatingSnackBar.show(
                           context,
@@ -195,7 +193,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         hideLoader(context);
                         FloatingSnackBar.show(
                           context,
-                          message: 'new_transfer_page.error'.tr(),
+                          message: '${'new_transfer_page.error'.tr()}: $response',
                           type: SnackBarType.error,
                           width: 320,
                           duration: Duration(seconds: 3),
@@ -205,7 +203,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                       hideLoader(context);
                       FloatingSnackBar.show(
                         context,
-                        message: 'new_transfer_page.error'.tr(),
+                        message: '${'new_transfer_page.error'.tr()}: $asset',
                         type: SnackBarType.error,
                         width: 320,
                         duration: Duration(seconds: 3),
@@ -354,7 +352,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                           onPressed: () async {
                             showLoader(context);
                             final response = await _transfersService.requestCatalog(consumerID ?? '', providerID ?? '');
-                            if (response != null) {
+                            if (response is Map<String, dynamic>) {
                               hideLoader(context);
                               final ids = extractDatasetIds(response);
                               setState(() {
@@ -370,7 +368,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               hideLoader(context);
                               FloatingSnackBar.show(
                                 context,
-                                message: 'new_transfer_page.error_catalog'.tr(),
+                                message: '${'new_transfer_page.error_catalog'.tr()}: $response',
                                 type: SnackBarType.error,
                                 width: 320,
                                 duration: Duration(seconds: 3),
@@ -497,13 +495,13 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               _selectedAssetId ?? '',
                             );
 
-                            if (response != null) {
+                            if (response is Map<String, dynamic>) {
                               final negotiationId = response['@id'];
                               setState(() {
                                 contractNegotiationId = negotiationId;
                               });
 
-                              Map<String, dynamic>? responseAgreement;
+                              Object? responseAgreement;
                               String state = '';
 
                               // Intentar obtener el contrato hasta que sea FINALIZED o se agote el número de intentos
@@ -511,23 +509,23 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 await Future.delayed(const Duration(seconds: 2));
                                 responseAgreement = await _transfersService.getContractAgreement(consumerID ?? '', negotiationId);
 
-                                if (responseAgreement != null) {
+                                if (responseAgreement is Map<String, dynamic>) {
                                   state = responseAgreement['state'] ?? '';
                                   if (state == 'FINALIZED') break;
-                                }
+                                } 
                               }
 
                               hideLoader(context);
 
-                              if (responseAgreement != null && state == 'FINALIZED') {
+                              if (responseAgreement is Map<String, dynamic> && state == 'FINALIZED') {
                                 setState(() {
-                                  contractAgreementId = responseAgreement!['contractAgreementId'];
+                                  if (responseAgreement is Map<String, dynamic>) contractAgreementId = responseAgreement['contractAgreementId'];
                                   contractState = state;
                                 });
                               } else {
                                 FloatingSnackBar.show(
                                   context,
-                                  message: 'new_transfer_page.error_contract'.tr(),
+                                  message: '${'new_transfer_page.error_contract'.tr()}: $responseAgreement',
                                   type: SnackBarType.error,
                                   width: 320,
                                   duration: const Duration(seconds: 3),
@@ -537,7 +535,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                               hideLoader(context);
                               FloatingSnackBar.show(
                                 context,
-                                message: 'new_transfer_page.error_neg_contract'.tr(),
+                                message: '${'new_transfer_page.error_neg_contract'.tr()}: $response',
                                 type: SnackBarType.error,
                                 width: 320,
                                 duration: const Duration(seconds: 3),
@@ -750,21 +748,21 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             onPressed: () async {
                               showLoader(context);
                               final response = await _transfersService.startTransfer(consumerID ?? '', providerID ?? '', contractAgreementId ?? '');
-                              if (response != null) {
+                              if (response is Map<String, dynamic>) {
                                 setState(() {
                                   transferProcessID = response['@id'];
                                 });
 
-                                Map<String, dynamic>? responseCheck;
+                                Object responseCheck;
                                 String state = '';
 
                                 for (int i = 0; i < 10; i++) {
                                   await Future.delayed(const Duration(seconds: 2));
                                   responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
 
-                                  if (responseCheck != null) {
+                                  if (responseCheck is Map<String, dynamic>) {
                                     setState(() {
-                                      transferState = responseCheck!['state'];
+                                      if (responseCheck is Map<String, dynamic>)  transferState = responseCheck['state'];
                                     });
                                     state = responseCheck['state'] ?? '';
                                     if (state == 'COMPLETED') break;
@@ -869,21 +867,21 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
                                 if (!context.mounted) return;
 
-                                if (response != null) {
+                                if (response is Map<String, dynamic>) {
                                   setState(() {
                                     transferProcessID = response['@id'];
                                   });
 
-                                  Map<String, dynamic>? responseCheck;
+                                  Object? responseCheck;
                                   String state = '';
 
                                   for (int i = 0; i < 10; i++) {
                                     await Future.delayed(const Duration(seconds: 2));
                                     responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
 
-                                    if (responseCheck != null) {
+                                    if (responseCheck is Map<String, dynamic>) {
                                       setState(() {
-                                        transferState = responseCheck!['state'];
+                                        if (responseCheck is Map<String, dynamic>) transferState = responseCheck['state'];
                                       });
                                       state = responseCheck['state'] ?? '';
                                       if (state == 'STARTED') break;
@@ -892,9 +890,9 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
                                   if (!context.mounted) return;
 
-                                  if (responseCheck != null) {
+                                  if (responseCheck is Map<String, dynamic>) {
                                     setState(() {
-                                      transferState = responseCheck!['state'];
+                                      if (responseCheck is Map<String, dynamic>) transferState = responseCheck['state'];
                                     });
 
                                     final responseData = await _transfersService.checkDataPull(
@@ -904,7 +902,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
                                     if (!context.mounted) return;
 
-                                    if (responseData != null) {
+                                    if (responseData is Map<String, dynamic>) {
                                       setState(() {
                                         final originalEndpoint = responseData['endpoint'] as String;
                                         endpoint = originalEndpoint.replaceFirstMapped(
@@ -918,7 +916,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_transfer_page.error_transfer_process'.tr(),
+                                          message: '${'new_transfer_page.error_transfer_process'.tr()}: $response',
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
@@ -931,7 +929,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                       hideLoader(context);
                                       FloatingSnackBar.show(
                                         context,
-                                        message: 'new_transfer_page.error_transfer_process'.tr(),
+                                        message: '${'new_transfer_page.error_transfer_process'.tr()}: $responseCheck',
                                         type: SnackBarType.error,
                                         width: 320,
                                         duration: Duration(seconds: 3),
@@ -949,7 +947,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                     hideLoader(context);
                                     FloatingSnackBar.show(
                                       context,
-                                      message: 'new_transfer_page.error_transfer_process'.tr(),
+                                      message: '${'new_transfer_page.error_transfer_process'.tr()}: $response',
                                       type: SnackBarType.error,
                                       width: 320,
                                       duration: Duration(seconds: 3),

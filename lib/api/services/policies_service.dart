@@ -1,6 +1,7 @@
 import 'package:edc_studio/api/models/policy.dart';
 import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
+import 'package:edc_studio/api/utils/handle_message.dart';
 
 class PoliciesService {
   final CommunicationService _api = CommunicationService();
@@ -8,22 +9,22 @@ class PoliciesService {
   /// Create a new policy
   Future<String?> createPolicy(Policy policy) async {
     try {
-      final response = await _api.post(ApiRoutes.policies, policy.toJson());
-      return response;
-    } catch (e) {
+      await _api.post(ApiRoutes.policies, policy.toJson());
       return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Get policies by EDC ID
-  Future<List<Policy>> getPoliciesByEdcId(String edcId) async {
+  Future<Object> getPoliciesByEdcId(String edcId) async {
     try {
       final response = await _api.get('${ApiRoutes.policies}/by-edc/$edcId');
       return (response as List)
           .map((json) => Policy.fromJson(json))
           .toList();
-    } catch (e) {
-      return [];
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 

@@ -54,10 +54,12 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
   List<String> selectedAssetIds = [];
 
   Future<void> _loadContract() async {
+    showLoader(context);
     final contract = await _contractsService.getContractByContractId(widget.edcId, widget.contractId);
     final connector = await _edcService.getConnectorByID(widget.edcId);
 
-    if (contract != null) {
+    if (contract is Contract) {
+      hideLoader(context);
       setState(() {
         accessPolicyIdSelected = contract.accessPolicyId;
         contractPolicyIdSelected = contract.contractPolicyId;
@@ -66,6 +68,15 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
       });
       await _loadAssets(widget.edcId);
       await _loadPolicies(widget.edcId);
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()}: $contract',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 5),
+      );
     }
 
     if (connector != null) {
@@ -77,17 +88,43 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
   }
 
   Future<void> _loadAssets(String id) async {
+    showLoader(context);
     final assets = await _assetsService.getAssetsByEdcId(id);
-    setState(() {
-      _allAssets = assets;
-    });
+    if (assets is List<Asset>) {
+      hideLoader(context);
+      setState(() {
+        _allAssets = assets;
+      });
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()}: $assets',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 5),
+      );
+    }
   }
 
   Future<void> _loadPolicies(String id) async {
+    showLoader(context);
     final policies = await _policyService.getPoliciesByEdcId(id);
-    setState(() {
-      _allPolicies = policies;
-    });
+    if (policies is List<Policy>) {
+      hideLoader(context);
+      setState(() {
+        _allPolicies = policies;
+      });
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()}: $policies',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 5),
+      );
+    }
   }
 
   @override
@@ -311,7 +348,7 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                   
                                       showLoader(context);
                                       final response = await _contractsService.updateContract(edcIdSelected ?? '', contract);
-                                      if (response) {
+                                      if (response == null) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
@@ -324,7 +361,7 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'update_contract_page.error'.tr(),
+                                          message: '${'update_contract_page.error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),

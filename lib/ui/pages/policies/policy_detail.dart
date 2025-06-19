@@ -3,6 +3,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/policy.dart';
+import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/api/services/policies_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
@@ -25,6 +26,7 @@ class PolicyDetailPage extends StatefulWidget {
 class _PolicyDetailPageState extends State<PolicyDetailPage> {
 
   final PoliciesService _policyService = PoliciesService();
+  final EdcService _edcService = EdcService();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -48,6 +50,13 @@ class _PolicyDetailPageState extends State<PolicyDetailPage> {
         numProhibitions = prohibitions.length;
         obligations = policy.policy.obligation ?? [];
         numObligations = obligations.length;
+      });
+    }
+
+    final connector = await _edcService.getConnectorByID(widget.edcId);
+    if (connector != null) {
+      setState(() {
+        edcStateSelected = connector.state;
       });
     }
   }

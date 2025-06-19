@@ -36,10 +36,12 @@ class _AssetsListPageState extends State<AssetsListPage> {
 
   Future<void> _loadAssets(String id) async {
     final assets = await _assetsService.getAssetsByEdcId(id);
-    setState(() {
-      _allAssets = assets;
-      _filteredAssets = assets;
-    });
+    if (assets is List<Asset>) {
+      setState(() {
+        _allAssets = assets;
+        _filteredAssets = assets;
+      });
+    }
   }
 
   void _filterAssets(String query) {

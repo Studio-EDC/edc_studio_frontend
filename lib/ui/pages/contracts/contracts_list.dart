@@ -36,10 +36,12 @@ class _ContractsListPageState extends State<ContractsListPage> {
 
   Future<void> _loadContracts(String id) async {
     final contracts = await _contractsService.getContractsByEdcId(id);
-    setState(() {
-      _allContracts = contracts;
-      _filteredContracts = contracts;
-    });
+    if (contracts is List<Contract>) {
+      setState(() {
+        _allContracts = contracts;
+        _filteredContracts = contracts;
+      });
+    }
   }
 
   void _filterContracts(String query) {
@@ -255,7 +257,7 @@ class _ContractsListPageState extends State<ContractsListPage> {
                                       final response = await _contractsService.deleteContract(contract.contractId, _selectedConnectorId);
                                       hideLoader(context);
 
-                                      if (response == true) {
+                                      if (response == null) {
                                         FloatingSnackBar.show(
                                           context,
                                           message: 'contracts_list_page.deleted_success'.tr(),
@@ -266,7 +268,7 @@ class _ContractsListPageState extends State<ContractsListPage> {
                                       } else {
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'contracts_list_page.deleted_error'.tr(),
+                                          message: '${'contracts_list_page.deleted_error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           duration: const Duration(seconds: 3),
                                         );

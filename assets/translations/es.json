@@ -12,6 +12,7 @@
   "create": "Crear",
   "actions": "Acciones",
   "update": "Actualizar",
+  "general_error": "Ha habido un error:",
   "edc_list_page": {
     "new_edc": "Nuevo EDC",
     "search": "Buscar EDC",
@@ -54,7 +55,7 @@
     "true": "Verdadero",
     "false": "Falso",
     "success": "¡Recurso creado correctamente!",
-    "error": "Error al crear el recurso.",
+    "error": "Error al crear el recurso",
     "create_req": "Para crear el activo, el conector debe estar en ejecución. Vaya a la página de lista de EDC e inícielo antes de crear el activo."
   },
   "update_asset_page": {
@@ -66,7 +67,7 @@
     "description": "Para garantizar un intercambio entre proveedor y consumidor, el proveedor debe crear una oferta de contrato para el recurso, sobre la base de la cual se puede negociar un acuerdo de contrato. La definición del contrato asocia políticas a una selección de recursos para generar las ofertas que se pondrán en el catálogo. Así que selecciona el proveedor del que deseas ver los contratos:",
     "search": "Buscar contrato",
     "new_contract": "Nuevo contrato",
-    "not_found": "No se encontraron contratos para este proveedor.",
+    "not_found": "No se encontraron contratos para este proveedor. ¿Estás seguro de que el conector está en funcionamiento?",
     "contract_id": "ID del contrato",
     "access_policy_id": "ID de la política de acceso",
     "contract_policy_id": "ID de la política de contrato",
@@ -127,7 +128,7 @@
     "description": "El conector proveedor es el que gestiona las políticas para las que se puede ejecutar una negociación de contrato. Así que selecciona el proveedor del que deseas ver las políticas:",
     "search": "Buscar política",
     "new": "Nueva política",
-    "no_policies": "No se encontraron políticas para este proveedor.",
+    "no_policies": "No se encontraron políticas para este proveedor. ¿Estás seguro de que el conector está en funcionamiento?",
     "columns": {
       "policy_id": "ID de la política",
       "actions": "Acciones",

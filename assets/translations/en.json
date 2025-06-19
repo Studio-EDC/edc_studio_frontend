@@ -12,6 +12,7 @@
   "create": "Create",
   "actions": "Actions",
   "update": "Update",
+  "general_error": "There was an error:",
   "edc_list_page": {
     "new_edc": "New EDC",
     "search": "Search EDC",
@@ -54,7 +55,7 @@
     "true": "True",
     "false": "False",
     "success": "Asset created successfully!",
-    "error": "Error creating asset.",
+    "error": "Error creating asset",
     "create_req": "To create the asset, the connector must be running. Go to the EDC list page and start it before creating the asset."
   },
   "update_asset_page": {
@@ -66,7 +67,7 @@
     "description": "To ensure an exchange between provider and consumer, the provider must create a contract offer for the asset, on the basis of which a contract agreement can be negotiated. The contract definition associates policies to a selection of assets to generate the contract offers that will be put in the catalog. So, select the provider you want to view the contracts from:",
     "search": "Search Contract",
     "new_contract": "New Contract",
-    "not_found": "No contracts found for this provider.",
+    "not_found": "No contracts found for this provider. Are you sure the connector is running?",
     "contract_id": "Contract ID",
     "access_policy_id": "Access policy ID",
     "contract_policy_id": "Contract policy ID",
@@ -127,7 +128,7 @@
     "description": "The provider connector is the one managing policies for which a contract negotiation can be executed. So, select the provider you want to view the policies from:",
     "search": "Search Policy",
     "new": "New Policy",
-    "no_policies": "No policies found for this provider.",
+    "no_policies": "No policies found for this provider. Are you sure the connector is running?",
     "columns": {
       "policy_id": "Policy ID",
       "actions": "Actions",

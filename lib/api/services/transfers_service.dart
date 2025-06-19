@@ -1,12 +1,13 @@
 import 'package:edc_studio/api/models/transfer.dart';
 import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
+import 'package:edc_studio/api/utils/handle_message.dart';
 
 class TransfersService {
   final CommunicationService _api = CommunicationService();
 
   /// Rquest catalog
-  Future<Map<String, dynamic>?> requestCatalog(String consumer, String provider) async {
+  Future<Object> requestCatalog(String consumer, String provider) async {
     try {
       final response = await _api.post(
         '${ApiRoutes.transfers}/catalog_request', 
@@ -16,13 +17,13 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Negotiate contract
-  Future<Map<String, dynamic>?> negotiateContract(String consumer, String provider, String contractOfferId, String assetId) async {
+  Future<Object> negotiateContract(String consumer, String provider, String contractOfferId, String assetId) async {
     try {
       final response = await _api.post(
         '${ApiRoutes.transfers}/negotiate_contract', 
@@ -34,13 +35,13 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Contract agreement
-  Future<Map<String, dynamic>?> getContractAgreement(String consumer, String contractNegotiationId) async {
+  Future<Object> getContractAgreement(String consumer, String contractNegotiationId) async {
     try {
       final response = await _api.post(
         '${ApiRoutes.transfers}/contract_agreement',
@@ -50,8 +51,8 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
@@ -80,7 +81,7 @@ class TransfersService {
   }
 
   /// Start transfer
-  Future<dynamic> startTransfer(String consumer, String provider, String contractAgreementId) async {
+  Future<Object> startTransfer(String consumer, String provider, String contractAgreementId) async {
     try {
       final response = await _api.post(
         '${ApiRoutes.transfers}/start_transfer', 
@@ -91,13 +92,13 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Check transfer
-  Future<dynamic> checkTransfer(String consumer, String transferProcessID) async {
+  Future<Object> checkTransfer(String consumer, String transferProcessID) async {
     try {
       final response = await _api.post(
         '${ApiRoutes.transfers}/check_transfer', 
@@ -107,31 +108,31 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Create a new policy
   Future<String?> createTransfer(Transfer transfer) async {
     try {
-      final response = await _api.post(ApiRoutes.transfers, transfer.toJson());
-      return response['id'];
-    } catch (e) {
+      await _api.post(ApiRoutes.transfers, transfer.toJson());
       return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Get all
-  Future<List<TransferPopulated>?> getAll() async {
+  Future<Object> getAll() async {
     try {
       final response = await _api.get(ApiRoutes.transfers);
       final transfers = (response as List)
           .map((json) => TransferPopulated.fromJson(json))
           .toList();
       return transfers;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
@@ -147,8 +148,8 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
@@ -163,8 +164,8 @@ class TransfersService {
         }
       );
       return response;
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 }

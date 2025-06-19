@@ -339,7 +339,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                   
                                       showLoader(context);
                                       final response = await _policyService.createPolicy(policy);
-                                      if (response != null) {
+                                      if (response == null) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
@@ -352,7 +352,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_policy_page.error'.tr(),
+                                          message: '${'new_policy_page.error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),

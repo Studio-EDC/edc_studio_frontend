@@ -347,7 +347,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                   
                                       showLoader(context);
                                       final response = await _assetService.createAsset(asset);
-                                      if (response != null) {
+                                      if (response == null) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
@@ -360,10 +360,10 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_asset_page.error'.tr(),
+                                          message: '${'new_asset_page.error'.tr()}:$response',
                                           type: SnackBarType.error,
                                           width: 320,
-                                          duration: Duration(seconds: 3),
+                                          duration: Duration(seconds: 5),
                                         );
                                       }
                                       context.go('/assets');

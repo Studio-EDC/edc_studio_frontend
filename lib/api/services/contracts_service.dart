@@ -1,6 +1,7 @@
 import 'package:edc_studio/api/models/contract.dart';
 import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
+import 'package:edc_studio/api/utils/handle_message.dart';
 
 class ContractsService {
   final CommunicationService _api = CommunicationService();
@@ -8,52 +9,52 @@ class ContractsService {
   /// Create a new contract
   Future<String?> createContract(Contract contract) async {
     try {
-      final response = await _api.post(ApiRoutes.contracts, contract.toJson());
-      return response;
-    } catch (e) {
+      await _api.post(ApiRoutes.contracts, contract.toJson());
       return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Get contracts by EDC ID
-  Future<List<Contract>> getContractsByEdcId(String edcId) async {
+  Future<Object> getContractsByEdcId(String edcId) async {
     try {
       final response = await _api.get('${ApiRoutes.contracts}/by-edc/$edcId');
       return (response as List)
           .map((json) => Contract.fromJson(json))
           .toList();
-    } catch (e) {
-      return [];
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Get contract by ID
-  Future<Contract?> getContractByContractId(String edcId, String assetId) async {
+  Future<Object> getContractByContractId(String edcId, String assetId) async {
     try {
       final response = await _api.get('${ApiRoutes.contracts}/by-contract-id/$edcId/$assetId');
       return Contract.fromJson(response);
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Update contract by ID
-  Future<bool> updateContract(String edcId, Contract contract) async {
+  Future<String?> updateContract(String edcId, Contract contract) async {
     try {
       await _api.put('${ApiRoutes.contracts}/$edcId', contract.toJson());
-      return true;
-    } catch (e) {
-      return false;
+      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Delete contract by ID
-  Future<bool> deleteContract(String contractId, String edcId) async {
+  Future<String?> deleteContract(String contractId, String edcId) async {
     try {
       await _api.delete('${ApiRoutes.contracts}/$contractId/$edcId');
-      return true;
-    } catch (e) {
-      return false;
+      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 }

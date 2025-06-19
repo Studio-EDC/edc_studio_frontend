@@ -12,6 +12,7 @@
   "create": "Crear",
   "actions": "Accions",
   "update": "Actualitza",
+  "general_error": "Hi ha hagut un error:",
   "edc_list_page": {
     "new_edc": "Nou EDC",
     "search": "Cerca EDC",
@@ -54,7 +55,7 @@
     "true": "Cert",
     "false": "Fals",
     "success": "Actiu creat correctament!",
-    "error": "Error en crear l'actiu.",   
+    "error": "Error en crear l'actiu",   
     "create_req": "Per crear l'actiu, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear l'actiu."
   },
   "update_asset_page": {
@@ -66,7 +67,7 @@
     "description": "Per garantir un intercanvi entre el proveïdor i el consumidor, el proveïdor ha de crear una oferta de contracte per a l'actiu, sobre la base de la qual es pot negociar un acord. La definició del contracte associa polítiques a una selecció d'actius per generar les ofertes que es mostraran al catàleg. Selecciona el proveïdor del qual vols veure els contractes:",
     "search": "Cerca contracte",
     "new_contract": "Nou contracte",
-    "not_found": "No s'han trobat contractes per a aquest proveïdor.",
+    "not_found": "No s'han trobat contractes per a aquest proveïdor. Estàs segur que el connector està en funcionament?",
     "contract_id": "ID del contracte",
     "access_policy_id": "ID de la política d'accés",
     "contract_policy_id": "ID de la política de contracte",
@@ -127,7 +128,7 @@
     "description": "El connector proveïdor és qui gestiona les polítiques per a les quals es pot executar una negociació de contracte. Selecciona el proveïdor del qual vols veure les polítiques:",
     "search": "Cerca política",
     "new": "Nova política",
-    "no_policies": "No s'han trobat polítiques per a aquest proveïdor.",
+    "no_policies": "No s'han trobat polítiques per a aquest proveïdor. Estàs segur que el connector està en funcionament?",
     "columns": {
       "policy_id": "ID de la política",
       "actions": "Accions",

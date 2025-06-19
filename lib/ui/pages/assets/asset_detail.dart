@@ -3,6 +3,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/services/assets_service.dart';
+import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
@@ -27,6 +28,7 @@ class AssetDetailPage extends StatefulWidget {
 class _AssetDetailPageState extends State<AssetDetailPage> {
 
   final AssetService _assetService = AssetService();
+  final EdcService _edcService = EdcService();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -43,8 +45,10 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
   String dataAddressProxyController = 'True';
 
   Future<void> _loadAsset() async {
+    showLoader(context);
     final asset = await _assetService.getAssetByAssetId(widget.edcId, widget.assetId);
-    if (asset != null) {
+    if (asset is Asset) {
+      hideLoader(context);
       setState(() {
         _assetIdController.text = asset.assetId;
         _nameController.text = asset.name;
@@ -53,6 +57,22 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
         _baseURLController.text = asset.baseUrl;
         dataAddressProxyController = asset.dataAddressType;
         dataAddressProxyController = asset.dataAddressProxy ? 'True' : 'False';
+      });
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()}: $asset',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 5),
+      );
+    }
+
+    final connector = await _edcService.getConnectorByID(edcIdSelected);
+    if (connector != null) {
+      setState(() {
+        edcStateSelected = connector.state;
       });
     }
   }
@@ -304,7 +324,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                   
                                       showLoader(context);
                                       final response = await _assetService.updateAsset(widget.edcId, asset);
-                                      if (response) {
+                                      if (response == null) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
@@ -317,7 +337,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'update_asset_page.error'.tr(),
+                                          message: '${'update_asset_page.error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),

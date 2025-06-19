@@ -63,17 +63,43 @@ class _NewContractPageState extends State<NewContractPage> {
   }
 
   Future<void> _loadAssets(String id) async {
+    showLoader(context);
     final assets = await _assetsService.getAssetsByEdcId(id);
-    setState(() {
-      _allAssets = assets;
-    });
+    if (assets is List<Asset>) {
+      hideLoader(context);
+      setState(() {
+        _allAssets = assets;
+      });
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()}: $assets',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 5),
+      );
+    }
   }
 
   Future<void> _loadPolicies(String id) async {
+    showLoader(context);
     final policies = await _policyService.getPoliciesByEdcId(id);
-    setState(() {
-      _allPolicies = policies;
-    });
+    if (policies is List<Policy>) {
+      hideLoader(context);
+      setState(() {
+        _allPolicies = policies;
+      });
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()}: $policies',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 5),
+      );
+    }
   }
 
   @override
@@ -340,12 +366,10 @@ class _NewContractPageState extends State<NewContractPage> {
                                           "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
                                         }
                                       );
-
-                                      print(contract.toJson());
                   
                                       showLoader(context);
                                       final response = await _contractsService.createContract(contract);
-                                      if (response != null) {
+                                      if (response == null) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
@@ -358,7 +382,7 @@ class _NewContractPageState extends State<NewContractPage> {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_contract_page.error'.tr(),
+                                          message: '${'new_contract_page.error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),

@@ -48,10 +48,12 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
 
   Future<void> _loadPolicies(String id) async {
     final policies = await _policiesService.getPoliciesByEdcId(id);
-    setState(() {
-      _allPolicies = policies;
-      _filteredPolicies = policies;
-    });
+    if (policies is List<Policy>) {
+      setState(() {
+        _allPolicies = policies;
+        _filteredPolicies = policies;
+      });
+    }
   }
 
   void _filterPolicies(String query) {

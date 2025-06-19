@@ -1,10 +1,8 @@
-import 'dart:convert';
 
 import 'package:edc_studio/api/models/asset.dart';
 import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/api/utils/handle_message.dart';
-import 'package:http/http.dart' as http;
 
 class AssetService {
   final CommunicationService _api = CommunicationService();
@@ -12,52 +10,30 @@ class AssetService {
   /// Create a new asset
   Future<String?> createAsset(Asset asset) async {
     try {
-      final response = await _api.post(ApiRoutes.assets, asset.toJson());
-      return response;
-    } catch (e) {
+      await _api.post(ApiRoutes.assets, asset.toJson());
       return null;
-    }
-  }
-
-  /// Get all assets
-  Future<List<Asset>> getAllAssets() async {
-    try {
-      final response = await _api.get(ApiRoutes.assets);
-      return (response as List)
-          .map((json) => Asset.fromJson(json))
-          .toList();
-    } catch (e) {
-      return [];
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Get asset by ID
-  Future<Asset?> getAssetById(String id) async {
-    try {
-      final response = await _api.get('${ApiRoutes.assets}/$id');
-      return Asset.fromJson(response);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /// Get asset by ID
-  Future<Asset?> getAssetByAssetId(String edcId, String assetId) async {
+  Future<Object> getAssetByAssetId(String edcId, String assetId) async {
     try {
       final response = await _api.get('${ApiRoutes.assets}/by-asset-id/$edcId/$assetId');
       return Asset.fromJson(response);
-    } catch (e) {
-      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
   /// Update asset by ID
-  Future<bool> updateAsset(String edcId, Asset asset) async {
+  Future<String?> updateAsset(String edcId, Asset asset) async {
     try {
       await _api.put('${ApiRoutes.assets}/$edcId', asset.toJson());
-      return true;
-    } catch (e) {
-      return false;
+      return null;
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 
@@ -72,14 +48,14 @@ class AssetService {
   }
 
   /// Get assets by EDC ID
-  Future<List<Asset>> getAssetsByEdcId(String edcId) async {
+  Future<Object> getAssetsByEdcId(String edcId) async {
     try {
       final response = await _api.get('${ApiRoutes.assets}/by-edc/$edcId');
       return (response as List)
           .map((json) => Asset.fromJson(json))
           .toList();
-    } catch (e) {
-      return [];
+    } on Exception catch (e) {
+      return extractEdcErrorMessage(e);
     }
   }
 }
