@@ -4,7 +4,7 @@ import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/api/utils/handle_message.dart';
 
 class ContractsService {
-  final CommunicationService _api = CommunicationService();
+  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
 
   /// Create a new contract
   Future<String?> createContract(Contract contract) async {

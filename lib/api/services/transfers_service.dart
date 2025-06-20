@@ -4,7 +4,7 @@ import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/api/utils/handle_message.dart';
 
 class TransfersService {
-  final CommunicationService _api = CommunicationService();
+  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
 
   /// Rquest catalog
   Future<Object> requestCatalog(String consumer, String provider) async {

@@ -232,6 +232,19 @@
     "pull_flow_steps": "• Provide a simple Http Proxy data plane implementation.\n• Perform a file transfer initiated by the consumer.\n• The provider will send an EndpointDataReference to the consumer.\n• The consumer will call the endpoint and fetch the data.",
     "start_transfer_2": "1. Start the transfer",
     "see_data": "You can see the data here: ",
-    "create_req": "To create the transfer, the connector must be running. Go to the EDC list page and start it before creating the transfer."
+    "create_req": "To create the transfer, the connector must be running. Go to the EDC list page and start it before creating the transfer.",
+    "save_data": "Click the button below to save the data to your Data Pond account.",
+    "save_data_button": "Save data"
+  },
+  "users_list_page": {
+    "search": "Search User",
+    "new_user": "New user",
+    "username": "Username",
+    "no_users": "No users found.",
+    "title_list": "Click the user you want to login with",
+    "login_title": "Login with your credentials",
+    "title_register": "Enter the user data",
+    "password": "Password",
+    "login": "Login"
   }
 }

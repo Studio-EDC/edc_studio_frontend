@@ -4,7 +4,7 @@ import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
 
 class EdcService {
-  final CommunicationService _api = CommunicationService();
+  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
 
   /// Create a new EDC connector
   Future<String?> createConnector(Connector data) async {

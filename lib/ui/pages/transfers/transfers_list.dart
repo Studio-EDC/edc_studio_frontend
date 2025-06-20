@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/transfer.dart';
 import 'package:edc_studio/api/services/transfers_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
-import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +25,8 @@ class _TransfersListPageState extends State<TransfersListPage> {
   List<TransferPopulated> _filteredTransfers = [];
 
   Future<void> _loadTransfers() async {
-    showLoader(context);
     final transfers = await _transfersService.getAll();
     if (transfers is List<TransferPopulated>) {
-      hideLoader(context);
       setState(() {
         _allTransfers = transfers;
         _filteredTransfers = transfers;

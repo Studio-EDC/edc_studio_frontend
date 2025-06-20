@@ -12,6 +12,7 @@ import 'package:edc_studio/ui/widgets/link.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
+import 'package:edc_studio/ui/widgets/user_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -38,6 +39,8 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
   String providerStateSelected = '';
   String consumerStateSelected = '';
+
+  bool saveData = false;
 
   Future<void> _loadProviders() async {
     final connectors = await _edcService.getAllConnectors();
@@ -631,198 +634,12 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         fontSize: 15,
                       ),
                     ),
-                    content: _selectedTransferFlow == 'push' 
-                      ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'new_transfer_page.file_transfer'.tr(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'new_transfer_page.push_flow_steps'.tr(),
-                            style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
-                          ),
-                          const SizedBox(height: 24),
-                          Text(
-                            'new_transfer_page.start_http_server'.tr(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'new_transfer_page.pre_requisit'.tr(),
-                            style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
-                          ),
-                          const SizedBox(height: 16),
-                          OutlinedButton.icon(
-                            onPressed: () async {
-                              if (httpLoggerStarted) {
-                                showLoader(context);
-                                final success = await _transfersService.stopHttpLogger();
-                                hideLoader(context);
-
-                                if (success == null) {
-                                  FloatingSnackBar.show(
-                                    context,
-                                    message: 'new_transfer_page.error_start_http'.tr(),
-                                    type: SnackBarType.error,
-                                    width: 320,
-                                    duration: Duration(seconds: 3),
-                                  );
-                                } else {
-                                  setState(() {
-                                    httpLoggerStarted = false;
-                                  });
-                                }
-                              } else {
-                                showLoader(context);
-                                final success = await _transfersService.startHttpLogger();
-                                hideLoader(context);
-
-                                if (success == null) {
-                                  FloatingSnackBar.show(
-                                    context,
-                                    message: 'new_transfer_page.error_start_http'.tr(),
-                                    type: SnackBarType.error,
-                                    width: 320,
-                                    duration: Duration(seconds: 3),
-                                  );
-                                } else {
-                                  setState(() {
-                                    httpLoggerStarted = true;
-                                  });
-                                }
-                              }
-                            },
-                            icon: httpLoggerStarted ?  const Icon(Icons.stop, color: Colors.red) : const Icon(Icons.play_arrow, color: Colors.green),
-                            label: Text(
-                              httpLoggerStarted ? 'new_transfer_page.stop'.tr() : 'new_transfer_page.start'.tr(),
-                              style: TextStyle(
-                                color: httpLoggerStarted ?  Colors.red : Colors.green,
-                                fontSize: 15,
-                              ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          Text(
-                            'new_transfer_page.start_transfer_numbered'.tr(),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'new_transfer_page.click'.tr(),
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'new_transfer_page.info'.tr(),
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          OutlinedButton.icon(
-                            onPressed: () async {
-                              showLoader(context);
-                              final response = await _transfersService.startTransfer(consumerID ?? '', providerID ?? '', contractAgreementId ?? '');
-                              if (response is Map<String, dynamic>) {
-                                setState(() {
-                                  transferProcessID = response['@id'];
-                                });
-
-                                Object responseCheck;
-                                String state = '';
-
-                                for (int i = 0; i < 10; i++) {
-                                  await Future.delayed(const Duration(seconds: 2));
-                                  responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
-
-                                  if (responseCheck is Map<String, dynamic>) {
-                                    setState(() {
-                                      if (responseCheck is Map<String, dynamic>)  transferState = responseCheck['state'];
-                                    });
-                                    state = responseCheck['state'] ?? '';
-                                    if (state == 'COMPLETED') break;
-                                  }
-                                }
-
-                                hideLoader(context);
-                              } else {
-                                hideLoader(context);
-                                FloatingSnackBar.show(
-                                  context,
-                                  message: 'new_transfer_page.error_transfer_process'.tr(),
-                                  type: SnackBarType.error,
-                                  width: 320,
-                                  duration: Duration(seconds: 3),
-                                );
-                              }
-                            },
-                            label: Text(
-                              'new_transfer_page.start_transfer'.tr(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 15,
-                              ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          if (transferProcessID != null)
-                          Text(
-                            '${'new_transfer_page.transfer_process_id'.tr()} $transferProcessID',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontSize: 15,
-                            )
-                          ),
-                          if (transferProcessID != null)
-                          const SizedBox(height: 16),
-                          if (transferState != null)
-                          Text(
-                            '${'new_transfer_page.transfer_state'.tr()} $transferState',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontSize: 15,
-                            )
-                          ),
-                          if (transferState != null)
-                          const SizedBox(height: 16),
-                          if (transferState == 'COMPLETED')
-                          LinkWidget(url: 'http://localhost:4000/data'),
-                          if (transferState != null)
-                          const SizedBox(height: 50),
-                        ],
-                      ) 
-                      : Column(
+                    content: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _selectedTransferFlow == 'push' 
+                        ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -835,12 +652,82 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'new_transfer_page.pull_flow_steps'.tr(),
+                              'new_transfer_page.push_flow_steps'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
                             ),
                             const SizedBox(height: 24),
                             Text(
-                              'new_transfer_page.start_transfer_2'.tr(),
+                              'new_transfer_page.start_http_server'.tr(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'new_transfer_page.pre_requisit'.tr(),
+                              style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                            ),
+                            const SizedBox(height: 16),
+                            OutlinedButton.icon(
+                              onPressed: () async {
+                                if (httpLoggerStarted) {
+                                  showLoader(context);
+                                  final success = await _transfersService.stopHttpLogger();
+                                  hideLoader(context);
+
+                                  if (success == null) {
+                                    FloatingSnackBar.show(
+                                      context,
+                                      message: 'new_transfer_page.error_start_http'.tr(),
+                                      type: SnackBarType.error,
+                                      width: 320,
+                                      duration: Duration(seconds: 3),
+                                    );
+                                  } else {
+                                    setState(() {
+                                      httpLoggerStarted = false;
+                                    });
+                                  }
+                                } else {
+                                  showLoader(context);
+                                  final success = await _transfersService.startHttpLogger();
+                                  hideLoader(context);
+
+                                  if (success == null) {
+                                    FloatingSnackBar.show(
+                                      context,
+                                      message: 'new_transfer_page.error_start_http'.tr(),
+                                      type: SnackBarType.error,
+                                      width: 320,
+                                      duration: Duration(seconds: 3),
+                                    );
+                                  } else {
+                                    setState(() {
+                                      httpLoggerStarted = true;
+                                    });
+                                  }
+                                }
+                              },
+                              icon: httpLoggerStarted ?  const Icon(Icons.stop, color: Colors.red) : const Icon(Icons.play_arrow, color: Colors.green),
+                              label: Text(
+                                httpLoggerStarted ? 'new_transfer_page.stop'.tr() : 'new_transfer_page.start'.tr(),
+                                style: TextStyle(
+                                  color: httpLoggerStarted ?  Colors.red : Colors.green,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                              ),
+                            ),
+                            const SizedBox(height: 50),
+                            Text(
+                              'new_transfer_page.start_transfer_numbered'.tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -855,24 +742,25 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'new_transfer_page.info'.tr(),
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
                             const SizedBox(height: 16),
                             OutlinedButton.icon(
                               onPressed: () async {
                                 showLoader(context);
-                                final response = await _transfersService.startTransferPull(
-                                  consumerID ?? '', 
-                                  providerID ?? '', 
-                                  contractAgreementId ?? '',
-                                );
-
-                                if (!context.mounted) return;
-
+                                final response = await _transfersService.startTransfer(consumerID ?? '', providerID ?? '', contractAgreementId ?? '');
                                 if (response is Map<String, dynamic>) {
                                   setState(() {
                                     transferProcessID = response['@id'];
                                   });
 
-                                  Object? responseCheck;
+                                  Object responseCheck;
                                   String state = '';
 
                                   for (int i = 0; i < 10; i++) {
@@ -881,78 +769,23 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
                                     if (responseCheck is Map<String, dynamic>) {
                                       setState(() {
-                                        if (responseCheck is Map<String, dynamic>) transferState = responseCheck['state'];
+                                        if (responseCheck is Map<String, dynamic>)  transferState = responseCheck['state'];
                                       });
                                       state = responseCheck['state'] ?? '';
-                                      if (state == 'STARTED') break;
+                                      if (state == 'COMPLETED') break;
                                     }
                                   }
 
-                                  if (!context.mounted) return;
-
-                                  if (responseCheck is Map<String, dynamic>) {
-                                    setState(() {
-                                      if (responseCheck is Map<String, dynamic>) transferState = responseCheck['state'];
-                                    });
-
-                                    final responseData = await _transfersService.checkDataPull(
-                                      consumerID ?? '', 
-                                      response['@id'] ?? '',
-                                    );
-
-                                    if (!context.mounted) return;
-
-                                    if (responseData is Map<String, dynamic>) {
-                                      setState(() {
-                                        final originalEndpoint = responseData['endpoint'] as String;
-                                        endpoint = originalEndpoint.replaceFirstMapped(
-                                          RegExp(r'^http:\/\/edc-provider-[\w\d\-]+'),
-                                          (match) => 'http://localhost',
-                                        );
-                                        authorization = responseData['authorization'];
-                                      });
-                                    } else {
-                                      if (context.mounted) {
-                                        hideLoader(context);
-                                        FloatingSnackBar.show(
-                                          context,
-                                          message: '${'new_transfer_page.error_transfer_process'.tr()}: $response',
-                                          type: SnackBarType.error,
-                                          width: 320,
-                                          duration: Duration(seconds: 3),
-                                        );
-                                      }
-                                      return;
-                                    }
-                                  } else {
-                                    if (context.mounted) {
-                                      hideLoader(context);
-                                      FloatingSnackBar.show(
-                                        context,
-                                        message: '${'new_transfer_page.error_transfer_process'.tr()}: $responseCheck',
-                                        type: SnackBarType.error,
-                                        width: 320,
-                                        duration: Duration(seconds: 3),
-                                      );
-                                    }
-                                    return;
-                                  }
-
-                                  if (context.mounted) {
-                                    hideLoader(context);
-                                  }
-
+                                  hideLoader(context);
                                 } else {
-                                  if (context.mounted) {
-                                    hideLoader(context);
-                                    FloatingSnackBar.show(
-                                      context,
-                                      message: '${'new_transfer_page.error_transfer_process'.tr()}: $response',
-                                      type: SnackBarType.error,
-                                      width: 320,
-                                      duration: Duration(seconds: 3),
-                                    );
-                                  }
+                                  hideLoader(context);
+                                  FloatingSnackBar.show(
+                                    context,
+                                    message: 'new_transfer_page.error_transfer_process'.tr(),
+                                    type: SnackBarType.error,
+                                    width: 320,
+                                    duration: Duration(seconds: 3),
+                                  );
                                 }
                               },
                               label: Text(
@@ -967,14 +800,6 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                   borderRadius: BorderRadius.circular(32),
                                 ),
                                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'new_transfer_page.tp_started_note'.tr(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 15,
                               ),
                             ),
                             const SizedBox(height: 50),
@@ -996,108 +821,344 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                 fontSize: 15,
                               )
                             ),
-                            if (authorization != null)
+                            if (transferState != null)
                             const SizedBox(height: 16),
-                            if (authorization != null)
-                            Text(
-                              'new_transfer_page.authorization_obtained'.tr(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              )
-                            ),
-                            if (authorization != null)
-                            const SizedBox(height: 12),
-                            if (authorization != null)
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '$authorization',
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.secondary,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.copy, size: 20),
-                                  onPressed: () {
-                                    Clipboard.setData(ClipboardData(text: authorization ?? ''));
-                                  },
-                                  tooltip: 'new_transfer_page.copy_authorization'.tr(),
-                                ),
-                              ],
-                            ),
-                            if (endpoint != null)
-                            const SizedBox(height: 18),
-                            if (endpoint != null)
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '${'new_transfer_page.endpoint'.tr()} $endpoint',
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.secondary,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.copy, size: 20),
-                                  onPressed: () {
-                                    Clipboard.setData(ClipboardData(text: endpoint ?? ''));
-                                  },
-                                  tooltip: 'new_transfer_page.copy_endpoint'.tr(),
-                                ),
-                              ],
-                            ),
-                            if (endpoint != null && authorization != null)
-                            const SizedBox(height: 16),
-                            if (endpoint != null && authorization != null)
-                            Text(
-                              'new_transfer_page.obtain_data_instruction'.tr(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              )
-                            ),
-                            if (endpoint != null && authorization != null)
-                            const SizedBox(height: 12),
-                            if (endpoint != null && authorization != null)
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'curl --location --request GET "$endpoint" --header "Authorization: $authorization"',
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.secondary,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.copy, size: 20),
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(text: 'curl --location --request GET "$endpoint" --header "Authorization: $authorization"'),
-                                    );
-                                  },
-                                  tooltip: 'new_transfer_page.copy_curl_command'.tr(),
-                                ),
-                              ],
-                            ),
+                            if (transferState == 'COMPLETED')
+                            LinkWidget(url: 'http://localhost:4000/data'),
+                            if (transferState != null)
                             const SizedBox(height: 50),
                           ],
+                        ) 
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'new_transfer_page.file_transfer'.tr(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'new_transfer_page.pull_flow_steps'.tr(),
+                                style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                              ),
+                              const SizedBox(height: 24),
+                              Text(
+                                'new_transfer_page.start_transfer_2'.tr(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'new_transfer_page.click'.tr(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              OutlinedButton.icon(
+                                onPressed: () async {
+                                  showLoader(context);
+                                  final response = await _transfersService.startTransferPull(
+                                    consumerID ?? '', 
+                                    providerID ?? '', 
+                                    contractAgreementId ?? '',
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  if (response is Map<String, dynamic>) {
+                                    setState(() {
+                                      transferProcessID = response['@id'];
+                                    });
+
+                                    Object? responseCheck;
+                                    String state = '';
+
+                                    for (int i = 0; i < 10; i++) {
+                                      await Future.delayed(const Duration(seconds: 2));
+                                      responseCheck = await _transfersService.checkTransfer(consumerID ?? '', response['@id'] ?? '');
+
+                                      if (responseCheck is Map<String, dynamic>) {
+                                        setState(() {
+                                          if (responseCheck is Map<String, dynamic>) transferState = responseCheck['state'];
+                                        });
+                                        state = responseCheck['state'] ?? '';
+                                        if (state == 'STARTED') break;
+                                      }
+                                    }
+
+                                    if (!context.mounted) return;
+
+                                    if (responseCheck is Map<String, dynamic>) {
+                                      setState(() {
+                                        if (responseCheck is Map<String, dynamic>) transferState = responseCheck['state'];
+                                      });
+
+                                      final responseData = await _transfersService.checkDataPull(
+                                        consumerID ?? '', 
+                                        response['@id'] ?? '',
+                                      );
+
+                                      if (!context.mounted) return;
+
+                                      if (responseData is Map<String, dynamic>) {
+                                        setState(() {
+                                          final originalEndpoint = responseData['endpoint'] as String;
+                                          endpoint = originalEndpoint.replaceFirstMapped(
+                                            RegExp(r'^http:\/\/edc-provider-[\w\d\-]+'),
+                                            (match) => 'http://localhost',
+                                          );
+                                          authorization = responseData['authorization'];
+                                        });
+                                      } else {
+                                        if (context.mounted) {
+                                          hideLoader(context);
+                                          FloatingSnackBar.show(
+                                            context,
+                                            message: '${'new_transfer_page.error_transfer_process'.tr()}: $response',
+                                            type: SnackBarType.error,
+                                            width: 320,
+                                            duration: Duration(seconds: 3),
+                                          );
+                                        }
+                                        return;
+                                      }
+                                    } else {
+                                      if (context.mounted) {
+                                        hideLoader(context);
+                                        FloatingSnackBar.show(
+                                          context,
+                                          message: '${'new_transfer_page.error_transfer_process'.tr()}: $responseCheck',
+                                          type: SnackBarType.error,
+                                          width: 320,
+                                          duration: Duration(seconds: 3),
+                                        );
+                                      }
+                                      return;
+                                    }
+
+                                    if (context.mounted) {
+                                      hideLoader(context);
+                                    }
+
+                                  } else {
+                                    if (context.mounted) {
+                                      hideLoader(context);
+                                      FloatingSnackBar.show(
+                                        context,
+                                        message: '${'new_transfer_page.error_transfer_process'.tr()}: $response',
+                                        type: SnackBarType.error,
+                                        width: 320,
+                                        duration: Duration(seconds: 3),
+                                      );
+                                    }
+                                  }
+                                },
+                                label: Text(
+                                  'new_transfer_page.start_transfer'.tr(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(32),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'new_transfer_page.tp_started_note'.tr(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 50),
+                              if (transferProcessID != null)
+                              Text(
+                                '${'new_transfer_page.transfer_process_id'.tr()} $transferProcessID',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 15,
+                                )
+                              ),
+                              if (transferProcessID != null)
+                              const SizedBox(height: 16),
+                              if (transferState != null)
+                              Text(
+                                '${'new_transfer_page.transfer_state'.tr()} $transferState',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 15,
+                                )
+                              ),
+                              if (authorization != null)
+                              const SizedBox(height: 16),
+                              if (authorization != null)
+                              Text(
+                                'new_transfer_page.authorization_obtained'.tr(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              if (authorization != null)
+                              const SizedBox(height: 12),
+                              if (authorization != null)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      '$authorization',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.secondary,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.copy, size: 20),
+                                    onPressed: () {
+                                      Clipboard.setData(ClipboardData(text: authorization ?? ''));
+                                    },
+                                    tooltip: 'new_transfer_page.copy_authorization'.tr(),
+                                  ),
+                                ],
+                              ),
+                              if (endpoint != null)
+                              const SizedBox(height: 18),
+                              if (endpoint != null)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      '${'new_transfer_page.endpoint'.tr()} $endpoint',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.secondary,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.copy, size: 20),
+                                    onPressed: () {
+                                      Clipboard.setData(ClipboardData(text: endpoint ?? ''));
+                                    },
+                                    tooltip: 'new_transfer_page.copy_endpoint'.tr(),
+                                  ),
+                                ],
+                              ),
+                              if (endpoint != null && authorization != null)
+                              const SizedBox(height: 16),
+                              if (endpoint != null && authorization != null)
+                              Text(
+                                'new_transfer_page.obtain_data_instruction'.tr(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              if (endpoint != null && authorization != null)
+                              const SizedBox(height: 12),
+                              if (endpoint != null && authorization != null)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'curl --location --request GET "$endpoint" --header "Authorization: $authorization"',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.secondary,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.copy, size: 20),
+                                    onPressed: () {
+                                      Clipboard.setData(
+                                        ClipboardData(text: 'curl --location --request GET "$endpoint" --header "Authorization: $authorization"'),
+                                      );
+                                    },
+                                    tooltip: 'new_transfer_page.copy_curl_command'.tr(),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 50),
+                            ],
+                          ),
+
+                        Text(
+                          'new_transfer_page.save_data'.tr(),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 15
+                          )
                         ),
-                      isActive: _currentStep >= 3,
-                      state: _currentStep > 3 ? StepState.complete : StepState.indexed,
+                        const SizedBox(height: 16),
+                        OutlinedButton.icon(
+                          onPressed: () async {
+                            await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true, // Necesario para poder controlar el tamaño
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              ),
+                              builder: (context) {
+                                return FractionallySizedBox(
+                                  heightFactor: 0.8, // 80% de la altura de la pantalla
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: UsersSelector(),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: const Text('Cerrar'),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          label: Text(
+                            'new_transfer_page.save_data_button'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                    isActive: _currentStep >= 3,
+                    state: _currentStep > 3 ? StepState.complete : StepState.indexed,
                   ),
                 ],
               ),

@@ -4,7 +4,7 @@ import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/api/utils/handle_message.dart';
 
 class PoliciesService {
-  final CommunicationService _api = CommunicationService();
+  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
 
   /// Create a new policy
   Future<String?> createPolicy(Policy policy) async {

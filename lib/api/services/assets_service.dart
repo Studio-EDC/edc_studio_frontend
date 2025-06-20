@@ -5,7 +5,7 @@ import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/api/utils/handle_message.dart';
 
 class AssetService {
-  final CommunicationService _api = CommunicationService();
+  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
 
   /// Create a new asset
   Future<String?> createAsset(Asset asset) async {
