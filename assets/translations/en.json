@@ -105,6 +105,7 @@
     "consumer": "Consumer",
     "provider": "Provider",
     "keystore_password": "Keystore Password",
+    "api_key": "API key",
     "management_url": "Management endpoint URL",
     "protocol_url": "Protocol endpoint URL",
     "success": "Connector updated successfully!",
@@ -249,6 +250,7 @@
     "login": "Login",
     "login_successfull": "Login successfull",
     "error_uploading": "Error uploading file",
-    "file_uploaded_succesfully": "File uploaded successfully!"
+    "file_uploaded_succesfully": "File uploaded successfully!",
+    "register_successfull": "User created successfully!"
   }
 }

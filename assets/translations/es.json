@@ -105,6 +105,7 @@
     "consumer": "Consumidor",
     "provider": "Proveedor",
     "keystore_password": "Contraseña del almacén de claves",
+    "api_key": "API key",
     "management_url": "URL del endpoint de gestión",
     "protocol_url": "URL del endpoint de protocolo",
     "success": "¡Conector actualizado correctamente!",
@@ -249,6 +250,7 @@
     "login": "Iniciar sesión",
     "login_successfull": "Inicio de sesión exitoso",
     "error_uploading": "Error al subir el archivo",
-    "file_uploaded_succesfully": "¡Archivo subido correctamente!"
+    "file_uploaded_succesfully": "¡Archivo subido correctamente!",
+    "register_successfull": "¡Usuario creado correctamente!"
   }
 }

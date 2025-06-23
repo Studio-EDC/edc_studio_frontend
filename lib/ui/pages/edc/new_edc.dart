@@ -27,7 +27,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
   String _mode = 'managed';
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _keystorePasswordController = TextEditingController();
+  final _apikeyController = TextEditingController();
   final _managementEndpointUrlController = TextEditingController();
   final _protocolEndpointUrlController = TextEditingController();
 
@@ -160,9 +160,9 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 buildPortInputs(isMobile),
                                 const SizedBox(height: 16),
                                 TextFormField(
-                                  controller: _keystorePasswordController,
+                                  controller: _apikeyController,
                                   obscureText: true,
-                                  decoration: _inputStyle('connector_detail_page.keystore_password'.tr()),
+                                  decoration: _inputStyle('connector_detail_page.api_key'.tr()),
                                 ),
                               ] else if (_mode == 'remote') ...[
                                 TextFormField(
@@ -215,7 +215,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                         type: _connectorType,
                                         mode: _mode,
                                         ports: portConfig,
-                                        keystore_password: _keystorePasswordController.text.isNotEmpty ? _keystorePasswordController.text : null,
+                                        api_key: _apikeyController.text.isNotEmpty ? _apikeyController.text : null,
                                         state: 'stopped',
                                         endpoints_url: endpoints
                                       );

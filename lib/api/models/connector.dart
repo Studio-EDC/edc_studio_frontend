@@ -72,7 +72,7 @@ class Connector {
   final String mode; // "managed" or "remote"
   final PortConfig? ports;
   final String state; // "running" or "stopped"
-  final String? keystore_password;
+  final String? api_key;
   final Endpoints? endpoints_url;
 
   Connector({
@@ -83,7 +83,7 @@ class Connector {
     required this.mode,
     this.ports,
     required this.state,
-    this.keystore_password,
+    this.api_key,
     this.endpoints_url
   });
 
@@ -96,7 +96,7 @@ class Connector {
       mode: json['mode'],
       ports: json['ports'] != null ? PortConfig.fromJson(json['ports']) : null,
       state: json['state'],
-      keystore_password: json['keystore_password'],
+      api_key: json['api_key'],
       endpoints_url: json['endpoints_url'] != null ? Endpoints.fromJson(json['endpoints_url']) : null
     );
   }
@@ -110,7 +110,7 @@ class Connector {
       'mode': mode,
       'ports': ports?.toJson(),
       'state': state,
-      'keystore_password': keystore_password,
+      'api_key': api_key,
       'endpoints_url': endpoints_url?.toJson()
     };
   }

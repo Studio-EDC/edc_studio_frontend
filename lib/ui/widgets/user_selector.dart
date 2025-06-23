@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/user.dart';
 import 'package:edc_studio/api/services/users_service.dart';
@@ -62,24 +63,6 @@ class _UsersSelectorState extends State<UsersSelector> {
     });
   }
 
-  void _onUserClick(User user) {
-    if (list) {
-      debugPrint('List mode: ${user.username}');
-      setState(() {
-        list = false;
-        login = true;
-        register = false;
-        username.text = user.username;
-      });
-    } else if (login) {
-      debugPrint('Login mode: Logging in as ${user.username}');
-      // Aquí tu lógica de login
-    } else if (register) {
-      debugPrint('Register mode: Registering ${user.username}');
-      // Aquí tu lógica de registro
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (!list && !login && !register) {
@@ -112,7 +95,13 @@ class _UsersSelectorState extends State<UsersSelector> {
               ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
-                onPressed: () => context.go('/new_user'),
+                onPressed: () {
+                  setState(() {
+                    list = false;
+                    login = false;
+                    register = true;
+                  });
+                },
                 icon: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary),
                 label: Text(
                   'users_list_page.new_user'.tr(),
@@ -162,7 +151,14 @@ class _UsersSelectorState extends State<UsersSelector> {
                             cells: [
                               DataCell(
                                 InkWell(
-                                  onTap: () => _onUserClick(user),
+                                  onTap: () {
+                                    setState(() {
+                                      list = false;
+                                      login = true;
+                                      register = false;
+                                      username.text = user.username;
+                                    });
+                                  },
                                   hoverColor: Colors.transparent,
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -257,6 +253,97 @@ class _UsersSelectorState extends State<UsersSelector> {
                   },
                   label: Text(
                     'users_list_page.login'.tr(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 15,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  ),
+                ),
+              ],
+            )
+          ),
+        if (register)
+          Expanded(
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                TextField(
+                  controller: username,
+                  decoration: InputDecoration(
+                    hintText: 'users_list_page.username'.tr(),
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 15,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ), 
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2.0,
+                      ),
+                    ), 
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: password,
+                  decoration: InputDecoration(
+                    hintText: 'users_list_page.password'.tr(),
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 15,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ), 
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2.0,
+                      ),
+                    ), 
+                  ),
+                ),
+                const SizedBox(height: 32),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    final UsersService userService = UsersService();
+                    final response = await userService.registerUser(username.text, password.text);
+                    if (response != null) {
+                      FloatingSnackBar.show(
+                        context,
+                        message: response,
+                        type: SnackBarType.error,
+                        duration: const Duration(seconds: 3),
+                        width: 600
+                      );
+                    } else {
+                      FloatingSnackBar.show(
+                        context,
+                        message: 'users_list_page.register_successfull'.tr(),
+                        type: SnackBarType.success,
+                        duration: const Duration(seconds: 3),
+                        width: 600
+                      );
+
+                      setState(() {
+                        list = false;
+                        login = true;
+                        register = false;
+                        password.clear();
+                      });
+                    }
+                  },
+                  label: Text(
+                    'create'.tr(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 15,

@@ -105,6 +105,7 @@
     "consumer": "Consumidor",
     "provider": "Proveïdor",
     "keystore_password": "Contrasenya del keystore",
+    "api_key": "API key",
     "management_url": "URL de l'endpoint de gestió",
     "protocol_url": "URL de l'endpoint de protocol",
     "success": "Connector actualitzat correctament!",
@@ -249,6 +250,7 @@
     "login": "Iniciar sessió",
     "login_successfull": "Sessió iniciada correctament",
     "error_uploading": "Error en pujar l'arxiu",
-    "file_uploaded_succesfully": "Arxiu pujat correctament!"
+    "file_uploaded_succesfully": "Arxiu pujat correctament!",
+    "register_successfull": "Usuari creat correctament!"
   }
 }

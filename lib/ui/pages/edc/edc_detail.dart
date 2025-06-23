@@ -29,7 +29,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
 
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _keystorePasswordController = TextEditingController();
+  final _apiKeyController = TextEditingController();
   final _managementEndpointUrlController = TextEditingController();
   final _protocolEndpointUrlController = TextEditingController();
 
@@ -85,7 +85,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                     _portControllers['control']!.text = connector.ports!.control.toString();
                     _portControllers['public']!.text = connector.ports!.public.toString();
                     _portControllers['version']!.text = connector.ports!.version.toString();
-                    _keystorePasswordController.text = connector.keystore_password ?? '';
+                    _apiKeyController.text = connector.api_key ?? '';
                   }
 
                   if (connector.mode == 'remote' && connector.endpoints_url != null) {
@@ -184,9 +184,9 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                               buildPortInputs(isMobile),
                               const SizedBox(height: 16),
                               TextFormField(
-                                controller: _keystorePasswordController,
+                                controller: _apiKeyController,
                                 obscureText: true,
-                                decoration: _inputStyle('connector_detail_page.keystore_password'.tr()),
+                                decoration: _inputStyle('connector_detail_page.api_key'.tr()),
                               ),
                             ] else if (_mode == 'remote') ...[
                               TextFormField(
@@ -240,8 +240,8 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                       type: _connectorType,
                                       mode: _mode,
                                       ports: portConfig,
-                                      keystore_password: _keystorePasswordController.text.isNotEmpty
-                                          ? _keystorePasswordController.text
+                                      api_key: _apiKeyController.text.isNotEmpty
+                                          ? _apiKeyController.text
                                           : null,
                                       state: connector.state,
                                       endpoints_url: endpoints,
