@@ -68,11 +68,10 @@ class CommunicationService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return body;
       } else {
-        print(response.body);
         throw ApiException(response.statusCode, body);
       }
     } catch (e) {
-      throw ApiException(response.statusCode, response.body);
+      throw ApiException(response.statusCode, jsonDecode(response.body));
     }
   }
 }

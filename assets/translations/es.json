@@ -13,6 +13,7 @@
   "actions": "Acciones",
   "update": "Actualizar",
   "general_error": "Ha habido un error:",
+  "close": "Cerrar",
   "edc_list_page": {
     "new_edc": "Nuevo EDC",
     "search": "Buscar EDC",
@@ -232,6 +233,22 @@
     "pull_flow_steps": "• Proporciona una implementación simple de un proxy HTTP en el Data Plane.\n• Realiza una transferencia de archivo iniciada por el consumidor.\n• El proveedor enviará un EndpointDataReference al consumidor.\n• El consumidor llamará al endpoint y recuperará los datos.",
     "start_transfer_2": "1. Iniciar la transferencia",
     "see_data": "Puedes ver los datos aquí: ",
-    "create_req": "Para crear la transferencia, el conector debe estar en ejecución. Vaya a la página de la lista EDC e inícielo antes de crear la transferencia."
+    "create_req": "Para crear la transferencia, el conector debe estar en ejecución. Vaya a la página de la lista EDC e inícielo antes de crear la transferencia.",
+    "save_data": "Haz clic en el botón de abajo para guardar los datos en tu cuenta de Data Pond.",
+    "save_data_button": "Guardar datos"
+  },
+  "users_list_page": {
+    "search": "Buscar usuario",
+    "new_user": "Nuevo usuario",
+    "username": "Nombre de usuario",
+    "no_users": "No se encontraron usuarios.",
+    "title_list": "Haz clic en el usuario con el que deseas iniciar sesión",
+    "login_title": "Inicia sesión con tus credenciales",
+    "title_register": "Introduce los datos del usuario",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "login_successfull": "Inicio de sesión exitoso",
+    "error_uploading": "Error al subir el archivo",
+    "file_uploaded_succesfully": "¡Archivo subido correctamente!"
   }
 }

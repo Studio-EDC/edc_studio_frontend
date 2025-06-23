@@ -114,10 +114,10 @@ class TransfersService {
   }
 
   /// Create a new policy
-  Future<String?> createTransfer(Transfer transfer) async {
+ Future<Object> createTransfer(Transfer transfer) async {
     try {
-      await _api.post(ApiRoutes.transfers, transfer.toJson());
-      return null;
+      final response = await _api.post(ApiRoutes.transfers, transfer.toJson());
+      return response;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }

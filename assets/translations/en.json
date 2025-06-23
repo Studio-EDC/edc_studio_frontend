@@ -13,6 +13,7 @@
   "actions": "Actions",
   "update": "Update",
   "general_error": "There was an error:",
+  "close": "Close",
   "edc_list_page": {
     "new_edc": "New EDC",
     "search": "Search EDC",
@@ -245,6 +246,9 @@
     "login_title": "Login with your credentials",
     "title_register": "Enter the user data",
     "password": "Password",
-    "login": "Login"
+    "login": "Login",
+    "login_successfull": "Login successfull",
+    "error_uploading": "Error uploading file",
+    "file_uploaded_succesfully": "File uploaded successfully!"
   }
 }

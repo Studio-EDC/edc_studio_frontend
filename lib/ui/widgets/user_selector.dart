@@ -7,9 +7,21 @@ import 'package:edc_studio/ui/widgets/search_bar.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UsersSelector extends StatefulWidget {
-  const UsersSelector({super.key});
+  final String? transferFlow;
+  final String? endpoint;
+  final String? authorization;
+  final String? transferID;
+
+  const UsersSelector({
+    super.key,
+    this.transferFlow,
+    this.endpoint,
+    this.authorization,
+    this.transferID
+  });
 
   @override
   State<UsersSelector> createState() => _UsersSelectorState();
@@ -187,13 +199,13 @@ class _UsersSelectorState extends State<UsersSelector> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                    ), // <-- Este es el borde outline
+                    ), 
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.primary,
                         width: 2.0,
                       ),
-                    ), // Opcional: define cómo se ve al enfocar
+                    ), 
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -207,13 +219,13 @@ class _UsersSelectorState extends State<UsersSelector> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                    ), // <-- Este es el borde outline
+                    ), 
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.primary,
                         width: 2.0,
                       ),
-                    ), // Opcional: define cómo se ve al enfocar
+                    ), 
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -221,14 +233,26 @@ class _UsersSelectorState extends State<UsersSelector> {
                   onPressed: () async {
                     final UsersService userService = UsersService();
                     final response = await userService.getToken(username.text, password.text);
-                    if (response == null) {
+                    if (response != null) {
                       FloatingSnackBar.show(
                         context,
-                        message: response ?? '',
+                        message: response,
                         type: SnackBarType.error,
                         duration: const Duration(seconds: 3),
                         width: 600
                       );
+                    } else {
+                      FloatingSnackBar.show(
+                        context,
+                        message: 'users_list_page.login_successfull'.tr(),
+                        type: SnackBarType.success,
+                        duration: const Duration(seconds: 3),
+                        width: 600
+                      );
+
+                      final prefs = await SharedPreferences.getInstance();
+                      final token = prefs.getString('access_token');
+                      await handleTransferDataUpload(username.text, token ?? '');
                     }
                   },
                   label: Text(
@@ -251,4 +275,44 @@ class _UsersSelectorState extends State<UsersSelector> {
       ],
     );
   }
+
+  Future<void> handleTransferDataUpload(String username, String token) async {
+    if (widget.transferFlow == 'pull') {
+      if (widget.endpoint != null && widget.authorization != null) {
+        await _usersService.downloadAndUploadFilePull(
+          widget.endpoint ?? '',
+          widget.authorization!,
+          'data_pull_file_${widget.transferID}',
+          token,
+          context
+        );
+        context.go('/transfers');
+      } else {
+        FloatingSnackBar.show(
+          context,
+          message: 'users_list_page.error_uploading'.tr(),
+          type: SnackBarType.success,
+          duration: const Duration(seconds: 3),
+          width: 600
+        );
+      }
+    } else if (widget.transferFlow == 'push') {
+      await _usersService.downloadAndUploadFilePush(
+        'data_push_file_${widget.transferID}',
+        token,
+        context
+      );
+      context.go('/transfers');
+    } else {
+      FloatingSnackBar.show(
+        context,
+        message: 'users_list_page.error_uploading'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+        width: 600
+      );
+    }
+  }
+
 }
+

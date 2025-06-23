@@ -13,6 +13,7 @@
   "actions": "Accions",
   "update": "Actualitza",
   "general_error": "Hi ha hagut un error:",
+  "close": "Tancar",
   "edc_list_page": {
     "new_edc": "Nou EDC",
     "search": "Cerca EDC",
@@ -232,6 +233,22 @@
     "pull_flow_steps": "• Proporciona una implementació simple d'un proxy HTTP al Data Plane.\n• Realitza una transferència de fitxer iniciada pel consumidor.\n• El proveïdor enviarà un EndpointDataReference al consumidor.\n• El consumidor cridarà a l'endpoint i recuperarà les dades.",
     "start_transfer_2": "1. Inicia la transferència",
     "see_data": "Pots veure les dades aquí: ",
-    "create_req": "Per crear la transferència, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear la transferència."
+    "create_req": "Per crear la transferència, el connector ha d'estar en funcionament. Aneu a la pàgina de la llista EDC i inicieu-lo abans de crear la transferència.",
+    "save_data": "Fes clic al botó de sota per desar les dades al teu compte de Data Pond.",
+    "save_data_button": "Desar dades"
+  },
+  "users_list_page": {
+    "search": "Cercar usuari",
+    "new_user": "Nou usuari",
+    "username": "Nom d'usuari",
+    "no_users": "No s'han trobat usuaris.",
+    "title_list": "Fes clic a l'usuari amb què vols iniciar sessió",
+    "login_title": "Inicia sessió amb les teves credencials",
+    "title_register": "Introdueix les dades de l'usuari",
+    "password": "Contrasenya",
+    "login": "Iniciar sessió",
+    "login_successfull": "Sessió iniciada correctament",
+    "error_uploading": "Error en pujar l'arxiu",
+    "file_uploaded_succesfully": "Arxiu pujat correctament!"
   }
 }

@@ -84,6 +84,8 @@ class _NewTransferPageState extends State<NewTransferPage> {
   String? contractAgreementId;
   String? contractState;
 
+  String? finalIdTransfer;
+
   List<String> extractDatasetIds(Map<String, dynamic> catalog) {
     final datasetField = catalog['dcat:dataset'];
 
@@ -145,6 +147,60 @@ class _NewTransferPageState extends State<NewTransferPage> {
   String? authorization;
   String? endpoint;
 
+  saveTransfer () async {
+    showLoader(context);
+    Object asset = await _assetsService.getAssetByAssetId(providerID ?? '', _selectedAssetId ?? '');
+    if (asset is Asset) {
+      Transfer transfer = Transfer(
+        consumer: consumerID ?? '', 
+        provider: providerID ?? '', 
+        asset: asset.assetId, 
+        hasPolicyId: _selectedHasPolicyId ?? '', 
+        negotiateContractId: contractNegotiationId ?? '', 
+        contractAgreementId: contractAgreementId ?? '',
+        transferProcessID: transferProcessID ?? '',
+        transferFlow: _selectedTransferFlow ?? '',
+        endpoint: endpoint,
+        authorization: authorization
+      );
+      final response = await _transfersService.createTransfer(transfer);
+      if (response is String) {
+        hideLoader(context);
+        FloatingSnackBar.show(
+          context,
+          message: '${'new_transfer_page.error'.tr()}: $response',
+          type: SnackBarType.error,
+          width: 320,
+          duration: Duration(seconds: 3),
+        );
+        
+      } else {
+        hideLoader(context);
+        FloatingSnackBar.show(
+          context,
+          message: 'new_transfer_page.success'.tr(),
+          type: SnackBarType.success,
+          width: 320,
+          duration: Duration(seconds: 3),
+        );
+
+        setState(() {
+          if (response is Map<String, dynamic>) finalIdTransfer = response['id'];
+        });
+
+      }
+    } else {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'new_transfer_page.error'.tr()}: $asset',
+        type: SnackBarType.error,
+        width: 320,
+        duration: Duration(seconds: 3),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -167,51 +223,6 @@ class _NewTransferPageState extends State<NewTransferPage> {
                 onStepTapped: (step) => setState(() => _currentStep = step),
                 onStepContinue: () async {
                   if (_currentStep == 3) {
-                    showLoader(context);
-                    Object asset = await _assetsService.getAssetByAssetId(providerID ?? '', _selectedAssetId ?? '');
-                    if (asset is Asset) {
-                      Transfer transfer = Transfer(
-                        consumer: consumerID ?? '', 
-                        provider: providerID ?? '', 
-                        asset: asset.assetId, 
-                        hasPolicyId: _selectedHasPolicyId ?? '', 
-                        negotiateContractId: contractNegotiationId ?? '', 
-                        contractAgreementId: contractAgreementId ?? '',
-                        transferProcessID: transferProcessID ?? '',
-                        transferFlow: _selectedTransferFlow ?? '',
-                        endpoint: endpoint,
-                        authorization: authorization
-                      );
-                      final response = await _transfersService.createTransfer(transfer);
-                      if (response == null) {
-                        hideLoader(context);
-                        FloatingSnackBar.show(
-                          context,
-                          message: 'new_transfer_page.success'.tr(),
-                          type: SnackBarType.success,
-                          width: 320,
-                          duration: Duration(seconds: 3),
-                        );
-                      } else {
-                        hideLoader(context);
-                        FloatingSnackBar.show(
-                          context,
-                          message: '${'new_transfer_page.error'.tr()}: $response',
-                          type: SnackBarType.error,
-                          width: 320,
-                          duration: Duration(seconds: 3),
-                        );
-                      }
-                    } else {
-                      hideLoader(context);
-                      FloatingSnackBar.show(
-                        context,
-                        message: '${'new_transfer_page.error'.tr()}: $asset',
-                        type: SnackBarType.error,
-                        width: 320,
-                        duration: Duration(seconds: 3),
-                      );
-                    }
                     context.go('/transfers');
                   }
                   if (_currentStep < 3) {
@@ -772,7 +783,10 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                         if (responseCheck is Map<String, dynamic>)  transferState = responseCheck['state'];
                                       });
                                       state = responseCheck['state'] ?? '';
-                                      if (state == 'COMPLETED') break;
+                                      if (state == 'COMPLETED') {
+                                        await saveTransfer();
+                                        break;
+                                      }
                                     }
                                   }
 
@@ -918,6 +932,9 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                           );
                                           authorization = responseData['authorization'];
                                         });
+
+                                        await saveTransfer();
+
                                       } else {
                                         if (context.mounted) {
                                           hideLoader(context);
@@ -1104,6 +1121,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             ],
                           ),
 
+                        if (endpoint != null || transferState == 'COMPLETED')
                         Text(
                           'new_transfer_page.save_data'.tr(),
                           style: TextStyle(
@@ -1111,28 +1129,35 @@ class _NewTransferPageState extends State<NewTransferPage> {
                             fontSize: 15
                           )
                         ),
+                        if (endpoint != null || transferState == 'COMPLETED')
                         const SizedBox(height: 16),
+                        if (endpoint != null || transferState == 'COMPLETED')
                         OutlinedButton.icon(
                           onPressed: () async {
                             await showModalBottomSheet(
                               context: context,
-                              isScrollControlled: true, // Necesario para poder controlar el tamaño
+                              isScrollControlled: true, 
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                               ),
                               builder: (context) {
                                 return FractionallySizedBox(
-                                  heightFactor: 0.8, // 80% de la altura de la pantalla
+                                  heightFactor: 0.8, 
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Column(
                                       children: [
                                         Expanded(
-                                          child: UsersSelector(),
+                                          child: UsersSelector(
+                                            transferFlow: _selectedTransferFlow,
+                                            endpoint: endpoint,
+                                            authorization: authorization,
+                                            transferID: finalIdTransfer,
+                                          ),
                                         ),
                                         ElevatedButton(
                                           onPressed: () => Navigator.of(context).pop(),
-                                          child: const Text('Cerrar'),
+                                          child: Text('close'.tr()),
                                         )
                                       ],
                                     ),
