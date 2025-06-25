@@ -7,6 +7,7 @@ import 'package:edc_studio/ui/pages/contracts/new_contract.dart';
 import 'package:edc_studio/ui/pages/edc/edc_detail.dart';
 import 'package:edc_studio/ui/pages/edc/edc_list.dart';
 import 'package:edc_studio/ui/pages/edc/new_edc.dart';
+import 'package:edc_studio/ui/pages/files/files_list.dart';
 import 'package:edc_studio/ui/pages/policies/new_policy.dart';
 import 'package:edc_studio/ui/pages/policies/policies_list.dart';
 import 'package:edc_studio/ui/pages/policies/policy_detail.dart';
@@ -144,6 +145,13 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => _buildFadeTransition(
         key: state.pageKey,
         child: const NewTransferPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/files',
+      pageBuilder: (context, state) => _buildFadeTransition(
+        key: state.pageKey,
+        child: const FilesListPage(),
       ),
     ),
   ],

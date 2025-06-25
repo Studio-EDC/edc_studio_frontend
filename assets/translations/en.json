@@ -4,6 +4,7 @@
   "policies": "Policies",
   "contracts": "Contracts",
   "transfers": "Transfers",
+  "files": "Files",
   "confirm_deletion_title": "Confirm Deletion",
   "confirm_deletion_message": "Are you sure you want to delete \"{name}\"?",
   "cancel": "Cancel",
@@ -252,5 +253,14 @@
     "error_uploading": "Error uploading file",
     "file_uploaded_succesfully": "File uploaded successfully!",
     "register_successfull": "User created successfully!"
+  },
+  "list_files": {
+    "select_user": "Select the user you want to view the files from:",
+    "select_user_hint": "Select user",
+    "search": "Search file",
+    "download": "Download",
+    "modified": "Modified",
+    "size": "Size",
+    "no_data": "No files found for this user."
   }
 }

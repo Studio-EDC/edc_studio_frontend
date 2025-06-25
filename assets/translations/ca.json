@@ -4,6 +4,7 @@
   "policies": "Polítiques",
   "contracts": "Contractes",
   "transfers": "Transferències",
+  "files": "Arxius",
   "confirm_deletion_title": "Confirmar eliminació",
   "confirm_deletion_message": "Estàs segur que vols eliminar \"{name}\"?",
   "cancel": "Cancel·la",
@@ -252,5 +253,14 @@
     "error_uploading": "Error en pujar l'arxiu",
     "file_uploaded_succesfully": "Arxiu pujat correctament!",
     "register_successfull": "Usuari creat correctament!"
+  },
+  "list_files": {
+    "select_user": "Selecciona l'usuari del qual vols veure els fitxers:",
+    "select_user_hint": "Seleccionar usuari",
+    "search": "Cercar fitxer",
+    "download": "Descarregar",
+    "modified": "Modificat",
+    "size": "Mida",
+    "no_data": "No s'han trobat arxius per aquest usuari."
   }
 }

@@ -15,13 +15,19 @@ class UsersSelector extends StatefulWidget {
   final String? endpoint;
   final String? authorization;
   final String? transferID;
+  final String? mode;
+  final String? username;
+  final String? filename;
 
   const UsersSelector({
     super.key,
     this.transferFlow,
     this.endpoint,
     this.authorization,
-    this.transferID
+    this.transferID,
+    this.mode,
+    this.username,
+    this.filename
   });
 
   @override
@@ -44,7 +50,16 @@ class _UsersSelectorState extends State<UsersSelector> {
   @override
   void initState() {
     super.initState();
-    _loadUsers();
+    if (widget.mode == 'login') {
+      setState(() {
+        list = false;
+        login = true;
+        register = false;
+        username.text = widget.username ?? '';
+      });
+    } else {
+      _loadUsers();
+    }
   }
 
   Future<void> _loadUsers() async {
@@ -246,9 +261,23 @@ class _UsersSelectorState extends State<UsersSelector> {
                         width: 600
                       );
 
-                      final prefs = await SharedPreferences.getInstance();
-                      final token = prefs.getString('access_token');
-                      await handleTransferDataUpload(username.text, token ?? '');
+                      if (widget.mode != 'login') {
+                        final prefs = await SharedPreferences.getInstance();
+                        final token = prefs.getString('access_token');
+                        await handleTransferDataUpload(username.text, token ?? '');
+                      } else {
+                        final response = await userService.downloadFile(widget.filename ?? '');
+                        if (response != null) {
+                          FloatingSnackBar.show(
+                            context,
+                            message: response,
+                            type: SnackBarType.error,
+                            duration: const Duration(seconds: 3),
+                            width: 600
+                          );
+                        }
+                      }
+
                     }
                   },
                   label: Text(
@@ -370,7 +399,6 @@ class _UsersSelectorState extends State<UsersSelector> {
           widget.endpoint ?? '',
           widget.authorization!,
           'data_pull_file_${widget.transferID}',
-          token,
           context
         );
         context.go('/transfers');

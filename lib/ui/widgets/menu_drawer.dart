@@ -25,6 +25,7 @@ class MenuDrawer extends StatelessWidget {
           _buildNavTile(context, icon: Icons.policy, label: 'policies'.tr(), route: '/policies'),
           _buildNavTile(context, icon: Icons.assignment, label: 'contracts'.tr(), route: '/contracts'),
           _buildNavTile(context, icon: Icons.swap_horiz, label: 'transfers'.tr(), route: '/transfers'),
+          _buildNavTile(context, icon: Icons.swap_horiz, label: 'files'.tr(), route: '/files'),
         ],
       ),
     );

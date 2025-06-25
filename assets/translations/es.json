@@ -4,6 +4,7 @@
   "policies": "Políticas",
   "contracts": "Contratos",
   "transfers": "Transferencias",
+  "files": "Archivos",
   "confirm_deletion_title": "Confirmar eliminación",
   "confirm_deletion_message": "¿Estás seguro de que deseas eliminar \"{name}\"?",
   "cancel": "Cancelar",
@@ -252,5 +253,14 @@
     "error_uploading": "Error al subir el archivo",
     "file_uploaded_succesfully": "¡Archivo subido correctamente!",
     "register_successfull": "¡Usuario creado correctamente!"
+  },
+  "list_files": {
+    "select_user": "Selecciona el usuario del que quieres ver los archivos:",
+    "select_user_hint": "Seleccionar usuario",
+    "search": "Buscar archivo",
+    "download": "Descargar",
+    "modified": "Modificado",
+    "size": "Tamaño",
+    "no_data": "No se encontraron ficheros para este usuario."
   }
 }
