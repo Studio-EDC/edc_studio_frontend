@@ -1,8 +1,7 @@
 
 class EndpointsApi {
   static const String localBase = 'http://127.0.0.1:8000';
-  static const String remoteBase = 'https://api.tuservidor.com';
-  static const String localPond = 'http://127.0.0.1:8080';
+  static const String localPond = 'http://127.0.0.1:8001';
 }
 
 class ApiRoutes {

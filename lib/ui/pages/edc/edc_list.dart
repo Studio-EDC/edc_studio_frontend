@@ -135,11 +135,27 @@ class _EDCListPageState extends State<EDCListPage> {
                           onToggleState: () async {
                             if (connector.state == 'running') {
                               showLoader(context);
-                              await _edcService.stopConnector(connector.id);
+                              final response = await _edcService.stopConnector(connector.id);
+                              if (response != null) {
+                                FloatingSnackBar.show(
+                                  context,
+                                  message: response,
+                                  type: SnackBarType.error,
+                                  duration: const Duration(seconds: 5),
+                                );
+                              }
                               hideLoader(context);
                             } else {
                               showLoader(context);
-                              await _edcService.startConnector(connector.id);
+                              final response = await _edcService.startConnector(connector.id);
+                              if (response != null) {
+                                FloatingSnackBar.show(
+                                  context,
+                                  message: response,
+                                  type: SnackBarType.error,
+                                  duration: const Duration(seconds: 5),
+                                );
+                              }
                               hideLoader(context);
                             }
                             _loadConnectors();

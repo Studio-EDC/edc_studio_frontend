@@ -66,40 +66,22 @@ class _NewContractPageState extends State<NewContractPage> {
     showLoader(context);
     final assets = await _assetsService.getAssetsByEdcId(id);
     if (assets is List<Asset>) {
-      hideLoader(context);
       setState(() {
         _allAssets = assets;
       });
-    } else {
-      hideLoader(context);
-      FloatingSnackBar.show(
-        context,
-        message: '${'general_error'.tr()}: $assets',
-        type: SnackBarType.error,
-        width: 320,
-        duration: Duration(seconds: 5),
-      );
-    }
+    } 
+    hideLoader(context);
   }
 
   Future<void> _loadPolicies(String id) async {
     showLoader(context);
     final policies = await _policyService.getPoliciesByEdcId(id);
     if (policies is List<Policy>) {
-      hideLoader(context);
       setState(() {
         _allPolicies = policies;
       });
-    } else {
-      hideLoader(context);
-      FloatingSnackBar.show(
-        context,
-        message: '${'general_error'.tr()}: $policies',
-        type: SnackBarType.error,
-        width: 320,
-        duration: Duration(seconds: 5),
-      );
-    }
+    } 
+    hideLoader(context);
   }
 
   @override

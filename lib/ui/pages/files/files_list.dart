@@ -15,26 +15,6 @@ class FilesListPage extends StatefulWidget {
 }
 
 class _FilesListPageState extends State<FilesListPage> {
-  final List<Map<String, dynamic>> files = const [
-    {
-      "username": "itziarmensa",
-      "filename": "data_pull_file",
-      "size": 5645,
-      "modified": "2025-06-23T09:39:05"
-    },
-    {
-      "username": "itziarmensa",
-      "filename": "policy_push_backup",
-      "size": 12930,
-      "modified": "2025-06-24T13:17:10"
-    },
-    {
-      "username": "itziarmensa",
-      "filename": "connector_logs",
-      "size": 89321,
-      "modified": "2025-06-20T18:45:33"
-    },
-  ];
 
   final UsersService _usersService = UsersService();
 
@@ -58,7 +38,10 @@ class _FilesListPageState extends State<FilesListPage> {
   Future<void> _loadFiles() async {
     final files = await _usersService.getFiles(selectedUsername ?? '');
     setState(() {
-      if (files != null) listFiles = files;
+      if (files != null) {
+        files.sort((a, b) => b.modified.compareTo(a.modified));
+        listFiles = files;
+      }
     });
   }
 

@@ -17,24 +17,30 @@ class EdcService {
   }
 
   /// Start an existing EDC connector by ID
-  Future<bool> startConnector(String id) async {
+  Future<String?> startConnector(String id) async {
     try {
       final path = '${ApiRoutes.edc}/$id/start';
       await _api.post(path, {});
-      return true;
-    } catch (e) {
-      return false;
+      return null;
+    } on ApiException catch (e) {
+      if (e.body is Map && e.body['detail'] is String) {
+        return e.body['detail'];
+      }
+      return '';
     }
   }
 
   /// Stop an existing EDC connector by ID
-  Future<bool> stopConnector(String id) async {
+  Future<String?> stopConnector(String id) async {
     try {
       final path = '${ApiRoutes.edc}/$id/stop';
       await _api.post(path, {});
-      return true;
-    } catch (e) {
-      return false;
+      return null;
+    } on ApiException catch (e) {
+      if (e.body is Map && e.body['detail'] is String) {
+        return e.body['detail'];
+      }
+      return '';
     }
   }
 
