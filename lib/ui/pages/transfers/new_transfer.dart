@@ -146,6 +146,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
   String? transferState;
   String? authorization;
   String? endpoint;
+  String? originalEndpoint;
 
   saveTransfer () async {
     showLoader(context);
@@ -925,8 +926,9 @@ class _NewTransferPageState extends State<NewTransferPage> {
 
                                       if (responseData is Map<String, dynamic>) {
                                         setState(() {
-                                          final originalEndpoint = responseData['endpoint'] as String;
-                                          endpoint = originalEndpoint.replaceFirstMapped(
+                                          final original = responseData['endpoint'] as String;
+                                          originalEndpoint = original;
+                                          endpoint = original.replaceFirstMapped(
                                             RegExp(r'^http:\/\/edc-provider-[\w\d\-]+'),
                                             (match) => 'http://localhost',
                                           );
@@ -1150,7 +1152,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                         Expanded(
                                           child: UsersSelector(
                                             transferFlow: _selectedTransferFlow,
-                                            endpoint: endpoint,
+                                            endpoint: originalEndpoint,
                                             authorization: authorization,
                                             transferID: finalIdTransfer,
                                           ),
