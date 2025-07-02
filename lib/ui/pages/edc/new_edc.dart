@@ -222,7 +222,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                   
                                       showLoader(context);
                                       final response = await _edcService.createConnector(connector);
-                                      if (response != null) {
+                                      if (response == null) {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
@@ -231,18 +231,17 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                           width: 320,
                                           duration: Duration(seconds: 3),
                                         );
+                                        context.go('/');
                                       } else {
                                         hideLoader(context);
                                         FloatingSnackBar.show(
                                           context,
-                                          message: 'new_connector_page.error'.tr(),
+                                          message: '${'new_connector_page.error'.tr()}: $response',
                                           type: SnackBarType.error,
                                           width: 320,
                                           duration: Duration(seconds: 3),
                                         );
                                       }
-                                      context.go('/');
-                  
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

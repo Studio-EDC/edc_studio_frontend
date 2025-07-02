@@ -9,10 +9,13 @@ class EdcService {
   /// Create a new EDC connector
   Future<String?> createConnector(Connector data) async {
     try {
-      final result = await _api.post(ApiRoutes.edc, data.toJson());
-      return result['id'];
-    } catch (e) {
+      await _api.post(ApiRoutes.edc, data.toJson());
       return null;
+    } on ApiException catch (e) {
+      if (e.body is Map && e.body['detail'] is String) {
+        return e.body['detail'];
+      }
+      return '';
     }
   }
 
