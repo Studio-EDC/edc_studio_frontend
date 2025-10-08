@@ -8,8 +8,9 @@ class CommunicationService {
 
   Future<dynamic> get(String path, {Map<String, String>? headers}) async {
     final mergedHeaders = {...?headers};
+    final url = Uri.parse(base).resolve(path);
     final response = await http.get(
-      Uri.parse('$base$path'),
+      url,
       headers: mergedHeaders,
     );
     return _handleResponse(response);
