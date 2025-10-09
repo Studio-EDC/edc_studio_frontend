@@ -1,7 +1,7 @@
 
 class EndpointsApi {
-  static const String localBase = 'http://127.0.0.1:8000';
-  static const String localPond = 'http://127.0.0.1:8001';
+  static const String localBase = 'https://upcxels-pre.widening.eu';
+  static const String localPond = 'https://pro-pre.widening.eu';
 }
 
 class ApiRoutes {
