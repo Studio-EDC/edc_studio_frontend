@@ -1,7 +1,8 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EndpointsApi {
-  static const String localBase = 'https://upcxels-pre.widening.eu';
-  static const String localPond = 'https://pro-pre.widening.eu';
+  static final String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
+  static final String localPond = dotenv.env['ENDPOINT_DATA_POND'] ?? '';
 }
 
 class ApiRoutes {

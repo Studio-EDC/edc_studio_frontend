@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   setPathUrlStrategy();
