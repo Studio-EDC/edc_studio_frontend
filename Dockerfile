@@ -10,6 +10,7 @@ RUN flutter config --enable-web
 
 WORKDIR /app
 COPY . .
+RUN touch .env
 RUN flutter pub get
 RUN flutter build web
 
