@@ -30,6 +30,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
   final _apikeyController = TextEditingController();
   final _managementEndpointUrlController = TextEditingController();
   final _protocolEndpointUrlController = TextEditingController();
+  final _domainController = TextEditingController();
 
   final _portControllers = {
     'http': TextEditingController(),
@@ -164,6 +165,13 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                   obscureText: true,
                                   decoration: _inputStyle('connector_detail_page.api_key'.tr()),
                                 ),
+                                const SizedBox(height: 16),
+                                Text('connector_detail_page.domain_explanation'.tr()),
+                                const SizedBox(height: 16),
+                                TextFormField(
+                                  controller: _domainController,
+                                  decoration: _inputStyle('connector_detail_page.domain'.tr()),
+                                ),
                               ] else if (_mode == 'remote') ...[
                                 TextFormField(
                                   controller: _managementEndpointUrlController,
@@ -217,7 +225,8 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                         ports: portConfig,
                                         api_key: _apikeyController.text.isNotEmpty ? _apikeyController.text : null,
                                         state: 'stopped',
-                                        endpoints_url: endpoints
+                                        endpoints_url: endpoints,
+                                        domain: _domainController.text.isNotEmpty ? _domainController.text : ''
                                       );
                   
                                       showLoader(context);

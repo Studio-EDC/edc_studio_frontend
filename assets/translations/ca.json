@@ -101,6 +101,8 @@
     "managed": "Gestionat",
     "remote": "Remot",
     "name": "Nom",
+    "domain": "Domini (Opcional)",
+    "domain_explanation": "Introdueix el domini públic del connector (per exemple, edc-provider.mevaempresa.com). Aquest camp és necessari quan el connector es desplega en un servidor i ha de comunicar-se amb altres connectors EDC. Si el connector només s’utilitzarà localment, pots deixar-lo buit o utilitzar localhost.",
     "description": "Descripció",
     "connector_type": "Tipus de connector:",
     "consumer": "Consumidor",

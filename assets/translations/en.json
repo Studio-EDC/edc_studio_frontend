@@ -101,6 +101,8 @@
     "managed": "Managed",
     "remote": "Remote",
     "name": "Name",
+    "domain": "Domain (Optional)",
+    "domain_explanation": "Enter the public domain of the connector (for example, edc-provider.mycompany.com). This field is required when the connector is deployed on a server and needs to communicate with other EDC connectors. If the connector will only be used locally, you can leave it empty or use localhost.",
     "description": "Description",
     "connector_type": "Type of connector:",
     "consumer": "Consumer",

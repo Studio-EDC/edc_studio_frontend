@@ -101,6 +101,8 @@
     "managed": "Gestionado",
     "remote": "Remoto",
     "name": "Nombre",
+    "domain": "Dominio (Opcional)",
+    "domain_explanation": "Introduce el dominio público del conector (por ejemplo, edc-provider.miempresa.com). Este campo es necesario cuando el conector se despliega en un servidor y debe comunicarse con otros conectores EDC. Si el conector solo se usará localmente, puedes dejarlo vacío o usar localhost.",
     "description": "Descripción",
     "connector_type": "Tipo de conector:",
     "consumer": "Consumidor",
