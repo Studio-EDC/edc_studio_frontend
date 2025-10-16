@@ -32,6 +32,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
   final _apiKeyController = TextEditingController();
   final _managementEndpointUrlController = TextEditingController();
   final _protocolEndpointUrlController = TextEditingController();
+  final _domainController = TextEditingController();
 
   final _portControllers = {
     'http': TextEditingController(),
@@ -77,6 +78,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                   _descriptionController.text = connector.description ?? '';
                   _connectorType = connector.type;
                   _mode = connector.mode;
+                  _domainController.text = connector.domain ?? '';
 
                   if (connector.mode == 'managed' && connector.ports != null) {
                     _portControllers['http']!.text = connector.ports!.http.toString();
@@ -188,6 +190,13 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                 obscureText: true,
                                 decoration: _inputStyle('connector_detail_page.api_key'.tr()),
                               ),
+                              const SizedBox(height: 16),
+                              Text('connector_detail_page.domain_explanation'.tr()),
+                              const SizedBox(height: 16),
+                              TextFormField(
+                                controller: _domainController,
+                                decoration: _inputStyle('connector_detail_page.domain'.tr()),
+                              ),
                             ] else if (_mode == 'remote') ...[
                               TextFormField(
                                 controller: _managementEndpointUrlController,
@@ -245,6 +254,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                           : null,
                                       state: connector.state,
                                       endpoints_url: endpoints,
+                                      domain: _domainController.text.isNotEmpty ? _domainController.text : ''
                                     );
 
                                     showLoader(context);
