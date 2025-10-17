@@ -8,30 +8,19 @@ ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PAT
 RUN flutter doctor
 RUN flutter config --enable-web
 
-# Crea carpeta de trabajo
 WORKDIR /app
-
-# Copia archivos del proyecto
 COPY . .
+RUN touch assets/.env
+RUN flutter pub get
+RUN flutter build web
 
-# Construye la aplicación Flutter Web
-RUN flutter build web --release
-
-# Etapa 2: Nginx con configuración dinámica de entorno
+# Etapa 2: servir con nginx
 FROM nginx:alpine
 
-# Copia el build del frontend
+# Reemplazamos la configuración por una que escuche en el puerto 3000
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 COPY --from=build /app/build/web /usr/share/nginx/html
-
-# Copia el template de variables
-COPY env.template.js /usr/share/nginx/html/env.template.js
-
-# Instala gettext para usar envsubst
-RUN apk add --no-cache gettext
-
-COPY entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh && sed -i 's/\r$//' /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-EXPOSE 80
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]

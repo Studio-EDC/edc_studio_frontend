@@ -1,22 +1,15 @@
-import 'dart:js' as js;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
-
-String getEnvVar(String key) {
-  final env = js.context['env'];
-  if (env == null) return '';
-  return env[key] ?? '';
-}
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  final endpointBase = getEnvVar('ENDPOINT_BASE');
-  final endpointDataPond = getEnvVar('ENDPOINT_DATA_POND');
-
-  print('Base endpoint: $endpointBase');
-  print('Data pond: $endpointDataPond');
-
+  await dotenv.load(fileName: "assets/.env");
+  String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
+  String localPond = dotenv.env['ENDPOINT_DATA_POND'] ?? '';
+  print('BASE: $localBase');
+  print('POND: $localPond');
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   setPathUrlStrategy();

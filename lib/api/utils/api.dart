@@ -1,9 +1,8 @@
-
-import 'package:edc_studio/main.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EndpointsApi {
-  static final String localBase = getEnvVar('ENDPOINT_BASE');
-  static final String localPond = getEnvVar('ENDPOINT_DATA_POND');
+  static final String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
+  static final String localPond = dotenv.env['ENDPOINT_DATA_POND'] ?? '';
 }
 
 class ApiRoutes {
