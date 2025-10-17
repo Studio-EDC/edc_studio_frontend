@@ -1,7 +1,9 @@
 
+import 'package:edc_studio/main.dart';
+
 class EndpointsApi {
-  static final String localBase = String.fromEnvironment('ENDPOINT_BASE');
-  static final String localPond = String.fromEnvironment('ENDPOINT_DATA_POND');
+  static final String localBase = getEnvVar('ENDPOINT_BASE');
+  static final String localPond = getEnvVar('ENDPOINT_DATA_POND');
 }
 
 class ApiRoutes {

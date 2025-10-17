@@ -1,18 +1,22 @@
+import 'dart:js' as js;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-const endpointBase = String.fromEnvironment('ENDPOINT_BASE');
-const endpointDataPond = String.fromEnvironment('ENDPOINT_DATA_POND');
+String getEnvVar(String key) {
+  final env = js.context['env'];
+  if (env == null) return '';
+  return env[key] ?? '';
+}
 
 Future<void> main() async {
-  if (endpointBase.isEmpty || endpointDataPond.isEmpty) {
-    throw Exception(
-        'Faltan las variables ENDPOINT_BASE o ENDPOINT_DATA_POND. '
-        'Debes definirlas con --dart-define al construir o ejecutar.');
-  }
-  
+  final endpointBase = getEnvVar('ENDPOINT_BASE');
+  final endpointDataPond = getEnvVar('ENDPOINT_DATA_POND');
+
+  print('Base endpoint: $endpointBase');
+  print('Data pond: $endpointDataPond');
+
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   setPathUrlStrategy();
