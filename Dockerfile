@@ -29,12 +29,8 @@ COPY env.template.js /usr/share/nginx/html/env.template.js
 # Instala gettext para usar envsubst
 RUN apk add --no-cache gettext
 
-# Crea script de arranque que reemplaza variables de entorno en runtime
-RUN echo '#!/bin/sh\n\
-echo "Generando env.js con variables de entorno..."\n\
-envsubst < /usr/share/nginx/html/env.template.js > /usr/share/nginx/html/env.js\n\
-echo "Iniciando Nginx..."\n\
-exec nginx -g "daemon off;"' > /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+COPY entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh && sed -i 's/\r$//' /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
