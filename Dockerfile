@@ -1,26 +1,22 @@
-# Etapa 1: build Flutter web
-FROM ubuntu:22.04 as build
-RUN apt-get update && apt-get install -y git curl unzip ca-certificates && apt-get clean
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-WORKDIR /usr/local/flutter
-RUN git checkout tags/3.32.4
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
-RUN flutter doctor
-RUN flutter config --enable-web
+FROM ubuntu:22.04 AS build
+
+RUN apt update && apt install -y curl unzip git xz-utils
+RUN curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.22.2-stable.tar.xz
+RUN tar xf flutter_linux_3.22.2-stable.tar.xz
+ENV PATH="/flutter/bin:/flutter/bin/cache/dart-sdk/bin:${PATH}"
 
 WORKDIR /app
 COPY . .
-RUN touch .env
-RUN flutter pub get
-RUN flutter build web
 
-# Etapa 2: servir con nginx
+# Usa variables de entorno pasadas por docker-compose
+ARG ENDPOINT_BASE
+ARG ENDPOINT_DATA_POND
+
+RUN flutter build web --release \
+  --dart-define=ENDPOINT_BASE=$ENDPOINT_BASE \
+  --dart-define=ENDPOINT_DATA_POND=$ENDPOINT_DATA_POND
+
+# Imagen final
 FROM nginx:alpine
-
-# Reemplazamos la configuración por una que escuche en el puerto 3000
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 COPY --from=build /app/build/web /usr/share/nginx/html
-EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
