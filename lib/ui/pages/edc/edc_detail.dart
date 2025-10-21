@@ -242,6 +242,8 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                       );
                                     }
 
+                                    print(_domainController.text);
+
                                     final updatedConnector = Connector(
                                       id: widget.id,
                                       name: _nameController.text,

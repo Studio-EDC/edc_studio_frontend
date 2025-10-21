@@ -928,9 +928,22 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                         setState(() {
                                           final original = responseData['endpoint'] as String;
                                           originalEndpoint = original;
+
+                                          final provider = _allProviders.firstWhere(
+                                            (p) => p.id == providerID
+                                          );
+
+                                          final domain = provider.domain != null && provider.domain!.isNotEmpty
+                                            ? provider.domain
+                                            : 'localhost';
+
+                                          final replacementBase = domain == 'localhost'
+                                            ? 'http://localhost'
+                                            : 'https://$domain';
+
                                           endpoint = original.replaceFirstMapped(
                                             RegExp(r'^http:\/\/edc-provider-[\w\d\-]+'),
-                                            (match) => 'http://localhost',
+                                            (match) => replacementBase,
                                           );
                                           authorization = responseData['authorization'];
                                         });
