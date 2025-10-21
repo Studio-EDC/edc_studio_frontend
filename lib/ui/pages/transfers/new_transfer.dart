@@ -933,18 +933,26 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                             (p) => p.id == providerID
                                           );
 
-                                          final domain = provider.domain != null && provider.domain!.isNotEmpty
-                                            ? provider.domain
-                                            : 'localhost';
+                                          final hasDomain = provider.domain != null && provider.domain!.isNotEmpty;
 
-                                          final replacementBase = domain == 'localhost'
-                                            ? 'http://localhost'
-                                            : 'https://$domain';
+                                          final portMatch = RegExp(r':(\d+)').firstMatch(original);
+                                          final port = portMatch?.group(1);
+
+                                          String replacementBase;
+
+                                          if (hasDomain) {
+                                            replacementBase = 'https://${provider.domain}';
+                                          } else {
+                                            replacementBase = port != null
+                                                ? 'http://localhost:$port'
+                                                : 'http://localhost';
+                                          }
 
                                           endpoint = original.replaceFirstMapped(
-                                            RegExp(r'^http:\/\/edc-provider-[\w\d\-]+'),
+                                            RegExp(r'^http:\/\/edc-provider-[\w\d\-]+(:\d+)?'),
                                             (match) => replacementBase,
                                           );
+                                          
                                           authorization = responseData['authorization'];
                                         });
 
