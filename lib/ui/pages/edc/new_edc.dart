@@ -174,6 +174,12 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 ),
                               ] else if (_mode == 'remote') ...[
                                 TextFormField(
+                                  controller: _apikeyController,
+                                  obscureText: true,
+                                  decoration: _inputStyle('connector_detail_page.api_key'.tr()),
+                                ),
+                                const SizedBox(height: 16),
+                                TextFormField(
                                   controller: _managementEndpointUrlController,
                                   decoration: _inputStyle('connector_detail_page.management_url'.tr()),
                                   keyboardType: TextInputType.url,

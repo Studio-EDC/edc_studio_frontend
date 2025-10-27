@@ -296,7 +296,9 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         if (providerStateSelected == 'stopped')
                         const SizedBox(height: 16),
 
-                        if (providerStateSelected == 'stopped')
+                        if (providerStateSelected == 'stopped' && (_allProviders.firstWhere(
+                          (p) => p.id == providerID
+                        )).type == 'managed') 
                         Text(
                           'new_transfer_page.create_req'.tr(),
                           style: TextStyle(
