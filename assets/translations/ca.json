@@ -15,6 +15,7 @@
   "update": "Actualitza",
   "general_error": "Hi ha hagut un error:",
   "close": "Tancar",
+  "requierd_field": "Aquest camp és obligatori",
   "edc_list_page": {
     "new_edc": "Nou EDC",
     "search": "Cerca EDC",
@@ -126,7 +127,9 @@
   "new_connector_page": {
     "title": "Nou EDC",
     "success": "Connector creat correctament!",
-    "error": "Error en crear el connector."
+    "error": "Error en crear el connector.",
+    "port_explanation": "Els ports d’un connector EDC defineixen els diferents punts de comunicació entre els seus components i amb altres connectors.\n- HTTP Port: exposa l’API principal del connector.\n- Management Port: gestiona la configuració, els assets i les policies.\n- Protocol Port: permet la comunicació entre connectors (provider i consumer).\n- Public Port: exposa serveis accessibles públicament.\n- Control Port: coordina les transferències de dades entre els plans de control i de dades.\n- Version Port: ofereix informació sobre la versió i l’estat del connector.",
+    "apikey_explanation": "L’API key s’utilitza per autenticar les sol·licituds a les APIs del connector i garantir un accés segur."
   },
   "policies_list_page": {
     "title": "Polítiques",

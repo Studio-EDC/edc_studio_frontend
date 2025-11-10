@@ -43,6 +43,13 @@ class _NewEDCPageState extends State<NewEDCPage> {
 
   String _connectorType = 'consumer';
 
+  String? requiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'required_field'.tr();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
@@ -117,6 +124,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               // Name
                               TextFormField(
                                 controller: _nameController,
+                                validator: requiredValidator,
                                 decoration: _inputStyle('connector_detail_page.name'.tr()),
                               ),
                   
@@ -125,6 +133,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               // Description
                               TextFormField(
                                 controller: _descriptionController,
+                                validator: requiredValidator,
                                 decoration: _inputStyle('connector_detail_page.description'.tr()),
                               ),
                               const SizedBox(height: 24),
@@ -158,11 +167,16 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               const SizedBox(height: 24),
                   
                               if (_mode == 'managed') ...[
+                                Text('new_connector_page.port_explanation'.tr()),
+                                const SizedBox(height: 16),
                                 buildPortInputs(isMobile),
+                                const SizedBox(height: 16),
+                                Text('new_connector_page.apikey_explanation'.tr()),
                                 const SizedBox(height: 16),
                                 TextFormField(
                                   controller: _apikeyController,
                                   obscureText: true,
+                                  validator: requiredValidator,
                                   decoration: _inputStyle('connector_detail_page.api_key'.tr()),
                                 ),
                                 const SizedBox(height: 16),
@@ -175,12 +189,14 @@ class _NewEDCPageState extends State<NewEDCPage> {
                               ] else if (_mode == 'remote') ...[
                                 TextFormField(
                                   controller: _apikeyController,
+                                  validator: requiredValidator,
                                   obscureText: true,
                                   decoration: _inputStyle('connector_detail_page.api_key'.tr()),
                                 ),
                                 const SizedBox(height: 16),
                                 TextFormField(
                                   controller: _managementEndpointUrlController,
+                                  validator: requiredValidator,
                                   decoration: _inputStyle('connector_detail_page.management_url'.tr()),
                                   keyboardType: TextInputType.url,
                                 ),
@@ -189,6 +205,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 if (_connectorType == 'provider')
                                 TextFormField(
                                   controller: _protocolEndpointUrlController,
+                                  validator: requiredValidator,
                                   decoration: _inputStyle('connector_detail_page.protocol_url'.tr()),
                                   keyboardType: TextInputType.url,
                                 ),
@@ -297,6 +314,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
             width: double.infinity,
             child: TextFormField(
               controller: entry.value,
+              validator: requiredValidator,
               decoration: _inputStyle(label),
               keyboardType: TextInputType.number,
             ),
@@ -316,6 +334,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
               padding: const EdgeInsets.only(right: 16),
               child: TextFormField(
                 controller: entry.value,
+                validator: requiredValidator,
                 decoration: _inputStyle(label),
                 keyboardType: TextInputType.number,
               ),
@@ -340,23 +359,43 @@ class _NewEDCPageState extends State<NewEDCPage> {
   }
 
   InputDecoration _inputStyle(String label) {
+    final theme = Theme.of(context);
 
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+      labelStyle: TextStyle(color: theme.colorScheme.secondary),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+        borderSide: BorderSide(color: theme.colorScheme.secondary),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
         borderSide: BorderSide(
-          color: Theme.of(context).colorScheme.primary,
+          color: theme.colorScheme.primary,
           width: 2.0,
         ),
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(
+          color: Colors.red.shade700,
+          width: 2.0,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(
+          color: Colors.red.shade700,
+          width: 2.0,
+        ),
+      ),
+      errorStyle: TextStyle(
+        color: Colors.red.shade700,
+        fontSize: 13,
+      ),
     );
   }
+
 }
 

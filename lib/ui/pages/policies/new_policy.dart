@@ -27,6 +27,13 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
 
   final _formKey = GlobalKey<FormState>();
 
+  String? requiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'required_field'.tr();
+    }
+    return null;
+  }
+
   // Controllers
   final _policyIdController = TextEditingController();
 
@@ -171,6 +178,7 @@ class _NewPolicyPageState extends State<NewPolicyPage> {
 
                               TextFormField(
                                 controller: _policyIdController,
+                                validator: requiredValidator,
                                 decoration: _inputStyle('new_policy_page.policy_id'.tr()),
                               ),
 

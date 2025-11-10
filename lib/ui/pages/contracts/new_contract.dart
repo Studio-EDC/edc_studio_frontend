@@ -47,6 +47,13 @@ class _NewContractPageState extends State<NewContractPage> {
 
   List<String> selectedAssetIds = [];
 
+  String? requiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'required_field'.tr();
+    }
+    return null;
+  }
+
   Future<void> _loadConnectors() async {
     final connectors = await _edcService.getAllConnectors();
     if (connectors != null) {
@@ -201,6 +208,7 @@ class _NewContractPageState extends State<NewContractPage> {
 
                               TextFormField(
                                 controller: _contractIdController,
+                                validator: requiredValidator,
                                 decoration: _inputStyle('new_contract_page.contract_id'.tr()),
                               ),
 

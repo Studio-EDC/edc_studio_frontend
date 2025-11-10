@@ -26,6 +26,13 @@ class _NewAssetPageState extends State<NewAssetPage> {
 
   final _formKey = GlobalKey<FormState>();
 
+  String? requiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'required_field'.tr();
+    }
+    return null;
+  }
+
   // Controllers
   final _assetIdController = TextEditingController();
   final _nameController = TextEditingController();
@@ -186,6 +193,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _assetIdController,
+                                        validator: requiredValidator,
                                         decoration: _inputStyle('new_asset_page.asset_id'.tr()),
                                       ),
                                     ),
@@ -193,6 +201,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _nameController,
+                                        validator: requiredValidator,
                                         decoration: _inputStyle('new_asset_page.name'.tr()),
                                       ),
                                     ),
@@ -200,6 +209,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _contentTypeController,
+                                        validator: requiredValidator,
                                         decoration: _inputStyle('new_asset_page.content_type'.tr()),
                                       ),
                                     ),
@@ -227,6 +237,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                                       width: isMobile ? double.infinity : 320,
                                       child: TextFormField(
                                         controller: _dataAddressNameController,
+                                        validator: requiredValidator,
                                         decoration: _inputStyle('new_asset_page.data_address_name'.tr()),
                                       ),
                                     ),
@@ -324,6 +335,7 @@ class _NewAssetPageState extends State<NewAssetPage> {
                               const SizedBox(height: 24),
                               TextFormField(
                                 controller: _baseURLController,
+                                validator: requiredValidator,
                                 decoration: _inputStyle('new_asset_page.base_url'.tr()),
                               ),
                               

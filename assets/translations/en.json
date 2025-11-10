@@ -15,6 +15,7 @@
   "update": "Update",
   "general_error": "There was an error:",
   "close": "Close",
+  "required_field": "Required field",
   "edc_list_page": {
     "new_edc": "New EDC",
     "search": "Search EDC",
@@ -126,7 +127,9 @@
   "new_connector_page": {
     "title": "New EDC",
     "success": "Connector created successfully!",
-    "error": "Error creating connector."
+    "error": "Error creating connector.",
+    "port_explanation": "The ports of an EDC connector define the different communication endpoints between its components and other connectors.\n- HTTP Port: exposes the connector’s main API.\n- Management Port: manages configuration, assets, and policies.\n- Protocol Port: enables communication between provider and consumer connectors.\n- Public Port: exposes publicly accessible services.\n- Control Port: coordinates data transfers between control and data planes.\n- Version Port: provides information about the connector’s version and status",
+    "apikey_explanation": "The API key is used to authenticate requests to the connector’s APIs, ensuring secure access."
   },
   "policies_list_page": {
     "title": "Policies",

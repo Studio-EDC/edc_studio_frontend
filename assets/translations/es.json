@@ -15,6 +15,7 @@
   "update": "Actualizar",
   "general_error": "Ha habido un error:",
   "close": "Cerrar",
+  "required_field": "Este campo es obligatorio",
   "edc_list_page": {
     "new_edc": "Nuevo EDC",
     "search": "Buscar EDC",
@@ -126,7 +127,9 @@
   "new_connector_page": {
     "title": "Nuevo EDC",
     "success": "¡Conector creado correctamente!",
-    "error": "Error al crear el conector."
+    "error": "Error al crear el conector.",
+    "port_explanation": "Los puertos de un conector EDC definen los diferentes puntos de comunicación entre sus componentes y con otros conectores.\n- HTTP Port: expone la API principal del conector.\n- Management Port: gestiona la configuración, los assets y las policies.\n- Protocol Port: permite la comunicación entre conectores (provider y consumer).\n- Public Port: expone servicios accesibles públicamente.\n- Control Port: coordina las transferencias de datos entre los planos de control y datos.\n- Version Port: ofrece información sobre la versión y el estado del conector.",
+    "apikey_explanation": "La API key se utiliza para autenticar las peticiones a las APIs del conector y garantizar un acceso seguro."
   },
   "policies_list_page": {
     "title": "Políticas",
