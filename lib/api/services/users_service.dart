@@ -72,10 +72,9 @@ class UsersService {
         final prefs = await SharedPreferences.getInstance();
         if (username == 'admin') {
           await prefs.setString('admin_token', token);
-        } else {
-          await prefs.setString('access_token', token);
-          await prefs.setString('username', username);
-        }
+        } 
+        await prefs.setString('access_token', token);
+        await prefs.setString('username', username);
       }
       return null;
     } on ApiException catch (e) {
