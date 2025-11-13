@@ -11,6 +11,9 @@ class ApiRoutes {
   static const policies = '/policies';
   static const contracts = '/contracts';
   static const transfers = '/transfers';
+  static const users = '/users/';
+  static const token = '/token';
+  static const register = '/register';
 }
 
 class ApiRoutesPond {

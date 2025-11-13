@@ -187,11 +187,20 @@ class _ContractsListPageState extends State<ContractsListPage> {
                     ),
             ),
             Expanded(
-              child: _filteredContracts.isEmpty
+              child: (_filteredContracts.isEmpty && _allConnectors.isNotEmpty)
+
                 ? Column(children: [
                     SizedBox(height: 100),
                     Text('contracts_list_page.not_found'.tr())
                   ]) 
+
+                : (_allConnectors.isEmpty)
+
+                ? Column(children: [
+                    SizedBox(height: 100),
+                    Text('no_providers'.tr())
+                  ]) 
+
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
                     child: Padding(

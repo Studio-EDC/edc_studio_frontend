@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:html' as html;
 
 class UsersService {
-  final CommunicationService _api = CommunicationService(base: EndpointsApi.localPond);
+  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
 
   Future<List<User>> getUsers() async {
     try {
@@ -33,20 +33,16 @@ class UsersService {
     }
   }
 
-  Future<String?> registerUser(String username, String password) async {
+  Future<String?> registerUser(String name, String surnames, String email, String username, String password) async {
     try {
-      await getToken('admin', 'admin');
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('admin_token');
-      await _api.post(ApiRoutesPond.users,
+      await _api.post(ApiRoutes.register,
         {
+          "name": name,
+          "surnames": surnames,
+          "email": email,
           "username": username,
           "password": password
-        },
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
+        }
       );
       return null;
     } on ApiException catch (e) {
@@ -59,12 +55,11 @@ class UsersService {
 
   Future<String?> getToken(String username, String password) async {
     try {
-      final response = await _api.post(ApiRoutesPond.token,
+      final response = await _api.post(ApiRoutes.token,
         {
           "username": username,
           "password": password
         },
-        asFormUrlEncoded: true,
       );
 
       if (response.containsKey('access_token')) {
@@ -83,6 +78,11 @@ class UsersService {
       }
       return '';
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 
   Future<List<FileModel>?> getFiles(String username) async {

@@ -26,7 +26,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final _router = router;
+  final _router = createRouter();
 
   @override
   Widget build(BuildContext context) {

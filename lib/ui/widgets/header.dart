@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:edc_studio/api/services/users_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -145,6 +146,30 @@ class EDCHeader extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // --- LOGOUT BUTTON ---
+              if (!isMobile)
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: IconButton(
+                    onPressed: () async {
+                      UsersService userService = UsersService();
+                      await userService.logout();
+                      context.go('/login');
+                    },
+                    icon: const Icon(Icons.logout, color: Colors.white),
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: IconButton(
+                    icon: const Icon(Icons.logout, color: Colors.white),
+                    onPressed: () {
+                      context.go('/login');
+                    },
+                  ),
+                ),
 
               if (!isMobile) 
                 const SizedBox(width: 80)

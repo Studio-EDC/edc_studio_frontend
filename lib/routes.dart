@@ -13,149 +13,181 @@ import 'package:edc_studio/ui/pages/policies/policies_list.dart';
 import 'package:edc_studio/ui/pages/policies/policy_detail.dart';
 import 'package:edc_studio/ui/pages/transfers/new_transfer.dart';
 import 'package:edc_studio/ui/pages/transfers/transfers_list.dart';
+import 'package:edc_studio/ui/pages/users/login.dart';
+import 'package:edc_studio/ui/pages/users/register.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final GoRouter router = GoRouter(
-  initialLocation: '/',
-  routes: [
-    GoRoute(
-      path: '/',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const EDCListPage(),
-      ),
-    ),
-    GoRoute(
-      path: '/new_edc',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const NewEDCPage(),
-      ),
-    ),
-    GoRoute(
-      path: '/edc_detail/:id',
-      pageBuilder: (context, state) {
-        final id = state.pathParameters['id']!;
-        return _buildFadeTransition(
+GoRouter createRouter() {  
+  return GoRouter(
+    initialLocation: '/login',
+
+    redirect: (BuildContext context, GoRouterState state) async {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      final bool loggingIn = state.matchedLocation == '/login' || state.matchedLocation == '/register';
+
+      if ((token == null || token.isEmpty) && !loggingIn) return '/login';
+
+      if ((token != null && token.isNotEmpty) && loggingIn) return '/';
+
+      return null;
+    },
+
+    routes: [
+      GoRoute(
+        path: '/',
+        pageBuilder: (context, state) => _buildFadeTransition(
           key: state.pageKey,
-          child: EDCDetailPage(id: id),
-        );
-      },
-    ),
-    GoRoute(
-      path: '/policies',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const PoliciesListPage(),
+          child: const EDCListPage(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: '/policy-detail/:edcId/:assetId',
-      pageBuilder: (context, state) {
-
-        final edcId = state.pathParameters['edcId']!;
-        final policyId = state.pathParameters['assetId']!;
-
-        return _buildFadeTransition(
+      GoRoute(
+        path: '/login',
+        pageBuilder: (context, state) => _buildFadeTransition(
           key: state.pageKey,
-          child: PolicyDetailPage(
-            policyId: policyId,
-            edcId: edcId,
-          ),
-        );
-      },
-    ),
-    GoRoute(
-      path: '/new_policy',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const NewPolicyPage(),
+          child: const Login(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: '/assets',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const AssetsListPage(),
-      ),
-    ),
-    GoRoute(
-      path: '/asset-detail/:edcId/:assetId',
-      pageBuilder: (context, state) {
-
-        final edcId = state.pathParameters['edcId']!;
-        final assetId = state.pathParameters['assetId']!;
-
-        return _buildFadeTransition(
+      GoRoute(
+        path: '/register',
+        pageBuilder: (context, state) => _buildFadeTransition(
           key: state.pageKey,
-          child: AssetDetailPage(
-            assetId: assetId,
-            edcId: edcId,
-          ),
-        );
-      },
-    ),
-    GoRoute(
-      path: '/new_asset',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const NewAssetPage(),
+          child: const Register(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: '/contracts',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const ContractsListPage(),
-      ),
-    ),
-    GoRoute(
-      path: '/contract-detail/:edcId/:contractId',
-      pageBuilder: (context, state) {
-
-        final edcId = state.pathParameters['edcId']!;
-        final contractId = state.pathParameters['contractId']!;
-
-        return _buildFadeTransition(
+      GoRoute(
+        path: '/new_edc',
+        pageBuilder: (context, state) => _buildFadeTransition(
           key: state.pageKey,
-          child: ContractDetailPage(
-            contractId: contractId,
-            edcId: edcId,
-          ),
-        );
-      },
-    ),
-    GoRoute(
-      path: '/new_contract',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const NewContractPage(),
+          child: const NewEDCPage(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: '/transfers',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const TransfersListPage(),
+      GoRoute(
+        path: '/edc_detail/:id',
+        pageBuilder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return _buildFadeTransition(
+            key: state.pageKey,
+            child: EDCDetailPage(id: id),
+          );
+        },
       ),
-    ),
-    GoRoute(
-      path: '/new_transfer',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const NewTransferPage(),
+      GoRoute(
+        path: '/policies',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const PoliciesListPage(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: '/files',
-      pageBuilder: (context, state) => _buildFadeTransition(
-        key: state.pageKey,
-        child: const FilesListPage(),
+      GoRoute(
+        path: '/policy-detail/:edcId/:assetId',
+        pageBuilder: (context, state) {
+
+          final edcId = state.pathParameters['edcId']!;
+          final policyId = state.pathParameters['assetId']!;
+
+          return _buildFadeTransition(
+            key: state.pageKey,
+            child: PolicyDetailPage(
+              policyId: policyId,
+              edcId: edcId,
+            ),
+          );
+        },
       ),
-    ),
-  ],
-);
+      GoRoute(
+        path: '/new_policy',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const NewPolicyPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/assets',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const AssetsListPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/asset-detail/:edcId/:assetId',
+        pageBuilder: (context, state) {
+
+          final edcId = state.pathParameters['edcId']!;
+          final assetId = state.pathParameters['assetId']!;
+
+          return _buildFadeTransition(
+            key: state.pageKey,
+            child: AssetDetailPage(
+              assetId: assetId,
+              edcId: edcId,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/new_asset',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const NewAssetPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/contracts',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const ContractsListPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/contract-detail/:edcId/:contractId',
+        pageBuilder: (context, state) {
+
+          final edcId = state.pathParameters['edcId']!;
+          final contractId = state.pathParameters['contractId']!;
+
+          return _buildFadeTransition(
+            key: state.pageKey,
+            child: ContractDetailPage(
+              contractId: contractId,
+              edcId: edcId,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/new_contract',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const NewContractPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/transfers',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const TransfersListPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/new_transfer',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const NewTransferPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/files',
+        pageBuilder: (context, state) => _buildFadeTransition(
+          key: state.pageKey,
+          child: const FilesListPage(),
+        ),
+      ),
+    ]
+  );
+}
 
 CustomTransitionPage _buildFadeTransition({
   required LocalKey key,

@@ -344,7 +344,7 @@ class _UsersSelectorState extends State<UsersSelector> {
                 const SizedBox(height: 32),
                 OutlinedButton.icon(
                   onPressed: () async {
-                    final UsersService userService = UsersService();
+                    /* final UsersService userService = UsersService();
                     final response = await userService.registerUser(username.text, password.text);
                     if (response != null) {
                       FloatingSnackBar.show(
@@ -369,7 +369,7 @@ class _UsersSelectorState extends State<UsersSelector> {
                         register = false;
                         password.clear();
                       });
-                    }
+                    } */
                   },
                   label: Text(
                     'create'.tr(),

@@ -188,11 +188,20 @@ class _PoliciesListPageState extends State<PoliciesListPage> {
             ),
 
             Expanded(
-              child: _filteredPolicies.isEmpty
+              child: (_filteredPolicies.isEmpty && _allConnectors.isNotEmpty)
+
                 ? Column(children: [
                     SizedBox(height: 100),
                     Text('policies_list_page.no_policies'.tr())
                   ]) 
+
+                : (_allConnectors.isEmpty)
+
+                ? Column(children: [
+                    SizedBox(height: 100),
+                    Text('no_providers'.tr())
+                  ]) 
+
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
                     child: Padding(

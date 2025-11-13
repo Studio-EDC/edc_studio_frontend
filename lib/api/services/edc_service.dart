@@ -2,6 +2,7 @@
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/utils/api.dart';
 import 'package:edc_studio/api/utils/communication_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EdcService {
   final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
@@ -9,7 +10,14 @@ class EdcService {
   /// Create a new EDC connector
   Future<String?> createConnector(Connector data) async {
     try {
-      await _api.post(ApiRoutes.edc, data.toJson());
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      await _api.post(ApiRoutes.edc, data.toJson(),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
       return null;
     } on ApiException catch (e) {
       if (e.body is Map && e.body['detail'] is String) {
@@ -50,7 +58,14 @@ class EdcService {
   /// Get all EDC connectors
   Future<List<Connector>?> getAllConnectors() async {
     try {
-      final response = await _api.get(ApiRoutes.edc);
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      final response = await _api.get(ApiRoutes.edc,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
       return (response as List)
           .map((json) => Connector.fromJson(json))
           .toList();

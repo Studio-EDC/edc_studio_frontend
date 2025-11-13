@@ -187,11 +187,20 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ),
             ),
             Expanded(
-              child: _filteredAssets.isEmpty
+              child: (_filteredAssets.isEmpty && _allConnectors.isNotEmpty)
+
                 ? Column(children: [
                     SizedBox(height: 100),
                     Text('assets_list_page.no_assets'.tr())
                   ]) 
+
+                : (_allConnectors.isEmpty)
+
+                ? Column(children: [
+                    SizedBox(height: 100),
+                    Text('no_providers'.tr())
+                  ]) 
+
                 : ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
                     child: Padding(
