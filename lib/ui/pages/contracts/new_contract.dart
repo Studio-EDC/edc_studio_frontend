@@ -70,25 +70,21 @@ class _NewContractPageState extends State<NewContractPage> {
   }
 
   Future<void> _loadAssets(String id) async {
-    showLoader(context);
     final assets = await _assetsService.getAssetsByEdcId(id);
     if (assets is List<Asset>) {
       setState(() {
         _allAssets = assets;
       });
     } 
-    hideLoader(context);
   }
 
   Future<void> _loadPolicies(String id) async {
-    showLoader(context);
     final policies = await _policyService.getPoliciesByEdcId(id);
     if (policies is List<Policy>) {
       setState(() {
         _allPolicies = policies;
       });
     } 
-    hideLoader(context);
   }
 
   @override

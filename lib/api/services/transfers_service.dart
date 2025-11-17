@@ -1,22 +1,24 @@
+import 'dart:convert';
+
 import 'package:edc_studio/api/models/transfer.dart';
 import 'package:edc_studio/api/utils/api.dart';
-import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/api/utils/handle_message.dart';
 
 class TransfersService {
-  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
+  final MyApi _api = MyApi();
 
   /// Rquest catalog
   Future<Object> requestCatalog(String consumer, String provider) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/catalog_request', 
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/catalog_request'), 
+        body: jsonEncode({
           "consumer": consumer,
           "provider": provider
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -25,16 +27,17 @@ class TransfersService {
   /// Negotiate contract
   Future<Object> negotiateContract(String consumer, String provider, String contractOfferId, String assetId) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/negotiate_contract', 
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/negotiate_contract'), 
+        body: jsonEncode({
           "consumer": consumer,
           "provider": provider,
           "contract_offer_id": contractOfferId,
           "asset": assetId
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -43,14 +46,15 @@ class TransfersService {
   /// Contract agreement
   Future<Object> getContractAgreement(String consumer, String contractNegotiationId) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/contract_agreement',
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/contract_agreement'),
+        body: jsonEncode({
           "consumer": consumer,
           "id_contract_negotiation": contractNegotiationId
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -59,10 +63,11 @@ class TransfersService {
   /// Start Http server
   Future<dynamic> startHttpLogger() async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/start_http_server', {}
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/start_http_server'), body: {}
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } catch (e) {
       return null;
     }
@@ -71,10 +76,11 @@ class TransfersService {
   /// Stop Http server
   Future<dynamic> stopHttpLogger() async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/stop_http_server', {}
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/stop_http_server'), body: {}
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } catch (e) {
       return null;
     }
@@ -83,15 +89,16 @@ class TransfersService {
   /// Start transfer
   Future<Object> startTransfer(String consumer, String provider, String contractAgreementId) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/start_transfer', 
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/start_transfer'), 
+        body: jsonEncode({
           "consumer": consumer,
           "provider": provider,
           "contract_agreement_id": contractAgreementId
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -100,14 +107,15 @@ class TransfersService {
   /// Check transfer
   Future<Object> checkTransfer(String consumer, String transferProcessID) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/check_transfer', 
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/check_transfer'), 
+        body: jsonEncode({
           "consumer": consumer,
           "transfer_process_id": transferProcessID
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -116,8 +124,9 @@ class TransfersService {
   /// Create a new policy
  Future<Object> createTransfer(Transfer transfer) async {
     try {
-      final response = await _api.post(ApiRoutes.transfers, transfer.toJson());
-      return response;
+      final response = await _api.client.post(Uri.parse(ApiRoutes.transfers), body: jsonEncode(transfer.toJson()));
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -126,8 +135,9 @@ class TransfersService {
   /// Get all
   Future<Object> getAll() async {
     try {
-      final response = await _api.get(ApiRoutes.transfers);
-      final transfers = (response as List)
+      final response = await _api.client.get(Uri.parse(ApiRoutes.transfers));
+      final data = jsonDecode(response.body);
+      final transfers = (data as List)
           .map((json) => TransferPopulated.fromJson(json))
           .toList();
       return transfers;
@@ -139,15 +149,16 @@ class TransfersService {
   /// Start transfer pull
   Future<dynamic> startTransferPull(String consumer, String provider, String contractAgreementId) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/start_transfer_pull', 
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/start_transfer_pull'), 
+        body: jsonEncode({
           "consumer": consumer,
           "provider": provider,
           "contract_agreement_id": contractAgreementId
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }
@@ -156,14 +167,15 @@ class TransfersService {
   /// Check transfer
   Future<dynamic> checkDataPull(String consumer, String transferProcessID) async {
     try {
-      final response = await _api.post(
-        '${ApiRoutes.transfers}/check_data_pull', 
-        {
+      final response = await _api.client.post(
+        Uri.parse('${ApiRoutes.transfers}/check_data_pull'), 
+        body: jsonEncode({
           "consumer": consumer,
           "transfer_process_id": transferProcessID
-        }
+        })
       );
-      return response;
+      final data = jsonDecode(response.body);
+      return data;
     } on Exception catch (e) {
       return extractEdcErrorMessage(e);
     }

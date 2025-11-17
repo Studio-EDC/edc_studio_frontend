@@ -1,29 +1,21 @@
 
+import 'dart:convert';
+
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/utils/api.dart';
-import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EdcService {
-  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
+  final MyApi _api = MyApi();
 
   /// Create a new EDC connector
   Future<String?> createConnector(Connector data) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
-      await _api.post(ApiRoutes.edc, data.toJson(),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
+      await _api.client.post(Uri.parse(ApiRoutes.edc), body: jsonEncode(data.toJson()));
       return null;
-    } on ApiException catch (e) {
-      if (e.body is Map && e.body['detail'] is String) {
-        return e.body['detail'];
-      }
-      return '';
+    } catch (e) {
+      print(e);
+      return e.toString();
     }
   }
 
@@ -31,13 +23,10 @@ class EdcService {
   Future<String?> startConnector(String id) async {
     try {
       final path = '${ApiRoutes.edc}/$id/start';
-      await _api.post(path, {});
+      await _api.client.post(Uri.parse(path), body: {});
       return null;
-    } on ApiException catch (e) {
-      if (e.body is Map && e.body['detail'] is String) {
-        return e.body['detail'];
-      }
-      return '';
+    } catch (e) {
+      return e.toString();
     }
   }
 
@@ -45,13 +34,10 @@ class EdcService {
   Future<String?> stopConnector(String id) async {
     try {
       final path = '${ApiRoutes.edc}/$id/stop';
-      await _api.post(path, {});
+      await _api.client.post(Uri.parse(path), body: {});
       return null;
-    } on ApiException catch (e) {
-      if (e.body is Map && e.body['detail'] is String) {
-        return e.body['detail'];
-      }
-      return '';
+    } catch (e) {
+      return e.toString();
     }
   }
 
@@ -60,13 +46,14 @@ class EdcService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('access_token');
-      final response = await _api.get(ApiRoutes.edc,
+      final response = await _api.client.get(Uri.parse(ApiRoutes.edc),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-      return (response as List)
+      final data = jsonDecode(response.body);
+      return (data as List)
           .map((json) => Connector.fromJson(json))
           .toList();
     } catch (e) {
@@ -77,8 +64,9 @@ class EdcService {
   /// Get EDC by id
   Future<Connector?> getConnectorByID(String id) async {
     try {
-      final response = await _api.get('${ApiRoutes.edc}/$id');
-      return Connector.fromJson(response);
+      final response = await _api.client.get(Uri.parse('${ApiRoutes.edc}/$id'));
+      final data = jsonDecode(response.body);
+      return Connector.fromJson(data);
     } catch (e) {
       return null;
     }
@@ -87,7 +75,7 @@ class EdcService {
   /// Update EDC by id
   Future<bool> updateConnectorByID(String id, Connector connector) async {
     try {
-      await _api.put('${ApiRoutes.edc}/$id', connector.toJson());
+      await _api.client.put(Uri.parse('${ApiRoutes.edc}/$id'), body: jsonEncode(connector.toJson()));
       return true;
     } catch (e) {
       return false;
@@ -97,7 +85,10 @@ class EdcService {
   /// Delete EDC by id
   Future<bool> deleteConnectorByID(String id) async {
     try {
-      await _api.delete('${ApiRoutes.edc}/$id');
+      final response = await _api.client.delete(Uri.parse('${ApiRoutes.edc}/$id'));
+      if (response.statusCode != 200) {
+        return false;
+      }
       return true;
     } catch (e) {
       return false;
