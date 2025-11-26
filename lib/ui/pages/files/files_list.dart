@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/file.dart';
-import 'package:edc_studio/api/models/user.dart';
 import 'package:edc_studio/api/services/users_service.dart';
 import 'package:edc_studio/ui/widgets/file_card.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FilesListPage extends StatefulWidget {
   const FilesListPage({super.key});
@@ -18,25 +18,19 @@ class _FilesListPageState extends State<FilesListPage> {
 
   final UsersService _usersService = UsersService();
 
-  List<User> listUsers = [];
   List<FileModel> listFiles = [];
   String? selectedUsername;
 
   @override
   void initState() {
     super.initState();
-    _loadUsers();
-  }
-
-  Future<void> _loadUsers() async {
-    final users = await _usersService.getUsers();
-    setState(() {
-      listUsers = users;
-    });
+    _loadFiles();
   }
 
   Future<void> _loadFiles() async {
-    final files = await _usersService.getFiles(selectedUsername ?? '');
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+    final files = await _usersService.getFiles(username ?? '');
     setState(() {
       if (files != null) {
         files.sort((a, b) => b.modified.compareTo(a.modified));
@@ -48,59 +42,13 @@ class _FilesListPageState extends State<FilesListPage> {
   @override
   Widget build(BuildContext context) {
 
-    final isMobile = MediaQuery.of(context).size.width < 600;
-
     return Scaffold(
       endDrawer: const MenuDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           EDCHeader(currentPage: 'files'),
-          Padding(
-            padding: isMobile
-                  ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
-                  : const EdgeInsets.symmetric(horizontal: 80, vertical: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 15),
-                Text(
-                  'list_files.select_user'.tr(),
-                  style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: isMobile ? null : 300,
-                  height: 40,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: selectedUsername,
-                        hint: Text('list_files.select_user_hint'.tr()),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        isExpanded: true,
-                        onChanged: (value) {
-                          setState(() => selectedUsername = value!);
-                          _loadFiles();
-                        },
-                        items: listUsers.map((user) {
-                          return DropdownMenuItem<String>(
-                            value: user.username,
-                            child: Text(user.username, style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ]
-            )
-          ),
+          const SizedBox(height: 30),
           Expanded(
             child: listFiles.isEmpty ?
             Center(

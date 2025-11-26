@@ -4,7 +4,6 @@ import 'package:http_interceptor/http_interceptor.dart';
 
 class EndpointsApi {
   static final String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
-  static final String localPond = dotenv.env['ENDPOINT_DATA_POND'] ?? '';
 }
 
 class ApiRoutes {
@@ -21,10 +20,8 @@ class ApiRoutes {
 }
 
 class ApiRoutesPond {
-  static final String localPond = dotenv.env['ENDPOINT_DATA_POND'] ?? '';
+  static final String localPond = dotenv.env['ENDPOINT_BASE'] ?? '';
 
-  static final users = '$localPond/users/';
-  static final token = '$localPond/token';
   static final files = '$localPond/files';
   static final download = '$localPond/files/download';
 }

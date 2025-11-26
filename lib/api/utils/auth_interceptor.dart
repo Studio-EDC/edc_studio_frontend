@@ -15,7 +15,7 @@ class AuthInterceptor extends InterceptorContract {
     request.headers['content-type'] = 'application/json';
     request.headers['accept'] = 'application/json';
 
-    if (token != null) {
+    if (!request.headers.containsKey('Authorization') && token != null) {
       request.headers['Authorization'] = 'Bearer $token';
     }
 

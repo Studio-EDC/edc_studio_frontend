@@ -17,10 +17,9 @@ class UsersService {
 
   Future<List<User>> getUsers() async {
     try {
-      await getToken('admin', 'admin');
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('admin_token');
-      final response = await _api.client.get(Uri.parse(ApiRoutesPond.users),
+      final response = await _api.client.get(Uri.parse(ApiRoutes.users),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -89,9 +88,8 @@ class UsersService {
 
   Future<List<FileModel>?> getFiles(String username) async {
     try {
-      await getToken('admin', 'admin');
       final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('admin_token');
+      final token = prefs.getString('access_token');
       final response = await _api.client.get(
         Uri.parse('${ApiRoutesPond.files}?username=$username'),
         headers: {
@@ -112,7 +110,7 @@ class UsersService {
   Future<String?> downloadFile(String filename) async {
     try {
       final response = await _api.client.get(
-        Uri.parse('${EndpointsApi.localPond}/files/download/$filename')
+        Uri.parse('${ApiRoutesPond.files}/download/$filename')
       );
 
       if (response.statusCode == 200) {
@@ -141,14 +139,14 @@ class UsersService {
     final prefs = await SharedPreferences.getInstance();
     final userToken = prefs.getString('access_token');
     final response = await _api.client.get(
-      Uri.parse('${EndpointsApi.localBase}/transfers/proxy_pull?uri=$fileUrl'),
+      Uri.parse('${ApiRoutes.transfers}/proxy_pull?uri=$fileUrl'),
       headers: authorization.isNotEmpty ? {'Authorization': authorization} : null,
     );
 
     if (response.statusCode == 200) {
       final bytes = response.bodyBytes;
 
-      final request = http.MultipartRequest('POST', Uri.parse('${EndpointsApi.localPond}/files/upload'))
+      final request = http.MultipartRequest('POST', Uri.parse('${ApiRoutesPond.files}/upload'))
         ..headers['Authorization'] = 'Bearer $userToken'
         ..files.add(http.MultipartFile.fromBytes('file', bytes, filename: filename));
 
@@ -166,7 +164,7 @@ class UsersService {
         FloatingSnackBar.show(
           context,
           message: 'users_list_page.error_uploading'.tr(),
-          type: SnackBarType.success,
+          type: SnackBarType.error,
           duration: const Duration(seconds: 3),
           width: 600
         );
@@ -175,7 +173,7 @@ class UsersService {
       FloatingSnackBar.show(
         context,
         message: 'users_list_page.error_uploading'.tr(),
-        type: SnackBarType.success,
+        type: SnackBarType.error,
         duration: const Duration(seconds: 3),
         width: 600
       );
@@ -188,13 +186,13 @@ class UsersService {
     BuildContext context
   ) async {
     final response = await _api.client.get(
-      Uri.parse('${EndpointsApi.localBase}/transfers/proxy_http_logger')
+      Uri.parse('${ApiRoutes.transfers}/proxy_http_logger')
     );
 
     if (response.statusCode == 200) {
       final bytes = response.bodyBytes;
 
-      final request = http.MultipartRequest('POST', Uri.parse('${EndpointsApi.localPond}/files/upload'))
+      final request = http.MultipartRequest('POST', Uri.parse('${ApiRoutesPond.files}/upload'))
         ..headers['Authorization'] = 'Bearer $userToken'
         ..files.add(http.MultipartFile.fromBytes('file', bytes, filename: filename));
 
@@ -212,7 +210,7 @@ class UsersService {
         FloatingSnackBar.show(
           context,
           message: 'users_list_page.error_uploading'.tr(),
-          type: SnackBarType.success,
+          type: SnackBarType.error,
           duration: const Duration(seconds: 3),
           width: 600
         );
@@ -221,7 +219,7 @@ class UsersService {
       FloatingSnackBar.show(
         context,
         message: 'users_list_page.error_uploading'.tr(),
-        type: SnackBarType.success,
+        type: SnackBarType.error,
         duration: const Duration(seconds: 3),
         width: 600
       );

@@ -7,6 +7,7 @@ import 'package:edc_studio/api/models/transfer.dart';
 import 'package:edc_studio/api/services/assets_service.dart';
 import 'package:edc_studio/api/services/edc_service.dart';
 import 'package:edc_studio/api/services/transfers_service.dart';
+import 'package:edc_studio/api/services/users_service.dart';
 import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/link.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
@@ -16,6 +17,7 @@ import 'package:edc_studio/ui/widgets/user_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewTransferPage extends StatefulWidget {
   const NewTransferPage({super.key});
@@ -1159,7 +1161,7 @@ class _NewTransferPageState extends State<NewTransferPage> {
                         if (endpoint != null || transferState == 'COMPLETED')
                         OutlinedButton.icon(
                           onPressed: () async {
-                            await showModalBottomSheet(
+                            /* await showModalBottomSheet(
                               context: context,
                               isScrollControlled: true, 
                               shape: const RoundedRectangleBorder(
@@ -1189,7 +1191,11 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                   ),
                                 );
                               },
-                            );
+                            ); */
+                            final prefs = await SharedPreferences.getInstance();
+                            final token = prefs.getString('access_token');
+                            final username = prefs.getString('username');
+                            await handleTransferDataUpload(username ?? '', token ?? '');
                           },
                           label: Text(
                             'new_transfer_page.save_data_button'.tr(),
@@ -1288,5 +1294,44 @@ class _NewTransferPageState extends State<NewTransferPage> {
         );
       },
     );
+  }
+
+  Future<void> handleTransferDataUpload(String username, String token) async {
+    final UsersService usersService = UsersService();
+    
+    if (_selectedTransferFlow == 'pull') {
+      if (endpoint != null && authorization != null) {
+        await usersService.downloadAndUploadFilePull(
+          endpoint ?? '',
+          authorization!,
+          'data_pull_file_$finalIdTransfer',
+          context
+        );
+        context.go('/transfers');
+      } else {
+        FloatingSnackBar.show(
+          context,
+          message: 'users_list_page.error_uploading'.tr(),
+          type: SnackBarType.error,
+          duration: const Duration(seconds: 3),
+          width: 600
+        );
+      }
+    } else if (_selectedTransferFlow == 'push') {
+      await usersService.downloadAndUploadFilePush(
+        'data_push_file_$finalIdTransfer',
+        token,
+        context
+      );
+      context.go('/transfers');
+    } else {
+      FloatingSnackBar.show(
+        context,
+        message: 'users_list_page.error_uploading'.tr(),
+        type: SnackBarType.error,
+        duration: const Duration(seconds: 3),
+        width: 600
+      );
+    }
   }
 }
