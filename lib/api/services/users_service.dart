@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:edc_studio/api/models/file.dart';
 import 'package:edc_studio/api/models/user.dart';
 import 'package:edc_studio/api/utils/api.dart';
-import 'package:edc_studio/api/utils/communication_service.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,20 +13,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:html' as html;
 
 class UsersService {
-  final CommunicationService _api = CommunicationService(base: EndpointsApi.localBase);
+  final MyApi _api = MyApi();
 
   Future<List<User>> getUsers() async {
     try {
-      await getToken('admin', 'admin');
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('admin_token');
-      final response = await _api.get(ApiRoutesPond.users,
+      final response = await _api.client.get(Uri.parse(ApiRoutes.users),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-      return (response as List)
+      final data = jsonDecode(response.body);
+      return (data as List)
           .map((json) => User.fromJson(json))
           .toList();
     } catch (e) {
@@ -35,48 +36,48 @@ class UsersService {
 
   Future<String?> registerUser(String name, String surnames, String email, String username, String password) async {
     try {
-      await _api.post(ApiRoutes.register,
-        {
+      await _api.client.post(Uri.parse(ApiRoutes.register),
+        body: jsonEncode({
           "name": name,
           "surnames": surnames,
           "email": email,
           "username": username,
           "password": password
-        }
+        })
       );
       return null;
-    } on ApiException catch (e) {
-      if (e.body is Map && e.body['detail'] is String) {
-        return e.body['detail'];
-      }
-      return '';
+    } catch (e) {
+      return e.toString();
     }
   }
 
   Future<String?> getToken(String username, String password) async {
     try {
-      final response = await _api.post(ApiRoutes.token,
-        {
+      final response = await _api.client.post(Uri.parse(ApiRoutes.token),
+        body: jsonEncode({
           "username": username,
           "password": password
-        },
+        }),
       );
 
-      if (response.containsKey('access_token')) {
-        final token = response['access_token'];
-        final prefs = await SharedPreferences.getInstance();
-        if (username == 'admin') {
-          await prefs.setString('admin_token', token);
-        } 
-        await prefs.setString('access_token', token);
-        await prefs.setString('username', username);
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        return data['detail'] ?? 'Internal error';
+      } else {
+        if (data.containsKey('access_token')) {
+          final token = data['access_token'];
+          final prefs = await SharedPreferences.getInstance();
+          if (username == 'admin') {
+            await prefs.setString('admin_token', token);
+          } 
+          await prefs.setString('access_token', token);
+          await prefs.setString('username', username);
+        }
+        return null;
       }
-      return null;
-    } on ApiException catch (e) {
-      if (e.body is Map && e.body['detail'] is String) {
-        return e.body['detail'];
-      }
-      return '';
+    } catch (e) {
+      return e.toString();
     }
   }
 
@@ -87,18 +88,17 @@ class UsersService {
 
   Future<List<FileModel>?> getFiles(String username) async {
     try {
-      await getToken('admin', 'admin');
       final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('admin_token');
-      final response = await _api.get(
-        '${ApiRoutesPond.files}?username=$username',
+      final token = prefs.getString('access_token');
+      final response = await _api.client.get(
+        Uri.parse('${ApiRoutesPond.files}?username=$username'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-
-      return (response as List)
+      final data = jsonDecode(response.body);
+      return (data as List)
           .map((json) => FileModel.fromJson(json))
           .toList();
 
@@ -109,14 +109,8 @@ class UsersService {
 
   Future<String?> downloadFile(String filename) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
-
-      final response = await http.get(
-        Uri.parse('${EndpointsApi.localPond}/files/download/$filename'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+      final response = await _api.client.get(
+        Uri.parse('${ApiRoutesPond.files}/download/$filename')
       );
 
       if (response.statusCode == 200) {
@@ -144,15 +138,15 @@ class UsersService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     final userToken = prefs.getString('access_token');
-    final response = await http.get(
-      Uri.parse('${EndpointsApi.localBase}/transfers/proxy_pull?uri=$fileUrl'),
+    final response = await _api.client.get(
+      Uri.parse('${ApiRoutes.transfers}/proxy_pull?uri=$fileUrl'),
       headers: authorization.isNotEmpty ? {'Authorization': authorization} : null,
     );
 
     if (response.statusCode == 200) {
       final bytes = response.bodyBytes;
 
-      final request = http.MultipartRequest('POST', Uri.parse('${EndpointsApi.localPond}/files/upload'))
+      final request = http.MultipartRequest('POST', Uri.parse('${ApiRoutesPond.files}/upload'))
         ..headers['Authorization'] = 'Bearer $userToken'
         ..files.add(http.MultipartFile.fromBytes('file', bytes, filename: filename));
 
@@ -170,7 +164,7 @@ class UsersService {
         FloatingSnackBar.show(
           context,
           message: 'users_list_page.error_uploading'.tr(),
-          type: SnackBarType.success,
+          type: SnackBarType.error,
           duration: const Duration(seconds: 3),
           width: 600
         );
@@ -179,7 +173,7 @@ class UsersService {
       FloatingSnackBar.show(
         context,
         message: 'users_list_page.error_uploading'.tr(),
-        type: SnackBarType.success,
+        type: SnackBarType.error,
         duration: const Duration(seconds: 3),
         width: 600
       );
@@ -191,14 +185,14 @@ class UsersService {
     String userToken,
     BuildContext context
   ) async {
-    final response = await http.get(
-      Uri.parse('${EndpointsApi.localBase}/transfers/proxy_http_logger')
+    final response = await _api.client.get(
+      Uri.parse('${ApiRoutes.transfers}/proxy_http_logger')
     );
 
     if (response.statusCode == 200) {
       final bytes = response.bodyBytes;
 
-      final request = http.MultipartRequest('POST', Uri.parse('${EndpointsApi.localPond}/files/upload'))
+      final request = http.MultipartRequest('POST', Uri.parse('${ApiRoutesPond.files}/upload'))
         ..headers['Authorization'] = 'Bearer $userToken'
         ..files.add(http.MultipartFile.fromBytes('file', bytes, filename: filename));
 
@@ -216,7 +210,7 @@ class UsersService {
         FloatingSnackBar.show(
           context,
           message: 'users_list_page.error_uploading'.tr(),
-          type: SnackBarType.success,
+          type: SnackBarType.error,
           duration: const Duration(seconds: 3),
           width: 600
         );
@@ -225,7 +219,7 @@ class UsersService {
       FloatingSnackBar.show(
         context,
         message: 'users_list_page.error_uploading'.tr(),
-        type: SnackBarType.success,
+        type: SnackBarType.error,
         duration: const Duration(seconds: 3),
         width: 600
       );

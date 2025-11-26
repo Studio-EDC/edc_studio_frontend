@@ -26,8 +26,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final _router = createRouter();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -36,7 +34,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      routerConfig: _router,
+      routerConfig: appRouter,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: const ColorScheme(
