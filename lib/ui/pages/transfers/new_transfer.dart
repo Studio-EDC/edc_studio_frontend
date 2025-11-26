@@ -13,7 +13,6 @@ import 'package:edc_studio/ui/widgets/link.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
-import 'package:edc_studio/ui/widgets/user_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
