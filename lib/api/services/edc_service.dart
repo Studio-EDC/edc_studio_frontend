@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:edc_studio/api/models/connector.dart';
@@ -23,8 +24,13 @@ class EdcService {
   Future<String?> startConnector(String id) async {
     try {
       final path = '${ApiRoutes.edc}/$id/start';
-      await _api.client.post(Uri.parse(path), body: {});
+      await _api.client
+          .post(Uri.parse(path), body: {})
+          .timeout(const Duration(minutes: 2));
+
       return null;
+    } on TimeoutException catch (_) {
+      return 'Timeout al intentar iniciar el conector';
     } catch (e) {
       return e.toString();
     }
