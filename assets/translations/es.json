@@ -143,6 +143,7 @@
     "api_key": "API key",
     "management_url": "URL del endpoint de gestión",
     "protocol_url": "URL del endpoint de protocolo",
+    "public_url": "URL del endpoint público",
     "success": "¡Conector actualizado correctamente!",
     "error": "Error al actualizar el conector.",
     "not_found": "Conector no encontrado",

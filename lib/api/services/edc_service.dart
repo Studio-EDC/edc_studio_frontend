@@ -24,9 +24,7 @@ class EdcService {
   Future<String?> startConnector(String id) async {
     try {
       final path = '${ApiRoutes.edc}/$id/start';
-      await _api.client
-          .post(Uri.parse(path), body: {})
-          .timeout(const Duration(minutes: 2));
+      await _api.client.post(Uri.parse(path), body: {});
 
       return null;
     } on TimeoutException catch (_) {
@@ -71,8 +69,12 @@ class EdcService {
   Future<Connector?> getConnectorByID(String id) async {
     try {
       final response = await _api.client.get(Uri.parse('${ApiRoutes.edc}/$id'));
-      final data = jsonDecode(response.body);
-      return Connector.fromJson(data);
+      if (response.statusCode != 200) {
+        return null;
+      } else {
+        final data = jsonDecode(response.body);
+        return Connector.fromJson(data);
+      }
     } catch (e) {
       return null;
     }
@@ -81,7 +83,10 @@ class EdcService {
   /// Update EDC by id
   Future<bool> updateConnectorByID(String id, Connector connector) async {
     try {
-      await _api.client.put(Uri.parse('${ApiRoutes.edc}/$id'), body: jsonEncode(connector.toJson()));
+      final response = await _api.client.put(Uri.parse('${ApiRoutes.edc}/$id'), body: jsonEncode(connector.toJson()));
+      if (response.statusCode != 200) {
+        return false;
+      }
       return true;
     } catch (e) {
       return false;

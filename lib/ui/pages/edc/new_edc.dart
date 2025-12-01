@@ -30,6 +30,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
   final _apikeyController = TextEditingController();
   final _managementEndpointUrlController = TextEditingController();
   final _protocolEndpointUrlController = TextEditingController();
+  final _publicEndpointUrlController = TextEditingController();
   final _domainController = TextEditingController();
 
   final _portControllers = {
@@ -209,6 +210,14 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                   decoration: _inputStyle('connector_detail_page.protocol_url'.tr()),
                                   keyboardType: TextInputType.url,
                                 ),
+                                const SizedBox(height: 16),
+                                if (_connectorType == 'provider')
+                                TextFormField(
+                                  controller: _publicEndpointUrlController,
+                                  validator: requiredValidator,
+                                  decoration: _inputStyle('connector_detail_page.public_url'.tr()),
+                                  keyboardType: TextInputType.url,
+                                ),
                               ],
                   
                               const SizedBox(height: 32),
@@ -235,7 +244,8 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                       if (_mode == 'remote') {
                                         endpoints = Endpoints(
                                           management: _managementEndpointUrlController.text, 
-                                          protocol: _protocolEndpointUrlController.text.isNotEmpty ? _protocolEndpointUrlController.text : null
+                                          protocol: _protocolEndpointUrlController.text.isNotEmpty ? _protocolEndpointUrlController.text : null,
+                                          public: _publicEndpointUrlController.text.isNotEmpty ? _publicEndpointUrlController.text : null
                                         );
                                       }
                   

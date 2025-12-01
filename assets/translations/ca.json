@@ -143,6 +143,7 @@
     "api_key": "API key",
     "management_url": "URL de l'endpoint de gestió",
     "protocol_url": "URL de l'endpoint de protocol",
+    "public_url": "URL de l'endpoint de public",
     "success": "Connector actualitzat correctament!",
     "error": "Error en actualitzar el connector.",
     "not_found": "Connector no trobat",

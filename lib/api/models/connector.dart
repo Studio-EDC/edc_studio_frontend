@@ -43,16 +43,19 @@ class PortConfig {
 class Endpoints {
   final String management;
   final String? protocol;
+  final String? public;
 
   Endpoints({
     required this.management,
     this.protocol,
+    this.public,
   });
 
   factory Endpoints.fromJson(Map<String, dynamic> json) {
     return Endpoints(
       management: json['management'],
       protocol: json['protocol'],
+      public: json['public'],
     );
   }
 
@@ -60,6 +63,7 @@ class Endpoints {
     return {
       'management': management,
       'protocol': protocol,
+      'public': public,
     };
   }
 }

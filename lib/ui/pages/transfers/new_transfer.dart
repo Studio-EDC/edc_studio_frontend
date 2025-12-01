@@ -936,25 +936,30 @@ class _NewTransferPageState extends State<NewTransferPage> {
                                             (p) => p.id == providerID
                                           );
 
-                                          final hasDomain = provider.domain != null && provider.domain!.isNotEmpty;
+                                          if (provider.mode == "managed") {
+                                            final hasDomain = provider.domain != null && provider.domain!.isNotEmpty;
 
-                                          final portMatch = RegExp(r':(\d+)').firstMatch(original);
-                                          final port = portMatch?.group(1);
+                                            final portMatch = RegExp(r':(\d+)').firstMatch(original);
+                                            final port = portMatch?.group(1);
 
-                                          String replacementBase;
+                                            String replacementBase;
 
-                                          if (hasDomain) {
-                                            replacementBase = 'https://${provider.domain}';
+                                            if (hasDomain) {
+                                              replacementBase = 'https://${provider.domain}';
+                                            } else {
+                                              replacementBase = port != null
+                                                  ? 'http://localhost:$port'
+                                                  : 'http://localhost';
+                                            }
+
+                                            endpoint = original.replaceFirstMapped(
+                                              RegExp(r'^http:\/\/edc-provider-[\w\d\-]+(:\d+)?'),
+                                              (match) => replacementBase,
+                                            );
                                           } else {
-                                            replacementBase = port != null
-                                                ? 'http://localhost:$port'
-                                                : 'http://localhost';
+                                            endpoint = provider.endpoints_url != null ? provider.endpoints_url?.public ?? '': null;
                                           }
 
-                                          endpoint = original.replaceFirstMapped(
-                                            RegExp(r'^http:\/\/edc-provider-[\w\d\-]+(:\d+)?'),
-                                            (match) => replacementBase,
-                                          );
                                           
                                           authorization = responseData['authorization'];
                                         });

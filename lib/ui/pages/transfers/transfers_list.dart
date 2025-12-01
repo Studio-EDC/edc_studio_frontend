@@ -136,37 +136,39 @@ class _TransfersListPageState extends State<TransfersListPage> {
                       padding: isMobile
                         ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
                         : const EdgeInsets.symmetric(horizontal: 80, vertical: 24),
-                      child: DataTable(
-                        columnSpacing: 20,
-                        headingRowColor: WidgetStatePropertyAll(
-                          Theme.of(context).colorScheme.tertiary,
+                      child: SingleChildScrollView(
+                        child: DataTable(
+                          columnSpacing: 20,
+                          headingRowColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.tertiary,
+                          ),
+                          columns: [
+                            DataColumn(label: Text('transfers_list_page.provider'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataColumn(label: Text('transfers_list_page.consumer'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataColumn(label: Text('transfers_list_page.asset'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataColumn(label: Text('transfers_list_page.flow_type'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                            DataColumn(label: Text('actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                          ],
+                          rows: _filteredTransfers.map((transfer) {
+                            return DataRow(cells: [
+                              DataCell(Text(transfer.provider?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                              DataCell(Text(transfer.consumer?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                              DataCell(Text(transfer.asset ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                              DataCell(Text(transfer.transferFlow == 'push' ? 'transfers_list_page.push'.tr() : 'transfers_list_page.pull'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
+                              DataCell(Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove_red_eye),
+                                    tooltip: 'view'.tr(),
+                                    onPressed: () {
+                                      // Acción de ver detalle
+                                    },
+                                  ),
+                                ],
+                              )),
+                            ]);
+                          }).toList(),
                         ),
-                        columns: [
-                          DataColumn(label: Text('transfers_list_page.provider'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('transfers_list_page.consumer'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('transfers_list_page.asset'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('transfers_list_page.flow_type'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                          DataColumn(label: Text('actions'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                        ],
-                        rows: _filteredTransfers.map((transfer) {
-                          return DataRow(cells: [
-                            DataCell(Text(transfer.provider?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                            DataCell(Text(transfer.consumer?.name ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                            DataCell(Text(transfer.asset ?? '', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                            DataCell(Text(transfer.transferFlow == 'push' ? 'transfers_list_page.push'.tr() : 'transfers_list_page.pull'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15))),
-                            DataCell(Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove_red_eye),
-                                  tooltip: 'view'.tr(),
-                                  onPressed: () {
-                                    // Acción de ver detalle
-                                  },
-                                ),
-                              ],
-                            )),
-                          ]);
-                        }).toList(),
                       ),
                     ),
                 ),

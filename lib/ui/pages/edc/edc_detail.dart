@@ -32,6 +32,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
   final _apiKeyController = TextEditingController();
   final _managementEndpointUrlController = TextEditingController();
   final _protocolEndpointUrlController = TextEditingController();
+  final _publicEndpointUrlController = TextEditingController();
   final _domainController = TextEditingController();
 
   final _portControllers = {
@@ -93,6 +94,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                   if (connector.mode == 'remote' && connector.endpoints_url != null) {
                     _managementEndpointUrlController.text = connector.endpoints_url!.management;
                     _protocolEndpointUrlController.text = connector.endpoints_url!.protocol ?? '';
+                    _publicEndpointUrlController.text = connector.endpoints_url!.public ?? '';
                   }
                 }
 
@@ -211,6 +213,14 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   keyboardType: TextInputType.url,
                                 ),
                               ],
+                              if (_connectorType == 'provider') ...[
+                                const SizedBox(height: 16),
+                                TextFormField(
+                                  controller: _publicEndpointUrlController,
+                                  decoration: _inputStyle('connector_detail_page.public_url'.tr()),
+                                  keyboardType: TextInputType.url,
+                                ),
+                              ],
                             ],
 
                             const SizedBox(height: 32),
@@ -239,10 +249,12 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                         protocol: _protocolEndpointUrlController.text.isNotEmpty
                                             ? _protocolEndpointUrlController.text
                                             : null,
+                                        public: _publicEndpointUrlController.text.isNotEmpty
+                                            ? _publicEndpointUrlController.text
+                                            : null,
                                       );
+                                      print(endpoints.toJson());
                                     }
-
-                                    print(_domainController.text);
 
                                     final updatedConnector = Connector(
                                       id: widget.id,

@@ -36,7 +36,7 @@ class MyApi {
 
   MyApi._internal()
       : client = InterceptedClient.build(
-          requestTimeout: const Duration(seconds: 20),
+          requestTimeout: const Duration(seconds: 60),
           interceptors: [AuthInterceptor()],
         );
 

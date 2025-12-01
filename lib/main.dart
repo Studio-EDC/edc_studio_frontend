@@ -7,9 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<void> main() async {
   await dotenv.load(fileName: "assets/.env");
   String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
-  String localPond = dotenv.env['ENDPOINT_DATA_POND'] ?? '';
   print('BASE: $localBase');
-  print('POND: $localPond');
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   setPathUrlStrategy();
