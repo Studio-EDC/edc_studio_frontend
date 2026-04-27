@@ -7,6 +7,7 @@ import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,6 +27,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
 
   String _mode = 'managed';
   String _connectorType = 'consumer';
+  bool _importingCredentials = false;
 
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -73,7 +75,6 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
 
                 final connector = snapshot.data!;
 
-                // Inicializar solo una vez
                 if (_nameController.text.isEmpty) {
                   _nameController.text = connector.name;
                   _descriptionController.text = connector.description ?? '';
@@ -118,16 +119,18 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('connector_detail_page.title'.tr(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )),
+                            Text(
+                              'connector_detail_page.title'.tr(),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
                             const SizedBox(height: 24),
-
-                            // Mode
-                            Text('connector_detail_page.mode_question'.tr(),
-                                style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                            Text(
+                              'connector_detail_page.mode_question'.tr(),
+                              style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                            ),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -136,34 +139,37 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   groupValue: _mode,
                                   onChanged: (value) => setState(() => _mode = value!),
                                 ),
-                                Text('connector_detail_page.managed'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text(
+                                  'connector_detail_page.managed'.tr(),
+                                  style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                                ),
                                 const SizedBox(width: 24),
                                 Radio<String>(
                                   value: 'remote',
                                   groupValue: _mode,
                                   onChanged: (value) => setState(() => _mode = value!),
                                 ),
-                                Text('connector_detail_page.remote'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text(
+                                  'connector_detail_page.remote'.tr(),
+                                  style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 24),
-
-                            // Name
                             TextFormField(
                               controller: _nameController,
                               decoration: _inputStyle('connector_detail_page.name'.tr()),
                             ),
                             const SizedBox(height: 16),
-
-                            // Description
                             TextFormField(
                               controller: _descriptionController,
                               decoration: _inputStyle('connector_detail_page.description'.tr()),
                             ),
                             const SizedBox(height: 24),
-
-                            // Type
-                            Text('connector_detail_page.connector_type'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                            Text(
+                              'connector_detail_page.connector_type'.tr(),
+                              style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                            ),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -172,18 +178,23 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   groupValue: _connectorType,
                                   onChanged: (value) => setState(() => _connectorType = value!),
                                 ),
-                                Text('connector_detail_page.consumer'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text(
+                                  'connector_detail_page.consumer'.tr(),
+                                  style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                                ),
                                 const SizedBox(width: 24),
                                 Radio<String>(
                                   value: 'provider',
                                   groupValue: _connectorType,
                                   onChanged: (value) => setState(() => _connectorType = value!),
                                 ),
-                                Text('connector_detail_page.provider'.tr(), style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary)),
+                                Text(
+                                  'connector_detail_page.provider'.tr(),
+                                  style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 24),
-
                             if (_mode == 'managed') ...[
                               buildPortInputs(isMobile),
                               const SizedBox(height: 16),
@@ -222,9 +233,11 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                 ),
                               ],
                             ],
-
+                            if (connector.mode == 'managed') ...[
+                              const SizedBox(height: 32),
+                              _buildIdentityHubSection(connector),
+                            ],
                             const SizedBox(height: 32),
-
                             Center(
                               child: ElevatedButton(
                                 onPressed: () async {
@@ -253,7 +266,6 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                             ? _publicEndpointUrlController.text
                                             : null,
                                       );
-                                      print(endpoints.toJson());
                                     }
 
                                     final updatedConnector = Connector(
@@ -263,12 +275,11 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                       type: _connectorType,
                                       mode: _mode,
                                       ports: portConfig,
-                                      api_key: _apiKeyController.text.isNotEmpty
-                                          ? _apiKeyController.text
-                                          : null,
+                                      api_key: _apiKeyController.text.isNotEmpty ? _apiKeyController.text : null,
                                       state: connector.state,
                                       endpoints_url: endpoints,
-                                      domain: _domainController.text.isNotEmpty ? _domainController.text : ''
+                                      domain: _domainController.text.isNotEmpty ? _domainController.text : '',
+                                      identity_hub: connector.identity_hub,
                                     );
 
                                     showLoader(context);
@@ -278,7 +289,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                         context,
                                         message: 'connector_detail_page.success'.tr(),
                                         type: SnackBarType.success,
-                                        duration: Duration(seconds: 3),
+                                        duration: const Duration(seconds: 3),
                                       );
                                       hideLoader(context);
                                     } else {
@@ -286,11 +297,11 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                         context,
                                         message: 'connector_detail_page.error'.tr(),
                                         type: SnackBarType.error,
-                                        duration: Duration(seconds: 3),
+                                        duration: const Duration(seconds: 3),
                                       );
                                       hideLoader(context);
                                     }
-                                    
+
                                     context.go('/');
                                   }
                                 },
@@ -301,7 +312,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                                 ),
-                                child: Text('update'.tr(), style: TextStyle(color: Colors.white, fontSize: 15)),
+                                child: Text('update'.tr(), style: const TextStyle(color: Colors.white, fontSize: 15)),
                               ),
                             )
                           ],
@@ -367,6 +378,260 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
             .toList(),
       );
     }
+  }
+
+  Widget _buildIdentityHubSection(Connector connector) {
+    final identityHub = connector.identity_hub;
+    final credentials = identityHub?.credentials ?? const <IdentityCredentialSummary>[];
+    final importedAt = identityHub?.imported_at;
+    final formattedImportedAt = importedAt == null || importedAt.isEmpty
+        ? null
+        : importedAt.replaceFirst('T', ' ').replaceFirst('Z', '');
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFD),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'connector_detail_page.identity_hub.title'.tr(),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'connector_detail_page.identity_hub.description'.tr(),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              _buildStatusChip(
+                identityHub?.enabled == true
+                    ? 'connector_detail_page.identity_hub.status_imported'.tr()
+                    : 'connector_detail_page.identity_hub.status_pending'.tr(),
+                identityHub?.enabled == true ? Colors.green.shade700 : Colors.orange.shade700,
+              ),
+              _buildStatusChip(
+                identityHub?.vault_enabled == true
+                    ? 'connector_detail_page.identity_hub.vault_enabled'.tr()
+                    : 'connector_detail_page.identity_hub.vault_pending'.tr(),
+                identityHub?.vault_enabled == true ? Colors.blue.shade700 : Colors.grey.shade700,
+              ),
+              _buildStatusChip(
+                identityHub?.runtime_prepared == true
+                    ? 'connector_detail_page.identity_hub.runtime_ready'.tr()
+                    : 'connector_detail_page.identity_hub.runtime_pending'.tr(),
+                identityHub?.runtime_prepared == true ? Colors.teal.shade700 : Colors.grey.shade700,
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 24,
+            runSpacing: 16,
+            children: [
+              _buildInfoItem(
+                'connector_detail_page.identity_hub.bundle'.tr(),
+                identityHub?.bundle_file_name ?? 'connector_detail_page.identity_hub.not_imported'.tr(),
+              ),
+              _buildInfoItem(
+                'connector_detail_page.identity_hub.participant_did'.tr(),
+                identityHub?.participant_context_did ?? '-',
+              ),
+              _buildInfoItem(
+                'connector_detail_page.identity_hub.imported_at'.tr(),
+                formattedImportedAt ?? '-',
+              ),
+              _buildInfoItem(
+                'connector_detail_page.identity_hub.imported_by'.tr(),
+                identityHub?.imported_by ?? '-',
+              ),
+              _buildInfoItem(
+                'connector_detail_page.identity_hub.credential_count'.tr(),
+                '${identityHub?.credential_count ?? 0}',
+              ),
+            ],
+          ),
+          if (identityHub?.restart_required == true) ...[
+            const SizedBox(height: 16),
+            Text(
+              'connector_detail_page.identity_hub.restart_required'.tr(),
+              style: TextStyle(
+                color: Colors.orange.shade900,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+          if (identityHub?.last_error != null && identityHub!.last_error!.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(identityHub.last_error!, style: const TextStyle(color: Colors.red)),
+          ],
+          const SizedBox(height: 20),
+          Text(
+            'connector_detail_page.identity_hub.credentials'.tr(),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          if (credentials.isEmpty)
+            Text(
+              'connector_detail_page.identity_hub.no_credentials'.tr(),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            )
+          else
+            Column(
+              children: credentials
+                  .map(
+                    (credential) => Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            credential.file_name,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            credential.credential_type ?? '-',
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          ),
+                          if (credential.subject_id != null && credential.subject_id!.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              credential.subject_id!,
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ElevatedButton.icon(
+              onPressed: _importingCredentials ? null : _importCredentialsZip,
+              icon: _importingCredentials
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Icon(Icons.upload_file),
+              label: Text(
+                _importingCredentials
+                    ? 'connector_detail_page.identity_hub.importing'.tr()
+                    : 'connector_detail_page.identity_hub.import_button'.tr(),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusChip(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(color: color, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  Widget _buildInfoItem(String label, String value) {
+    return SizedBox(
+      width: 220,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(value),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _importCredentialsZip() async {
+    final picked = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['zip'],
+      withData: true,
+    );
+    if (picked == null || picked.files.isEmpty) {
+      return;
+    }
+
+    setState(() => _importingCredentials = true);
+    final error = await _edcService.importIdentityHubCredentials(widget.id, picked.files.single);
+    if (!mounted) {
+      return;
+    }
+
+    setState(() => _importingCredentials = false);
+    if (error == null) {
+      FloatingSnackBar.show(
+        context,
+        message: 'connector_detail_page.identity_hub.import_success'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+      );
+      setState(() {
+        _connectorFuture = _edcService.getConnectorByID(widget.id);
+      });
+      return;
+    }
+
+    FloatingSnackBar.show(
+      context,
+      message: '${'connector_detail_page.identity_hub.import_error'.tr()}: $error',
+      type: SnackBarType.error,
+      duration: const Duration(seconds: 4),
+    );
   }
 
   InputDecoration _inputStyle(String label) {

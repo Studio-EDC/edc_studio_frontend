@@ -4,6 +4,8 @@ import 'dart:convert';
 
 import 'package:edc_studio/api/models/connector.dart';
 import 'package:edc_studio/api/utils/api.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EdcService {
@@ -103,6 +105,48 @@ class EdcService {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<String?> importIdentityHubCredentials(String id, PlatformFile file) async {
+    try {
+      if (file.bytes == null || file.bytes!.isEmpty) {
+        return 'Selected file is empty';
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('${ApiRoutes.edc}/$id/identity-hub/credentials'),
+      );
+
+      if (token != null && token.isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+      request.headers['Accept'] = 'application/json';
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'file',
+          file.bytes!,
+          filename: file.name,
+        ),
+      );
+
+      final streamed = await request.send();
+      final response = await http.Response.fromStream(streamed);
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return null;
+      }
+
+      try {
+        final data = jsonDecode(response.body);
+        return data['detail']?.toString() ?? 'Credential import failed';
+      } catch (_) {
+        return 'Credential import failed';
+      }
+    } catch (e) {
+      return e.toString();
     }
   }
 }
