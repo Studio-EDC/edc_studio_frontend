@@ -15,6 +15,8 @@ class EDCHeader extends StatelessWidget {
     switch (page) {
       case 'edc_list':
         return '/';
+      case 'federated_participants':
+        return '/federated-participants';
       case 'policies':
         return '/policies';
       case 'assets':
@@ -32,7 +34,15 @@ class EDCHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navItems = ['edc_list', 'assets', 'policies', 'contracts', 'transfers', 'files'];
+    final navItems = [
+      'edc_list',
+      'federated_participants',
+      'assets',
+      'policies',
+      'contracts',
+      'transfers',
+      'files'
+    ];
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     return Container(
@@ -43,9 +53,9 @@ class EDCHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              if (!isMobile) 
+              if (!isMobile)
                 const SizedBox(width: 80)
-              else 
+              else
                 const SizedBox(width: 20),
               Image.asset(
                 'assets/edc_logo.png',
@@ -53,39 +63,37 @@ class EDCHeader extends StatelessWidget {
               ),
             ],
           ),
-
           Row(
             children: [
-
               if (isMobile)
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: context.locale.languageCode,
-                    dropdownColor: Colors.white,
-                    onChanged: (String? value) {
-                      if (value != null) {
-                        context.setLocale(Locale(value));
-                      }
-                    },
-                    items: [
-                      DropdownMenuItem(
-                        value: 'es',
-                        child: Image.asset('assets/flags/es.png', width: 24),
-                      ),
-                      DropdownMenuItem(
-                        value: 'ca',
-                        child: Image.asset('assets/flags/cat.png', width: 24),
-                      ),
-                      DropdownMenuItem(
-                        value: 'en',
-                        child: Image.asset('assets/flags/en.png', width: 24),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: context.locale.languageCode,
+                      dropdownColor: Colors.white,
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          context.setLocale(Locale(value));
+                        }
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          value: 'es',
+                          child: Image.asset('assets/flags/es.png', width: 24),
+                        ),
+                        DropdownMenuItem(
+                          value: 'ca',
+                          child: Image.asset('assets/flags/cat.png', width: 24),
+                        ),
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Image.asset('assets/flags/en.png', width: 24),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
               if (!isMobile)
                 ...navItems.map((item) {
@@ -116,36 +124,36 @@ class EDCHeader extends StatelessWidget {
                 ),
 
               if (isMobile) const SizedBox(width: 20),
-              
+
               if (!isMobile)
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: context.locale.languageCode,
-                    dropdownColor: Colors.white,
-                    onChanged: (String? value) {
-                      if (value != null) {
-                        context.setLocale(Locale(value));
-                      }
-                    },
-                    items: [
-                      DropdownMenuItem(
-                        value: 'es',
-                        child: Image.asset('assets/flags/es.png', width: 24),
-                      ),
-                      DropdownMenuItem(
-                        value: 'ca',
-                        child: Image.asset('assets/flags/cat.png', width: 24),
-                      ),
-                      DropdownMenuItem(
-                        value: 'en',
-                        child: Image.asset('assets/flags/en.png', width: 24),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: context.locale.languageCode,
+                      dropdownColor: Colors.white,
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          context.setLocale(Locale(value));
+                        }
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          value: 'es',
+                          child: Image.asset('assets/flags/es.png', width: 24),
+                        ),
+                        DropdownMenuItem(
+                          value: 'ca',
+                          child: Image.asset('assets/flags/cat.png', width: 24),
+                        ),
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Image.asset('assets/flags/en.png', width: 24),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
               // --- LOGOUT BUTTON ---
               if (!isMobile)
@@ -171,9 +179,9 @@ class EDCHeader extends StatelessWidget {
                   ),
                 ),
 
-              if (!isMobile) 
+              if (!isMobile)
                 const SizedBox(width: 80)
-              else 
+              else
                 const SizedBox(width: 20),
             ],
           ),

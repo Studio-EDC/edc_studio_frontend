@@ -1,5 +1,6 @@
 {
   "edc_list": "EDC List",
+  "federated_participants": "Federated participants",
   "assets": "Assets",
   "policies": "Policies",
   "contracts": "Contracts",
@@ -58,6 +59,39 @@
     "stop": "Stop",
     "start": "Start",
     "see_details": "See details"
+  },
+  "federated_list_page": {
+    "search": "Search federated participant",
+    "new_participant": "New federated participant",
+    "empty": "No federated participants found.",
+    "deleted": "Federated participant deleted successfully."
+  },
+  "federated_form": {
+    "new_title": "New federated participant",
+    "detail_title": "Federated participant details",
+    "status": "Status",
+    "connector": "Connector",
+    "participant_did": "participantDID",
+    "legal_name": "Legal name",
+    "lrn": "LRN value",
+    "headquarter_country": "Headquarter country code",
+    "legal_country": "Legal country code",
+    "public_domain": "Public domain",
+    "protocol_endpoint": "Protocol endpoint",
+    "notes": "Notes",
+    "checklist": "Manual checklist",
+    "did_published": "I have published did.json",
+    "registered": "I have registered the participant in edc-manager",
+    "credentials_installed": "I have installed the credentials",
+    "validate_did": "Validate DID",
+    "back_to_list": "Back to list",
+    "created": "Federated participant created successfully.",
+    "updated": "Federated participant updated successfully.",
+    "did_document": "Generated did.json",
+    "did_document_url": "Expected did.json URL",
+    "manual_payload": "Manual edc-manager payload",
+    "manual_curl": "Manual edc-manager curl",
+    "did_validation": "DID validation result"
   },
   "assets_list_page": {
     "description": "The provider connector is the one managing assets for which a contract negotiation can be executed. So, select the provider you want to view the assets from:",

@@ -20,23 +20,43 @@ class MenuDrawer extends StatelessWidget {
               height: 100,
             ),
           ),
-          _buildNavTile(context, icon: Icons.list, label: 'edc_list'.tr(), route: '/'),
-          _buildNavTile(context, icon: Icons.layers, label: 'assets'.tr(), route: '/assets'),
-          _buildNavTile(context, icon: Icons.policy, label: 'policies'.tr(), route: '/policies'),
-          _buildNavTile(context, icon: Icons.assignment, label: 'contracts'.tr(), route: '/contracts'),
-          _buildNavTile(context, icon: Icons.swap_horiz, label: 'transfers'.tr(), route: '/transfers'),
-          _buildNavTile(context, icon: Icons.swap_horiz, label: 'files'.tr(), route: '/files'),
+          _buildNavTile(context,
+              icon: Icons.list, label: 'edc_list'.tr(), route: '/'),
+          _buildNavTile(context,
+              icon: Icons.badge_outlined,
+              label: 'federated_participants'.tr(),
+              route: '/federated-participants'),
+          _buildNavTile(context,
+              icon: Icons.layers, label: 'assets'.tr(), route: '/assets'),
+          _buildNavTile(context,
+              icon: Icons.policy, label: 'policies'.tr(), route: '/policies'),
+          _buildNavTile(context,
+              icon: Icons.assignment,
+              label: 'contracts'.tr(),
+              route: '/contracts'),
+          _buildNavTile(context,
+              icon: Icons.swap_horiz,
+              label: 'transfers'.tr(),
+              route: '/transfers'),
+          _buildNavTile(context,
+              icon: Icons.swap_horiz, label: 'files'.tr(), route: '/files'),
         ],
       ),
     );
   }
 
-  Widget _buildNavTile(BuildContext context, {
+  Widget _buildNavTile(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required String route,
   }) {
-    final bool isActive = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString() == route;
+    final bool isActive = GoRouter.of(context)
+            .routerDelegate
+            .currentConfiguration
+            .uri
+            .toString() ==
+        route;
 
     final color = isActive
         ? Theme.of(context).colorScheme.primary
@@ -54,5 +74,4 @@ class MenuDrawer extends StatelessWidget {
       },
     );
   }
-
 }

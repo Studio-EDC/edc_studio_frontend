@@ -8,8 +8,9 @@ class EndpointsApi {
 
 class ApiRoutes {
   static final String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
-  
+
   static final edc = '$localBase/connectors';
+  static final federatedParticipants = '$localBase/federated-participants';
   static final assets = '$localBase/assets';
   static final policies = '$localBase/policies';
   static final contracts = '$localBase/contracts';

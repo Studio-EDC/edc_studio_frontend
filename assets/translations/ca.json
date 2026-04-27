@@ -1,5 +1,6 @@
 {
   "edc_list": "Llista d'EDC",
+  "federated_participants": "Participants federats",
   "assets": "Actius",
   "policies": "Polítiques",
   "contracts": "Contractes",
@@ -58,6 +59,39 @@
     "stop": "Atura",
     "start": "Inicia",
     "see_details": "Veure detalls"
+  },
+  "federated_list_page": {
+    "search": "Cercar participant federat",
+    "new_participant": "Nou participant federat",
+    "empty": "No s'han trobat participants federats.",
+    "deleted": "Participant federat eliminat correctament."
+  },
+  "federated_form": {
+    "new_title": "Nou participant federat",
+    "detail_title": "Detall del participant federat",
+    "status": "Estat",
+    "connector": "Connector",
+    "participant_did": "participantDID",
+    "legal_name": "Raó social",
+    "lrn": "Valor LRN",
+    "headquarter_country": "Codi país seu",
+    "legal_country": "Codi país legal",
+    "public_domain": "Domini públic",
+    "protocol_endpoint": "Protocol endpoint",
+    "notes": "Notes",
+    "checklist": "Checklist manual",
+    "did_published": "He publicat el did.json",
+    "registered": "He registrat el participant a edc-manager",
+    "credentials_installed": "He instal·lat les credencials",
+    "validate_did": "Validar DID",
+    "back_to_list": "Tornar al llistat",
+    "created": "Participant federat creat correctament.",
+    "updated": "Participant federat actualitzat correctament.",
+    "did_document": "did.json generat",
+    "did_document_url": "URL esperada del did.json",
+    "manual_payload": "Payload manual per a edc-manager",
+    "manual_curl": "curl manual per a edc-manager",
+    "did_validation": "Resultat de validació del DID"
   },
   "assets_list_page": {
     "description": "El connector proveïdor és qui gestiona els actius per als quals es pot executar una negociació de contracte. Selecciona el proveïdor del qual vols veure els actius:",

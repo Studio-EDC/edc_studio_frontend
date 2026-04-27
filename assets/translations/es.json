@@ -1,5 +1,6 @@
 {
   "edc_list": "Lista de EDC",
+  "federated_participants": "Participantes federados",
   "assets": "Recursos",
   "policies": "Políticas",
   "contracts": "Contratos",
@@ -58,6 +59,39 @@
     "stop": "Detener",
     "start": "Iniciar",
     "see_details": "Ver detalles"
+  },
+  "federated_list_page": {
+    "search": "Buscar participante federado",
+    "new_participant": "Nuevo participante federado",
+    "empty": "No se encontraron participantes federados.",
+    "deleted": "Participante federado eliminado correctamente."
+  },
+  "federated_form": {
+    "new_title": "Nuevo participante federado",
+    "detail_title": "Detalle del participante federado",
+    "status": "Estado",
+    "connector": "Conector",
+    "participant_did": "participantDID",
+    "legal_name": "Razón social",
+    "lrn": "LRN value",
+    "headquarter_country": "Código país sede",
+    "legal_country": "Código país legal",
+    "public_domain": "Dominio público",
+    "protocol_endpoint": "Protocol endpoint",
+    "notes": "Notas",
+    "checklist": "Checklist manual",
+    "did_published": "He publicado el did.json",
+    "registered": "He registrado el participante en edc-manager",
+    "credentials_installed": "He instalado las credenciales",
+    "validate_did": "Validar DID",
+    "back_to_list": "Volver al listado",
+    "created": "Participante federado creado correctamente.",
+    "updated": "Participante federado actualizado correctamente.",
+    "did_document": "did.json generado",
+    "did_document_url": "URL esperada del did.json",
+    "manual_payload": "Payload manual para edc-manager",
+    "manual_curl": "curl manual para edc-manager",
+    "did_validation": "Resultado de validación del DID"
   },
   "assets_list_page": {
     "description": "El conector proveedor es el que gestiona los recursos para los que se puede ejecutar una negociación de contrato. Así que selecciona el proveedor del que deseas ver los recursos:",
