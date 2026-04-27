@@ -337,7 +337,12 @@ class _FederatedParticipantEditorPageState
                           ],
                           const SizedBox(height: 24),
                           DropdownButtonFormField<String>(
-                            initialValue: _selectedConnectorId,
+                            value: _connectors.any(
+                              (connector) =>
+                                  connector.id == _selectedConnectorId,
+                            )
+                                ? _selectedConnectorId
+                                : null,
                             decoration:
                                 _inputStyle('federated_form.connector'.tr()),
                             items: _connectors.map((connector) {
