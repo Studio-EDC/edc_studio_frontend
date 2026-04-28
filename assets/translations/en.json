@@ -198,7 +198,7 @@
       "credentials": "Bundle credentials",
       "no_credentials": "No credentials have been imported for this connector yet.",
       "not_imported": "No ZIP imported",
-      "restart_required": "The connector is currently running. Restart it so the next boot uses the updated Vault and credential preparation.",
+      "restart_required": "The shared Identity Hub is currently running. Restart it so its next boot loads the updated Vault and credential preparation.",
       "import_button": "Import credential ZIP",
       "importing": "Importing...",
       "import_success": "Credential ZIP imported successfully.",

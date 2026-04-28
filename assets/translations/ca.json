@@ -198,7 +198,7 @@
       "credentials": "Credencials del bundle",
       "no_credentials": "Encara no hi ha credencials importades per a aquest connector.",
       "not_imported": "Sense ZIP importat",
-      "restart_required": "El connector està en execució. Reinicia'l perquè el proper arrencada utilitzi la nova preparació de Vault i credencials.",
+      "restart_required": "L'Identity Hub compartit està en execució. Reinicia'l perquè al proper arrencada carregui la nova preparació de Vault i credencials.",
       "import_button": "Importar ZIP de credencials",
       "importing": "Important...",
       "import_success": "ZIP de credencials importat correctament.",

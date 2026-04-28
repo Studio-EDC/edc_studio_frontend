@@ -198,7 +198,7 @@
       "credentials": "Credenciales del bundle",
       "no_credentials": "Todavía no hay credenciales importadas para este conector.",
       "not_imported": "Sin ZIP importado",
-      "restart_required": "El conector está en ejecución. Reinícialo para que el siguiente arranque use la nueva preparación de Vault y credenciales.",
+      "restart_required": "El Identity Hub compartido está en ejecución. Reinícialo para que su siguiente arranque cargue la nueva preparación de Vault y credenciales.",
       "import_button": "Importar ZIP de credenciales",
       "importing": "Importando...",
       "import_success": "ZIP de credenciales importado correctamente.",
