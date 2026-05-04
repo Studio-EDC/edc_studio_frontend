@@ -239,6 +239,36 @@ class _FederatedParticipantEditorPageState
     }
   }
 
+  Future<void> _generateDatagoraCredentials() async {
+    if (_isCreate || widget.participantId == null) {
+      return;
+    }
+
+    showLoader(context);
+    try {
+      await _service.issueCredentials(
+        widget.participantId!,
+        provider: 'datagora_internal',
+      );
+      await _reloadGeneratedData(widget.participantId!);
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: 'federated_form.generate_success'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+      );
+    } catch (e) {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()} $e',
+        type: SnackBarType.error,
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
   Future<void> _uploadCredentials() async {
     if (_isCreate || widget.participantId == null) {
       return;
@@ -746,6 +776,12 @@ class _FederatedParticipantEditorPageState
                               spacing: 12,
                               runSpacing: 12,
                               children: [
+                                ElevatedButton.icon(
+                                  onPressed: _generateDatagoraCredentials,
+                                  icon: const Icon(Icons.auto_awesome_outlined),
+                                  label: Text(
+                                      'federated_form.generate_datagora'.tr()),
+                                ),
                                 ElevatedButton.icon(
                                   onPressed: _issueCredentials,
                                   icon: const Icon(Icons.verified_outlined),
