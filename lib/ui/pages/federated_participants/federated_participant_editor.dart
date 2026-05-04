@@ -11,6 +11,7 @@ import 'package:edc_studio/ui/widgets/header.dart';
 import 'package:edc_studio/ui/widgets/loader.dart';
 import 'package:edc_studio/ui/widgets/menu_drawer.dart';
 import 'package:edc_studio/ui/widgets/snack_bar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -128,6 +129,13 @@ class _FederatedParticipantEditorPageState
     return null;
   }
 
+  String _formatDateTime(DateTime? value) {
+    if (value == null) {
+      return '-';
+    }
+    return value.toLocal().toString();
+  }
+
   Future<void> _reloadGeneratedData(String id) async {
     final didDocumentData = await _service.getDidDocument(id);
     final manualRegistrationData = await _service.getManualRegistration(id);
@@ -190,6 +198,128 @@ class _FederatedParticipantEditorPageState
       FloatingSnackBar.show(
         context,
         message: 'federated_form.updated'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+      );
+    } catch (e) {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()} $e',
+        type: SnackBarType.error,
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
+  Future<void> _issueCredentials() async {
+    if (_isCreate || widget.participantId == null) {
+      return;
+    }
+
+    showLoader(context);
+    try {
+      await _service.issueCredentials(widget.participantId!);
+      await _reloadGeneratedData(widget.participantId!);
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: 'federated_form.issue_success'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+      );
+    } catch (e) {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()} $e',
+        type: SnackBarType.error,
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
+  Future<void> _uploadCredentials() async {
+    if (_isCreate || widget.participantId == null) {
+      return;
+    }
+
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['zip'],
+      withData: true,
+    );
+    if (result == null || result.files.isEmpty) {
+      return;
+    }
+
+    showLoader(context);
+    try {
+      await _service.uploadCredentials(widget.participantId!, result.files.first);
+      await _reloadGeneratedData(widget.participantId!);
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: 'federated_form.upload_success'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+      );
+    } catch (e) {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()} $e',
+        type: SnackBarType.error,
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
+  Future<void> _downloadCredentials() async {
+    if (_isCreate || widget.participantId == null) {
+      return;
+    }
+
+    final fileName =
+        _participant?.credentials?.fileName ?? 'participant-credentials.zip';
+
+    showLoader(context);
+    try {
+      await _service.downloadCredentials(
+        widget.participantId!,
+        suggestedFileName: fileName,
+      );
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: 'federated_form.download_success'.tr(),
+        type: SnackBarType.success,
+        duration: const Duration(seconds: 3),
+      );
+    } catch (e) {
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: '${'general_error'.tr()} $e',
+        type: SnackBarType.error,
+        duration: const Duration(seconds: 4),
+      );
+    }
+  }
+
+  Future<void> _importCredentialsToConnector() async {
+    if (_isCreate || widget.participantId == null) {
+      return;
+    }
+
+    showLoader(context);
+    try {
+      await _service.importCredentialsToConnector(widget.participantId!);
+      await _reloadGeneratedData(widget.participantId!);
+      hideLoader(context);
+      FloatingSnackBar.show(
+        context,
+        message: 'federated_form.import_success'.tr(),
         type: SnackBarType.success,
         duration: const Duration(seconds: 3),
       );
@@ -277,6 +407,105 @@ class _FederatedParticipantEditorPageState
     return _buildJsonPanel(
       'federated_form.did_validation'.tr(),
       rows.join('\n'),
+    );
+  }
+
+  Color _credentialStatusColor(String status) {
+    switch (status) {
+      case 'IMPORTED':
+        return Colors.teal;
+      case 'READY':
+        return Colors.green;
+      case 'FAILED':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Widget _buildCredentialPanel() {
+    final credentials = _participant?.credentials;
+    if (credentials == null) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF7F7F9),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE1E1E8)),
+        ),
+        child: Text('federated_form.no_bundle'.tr()),
+      );
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7F7F9),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE1E1E8)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'federated_form.credential_bundle'.tr(),
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(width: 12),
+              Chip(
+                label: Text(credentials.status),
+                backgroundColor:
+                    _credentialStatusColor(credentials.status).withOpacity(0.12),
+                labelStyle: TextStyle(
+                  color: _credentialStatusColor(credentials.status),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SelectableText(
+            [
+              '${'federated_form.credential_provider'.tr()}: ${credentials.provider}',
+              '${'federated_form.credential_file'.tr()}: ${credentials.fileName ?? '-'}',
+              '${'federated_form.credential_count'.tr()}: ${credentials.credentialCount}',
+              '${'federated_form.bundle_participant_did'.tr()}: ${credentials.participantDid ?? '-'}',
+              '${'federated_form.source_url'.tr()}: ${credentials.sourceUrl ?? '-'}',
+              '${'federated_form.issued_at'.tr()}: ${_formatDateTime(credentials.issuedAt)}',
+              '${'federated_form.imported_at'.tr()}: ${_formatDateTime(credentials.importedToConnectorAt)}',
+              '${'federated_form.imported_by'.tr()}: ${credentials.importedToConnectorBy ?? '-'}',
+              '${'federated_form.last_error'.tr()}: ${credentials.lastError ?? '-'}',
+            ].join('\n'),
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 13),
+          ),
+          if (credentials.credentials.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(
+              'federated_form.bundle_credentials'.tr(),
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            ...credentials.credentials.map(
+              (credential) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: SelectableText(
+                  [
+                    credential.fileName,
+                    '${'federated_form.credential_type'.tr()}: ${credential.credentialType ?? '-'}',
+                    '${'federated_form.credential_id'.tr()}: ${credential.credentialId ?? '-'}',
+                    '${'federated_form.issuer_id'.tr()}: ${credential.issuerId ?? '-'}',
+                    '${'federated_form.subject_id'.tr()}: ${credential.subjectId ?? '-'}',
+                  ].join('\n'),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 13),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -494,6 +723,60 @@ class _FederatedParticipantEditorPageState
                               ),
                             ],
                           ),
+                          if (!_isCreate) ...[
+                            const SizedBox(height: 32),
+                            Text(
+                              'federated_form.credentials_section'.tr(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            _buildCredentialPanel(),
+                            const SizedBox(height: 16),
+                            Text(
+                              'federated_form.credentials_hint'.tr(),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 12,
+                              runSpacing: 12,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: _issueCredentials,
+                                  icon: const Icon(Icons.verified_outlined),
+                                  label:
+                                      Text('federated_form.issue_upcxels'.tr()),
+                                ),
+                                OutlinedButton.icon(
+                                  onPressed: _uploadCredentials,
+                                  icon: const Icon(Icons.upload_file_outlined),
+                                  label:
+                                      Text('federated_form.upload_bundle'.tr()),
+                                ),
+                                OutlinedButton.icon(
+                                  onPressed: _participant?.credentials == null
+                                      ? null
+                                      : _downloadCredentials,
+                                  icon: const Icon(Icons.download_outlined),
+                                  label: Text(
+                                      'federated_form.download_bundle'.tr()),
+                                ),
+                                OutlinedButton.icon(
+                                  onPressed: _participant?.credentials == null
+                                      ? null
+                                      : _importCredentialsToConnector,
+                                  icon: const Icon(Icons.input_outlined),
+                                  label: Text(
+                                      'federated_form.import_bundle'.tr()),
+                                ),
+                              ],
+                            ),
+                          ],
                           if (!_isCreate &&
                               _didDocumentData != null &&
                               _manualRegistrationData != null) ...[

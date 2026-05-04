@@ -54,12 +54,20 @@ class _FederatedParticipantListPageState
     switch (status) {
       case 'READY':
         return Colors.green;
+      case 'CREDENTIALS_READY':
+        return Colors.lightGreen;
+      case 'PENDING_CONNECTOR_IMPORT':
+        return Colors.teal;
       case 'CREDENTIALS_INSTALLED':
         return Colors.teal;
       case 'REGISTERED_IN_EDC_MANAGER':
         return Colors.orange;
       case 'DID_READY':
         return Colors.blue;
+      case 'PENDING_CREDENTIALS':
+        return Colors.deepOrange;
+      case 'FAILED':
+        return Colors.red;
       default:
         return Colors.grey;
     }
@@ -148,6 +156,10 @@ class _FederatedParticipantListPageState
                                 if (participant.connectorName != null)
                                   Text(
                                       '${'federated_form.connector'.tr()}: ${participant.connectorName}'),
+                                if (participant.credentials != null)
+                                  Text(
+                                    '${'federated_form.credential_bundle'.tr()}: ${participant.credentials!.status} (${participant.credentials!.provider})',
+                                  ),
                               ],
                             ),
                             trailing: Wrap(

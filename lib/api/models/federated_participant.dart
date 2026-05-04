@@ -26,6 +26,83 @@ class ManualChecklist {
   }
 }
 
+class CredentialBundleCredential {
+  final String fileName;
+  final String? credentialType;
+  final String? credentialId;
+  final String? issuerId;
+  final String? subjectId;
+
+  CredentialBundleCredential({
+    required this.fileName,
+    this.credentialType,
+    this.credentialId,
+    this.issuerId,
+    this.subjectId,
+  });
+
+  factory CredentialBundleCredential.fromJson(Map<String, dynamic> json) {
+    return CredentialBundleCredential(
+      fileName: json['file_name'] ?? '',
+      credentialType: json['credential_type'],
+      credentialId: json['credential_id'],
+      issuerId: json['issuer_id'],
+      subjectId: json['subject_id'],
+    );
+  }
+}
+
+class CredentialBundleInfo {
+  final String provider;
+  final String status;
+  final String? fileName;
+  final String? participantDid;
+  final String? sourceUrl;
+  final DateTime? issuedAt;
+  final DateTime? importedToConnectorAt;
+  final String? importedToConnectorBy;
+  final int credentialCount;
+  final List<CredentialBundleCredential> credentials;
+  final String? lastError;
+
+  CredentialBundleInfo({
+    required this.provider,
+    required this.status,
+    this.fileName,
+    this.participantDid,
+    this.sourceUrl,
+    this.issuedAt,
+    this.importedToConnectorAt,
+    this.importedToConnectorBy,
+    required this.credentialCount,
+    required this.credentials,
+    this.lastError,
+  });
+
+  factory CredentialBundleInfo.fromJson(Map<String, dynamic> json) {
+    return CredentialBundleInfo(
+      provider: json['provider'] ?? 'unknown',
+      status: json['status'] ?? 'MISSING',
+      fileName: json['file_name'],
+      participantDid: json['participant_did'],
+      sourceUrl: json['source_url'],
+      issuedAt: json['issued_at'] != null
+          ? DateTime.tryParse(json['issued_at'])
+          : null,
+      importedToConnectorAt: json['imported_to_connector_at'] != null
+          ? DateTime.tryParse(json['imported_to_connector_at'])
+          : null,
+      importedToConnectorBy: json['imported_to_connector_by'],
+      credentialCount: json['credential_count'] ?? 0,
+      credentials: (json['credentials'] as List<dynamic>? ?? [])
+          .map((item) => CredentialBundleCredential.fromJson(
+              item as Map<String, dynamic>))
+          .toList(),
+      lastError: json['last_error'],
+    );
+  }
+}
+
 class FederatedParticipant {
   final String id;
   final String participantDid;
@@ -39,6 +116,7 @@ class FederatedParticipant {
   final String? protocolEndpoint;
   final String? notes;
   final ManualChecklist checklist;
+  final CredentialBundleInfo? credentials;
   final String status;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -56,6 +134,7 @@ class FederatedParticipant {
     this.protocolEndpoint,
     this.notes,
     required this.checklist,
+    this.credentials,
     required this.status,
     this.createdAt,
     this.updatedAt,
@@ -75,6 +154,11 @@ class FederatedParticipant {
       protocolEndpoint: json['protocol_endpoint'],
       notes: json['notes'],
       checklist: ManualChecklist.fromJson(json['checklist'] ?? {}),
+      credentials: json['credentials'] != null
+          ? CredentialBundleInfo.fromJson(
+              json['credentials'] as Map<String, dynamic>,
+            )
+          : null,
       status: json['status'] ?? 'DRAFT',
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
