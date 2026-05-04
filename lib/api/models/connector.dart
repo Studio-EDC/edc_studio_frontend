@@ -177,6 +177,7 @@ class Connector {
   final String? api_key;
   final Endpoints? endpoints_url;
   final String? domain;
+  final String? participant_id;
   final IdentityHubStatus? identity_hub;
 
   Connector({
@@ -190,6 +191,7 @@ class Connector {
     this.api_key,
     this.endpoints_url,
     this.domain,
+    this.participant_id,
     this.identity_hub,
   });
 
@@ -205,6 +207,7 @@ class Connector {
       api_key: json['api_key'],
       endpoints_url: json['endpoints_url'] != null ? Endpoints.fromJson(json['endpoints_url']) : null,
       domain: json['domain'],
+      participant_id: json['participant_id'],
       identity_hub: json['identity_hub'] != null ? IdentityHubStatus.fromJson(json['identity_hub']) : null,
     );
   }
@@ -221,6 +224,7 @@ class Connector {
       'api_key': api_key,
       'endpoints_url': endpoints_url?.toJson(),
       'domain': domain,
+      'participant_id': participant_id,
       'identity_hub': identity_hub?.toJson(),
     };
   }

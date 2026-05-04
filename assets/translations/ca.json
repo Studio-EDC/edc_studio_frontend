@@ -175,6 +175,7 @@
     "provider": "Proveïdor",
     "keystore_password": "Contrasenya del keystore",
     "api_key": "API key",
+    "participant_id": "Participant ID / DID",
     "management_url": "URL de l'endpoint de gestió",
     "protocol_url": "URL de l'endpoint de protocol",
     "public_url": "URL de l'endpoint de public",

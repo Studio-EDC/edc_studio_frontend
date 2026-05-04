@@ -36,6 +36,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
   final _protocolEndpointUrlController = TextEditingController();
   final _publicEndpointUrlController = TextEditingController();
   final _domainController = TextEditingController();
+  final _participantIdController = TextEditingController();
 
   final _portControllers = {
     'http': TextEditingController(),
@@ -81,6 +82,11 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                   _connectorType = connector.type;
                   _mode = connector.mode;
                   _domainController.text = connector.domain ?? '';
+                  _participantIdController.text =
+                      connector.participant_id ??
+                      connector.identity_hub?.participant_context_did ??
+                      '';
+                  _apiKeyController.text = connector.api_key ?? '';
 
                   if (connector.mode == 'managed' && connector.ports != null) {
                     _portControllers['http']!.text = connector.ports!.http.toString();
@@ -89,7 +95,6 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                     _portControllers['control']!.text = connector.ports!.control.toString();
                     _portControllers['public']!.text = connector.ports!.public.toString();
                     _portControllers['version']!.text = connector.ports!.version.toString();
-                    _apiKeyController.text = connector.api_key ?? '';
                   }
 
                   if (connector.mode == 'remote' && connector.endpoints_url != null) {
@@ -166,6 +171,11 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                               decoration: _inputStyle('connector_detail_page.description'.tr()),
                             ),
                             const SizedBox(height: 24),
+                            TextFormField(
+                              controller: _participantIdController,
+                              decoration: _inputStyle('connector_detail_page.participant_id'.tr()),
+                            ),
+                            const SizedBox(height: 24),
                             Text(
                               'connector_detail_page.connector_type'.tr(),
                               style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.secondary),
@@ -211,6 +221,12 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                 decoration: _inputStyle('connector_detail_page.domain'.tr()),
                               ),
                             ] else if (_mode == 'remote') ...[
+                              TextFormField(
+                                controller: _apiKeyController,
+                                obscureText: true,
+                                decoration: _inputStyle('connector_detail_page.api_key'.tr()),
+                              ),
+                              const SizedBox(height: 16),
                               TextFormField(
                                 controller: _managementEndpointUrlController,
                                 decoration: _inputStyle('connector_detail_page.management_url'.tr()),
@@ -279,6 +295,7 @@ class _EDCDetailPageState extends State<EDCDetailPage> {
                                       state: connector.state,
                                       endpoints_url: endpoints,
                                       domain: _domainController.text.isNotEmpty ? _domainController.text : '',
+                                      participant_id: _participantIdController.text.isNotEmpty ? _participantIdController.text : null,
                                       identity_hub: connector.identity_hub,
                                     );
 

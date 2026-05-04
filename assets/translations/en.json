@@ -175,6 +175,7 @@
     "provider": "Provider",
     "keystore_password": "Keystore Password",
     "api_key": "API key",
+    "participant_id": "Participant ID / DID",
     "management_url": "Management endpoint URL",
     "protocol_url": "Protocol endpoint URL",
     "public_url": "Public endpoint URL",

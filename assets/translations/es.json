@@ -175,6 +175,7 @@
     "provider": "Proveedor",
     "keystore_password": "Contraseña del almacén de claves",
     "api_key": "API key",
+    "participant_id": "Participant ID / DID",
     "management_url": "URL del endpoint de gestión",
     "protocol_url": "URL del endpoint de protocolo",
     "public_url": "URL del endpoint público",

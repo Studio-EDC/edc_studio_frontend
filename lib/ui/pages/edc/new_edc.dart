@@ -32,6 +32,7 @@ class _NewEDCPageState extends State<NewEDCPage> {
   final _protocolEndpointUrlController = TextEditingController();
   final _publicEndpointUrlController = TextEditingController();
   final _domainController = TextEditingController();
+  final _participantIdController = TextEditingController();
 
   final _portControllers = {
     'http': TextEditingController(),
@@ -136,6 +137,12 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                 controller: _descriptionController,
                                 validator: requiredValidator,
                                 decoration: _inputStyle('connector_detail_page.description'.tr()),
+                              ),
+                              const SizedBox(height: 24),
+
+                              TextFormField(
+                                controller: _participantIdController,
+                                decoration: _inputStyle('connector_detail_page.participant_id'.tr()),
                               ),
                               const SizedBox(height: 24),
                   
@@ -259,7 +266,8 @@ class _NewEDCPageState extends State<NewEDCPage> {
                                         api_key: _apikeyController.text.isNotEmpty ? _apikeyController.text : null,
                                         state: 'stopped',
                                         endpoints_url: endpoints,
-                                        domain: _domainController.text.isNotEmpty ? _domainController.text : ''
+                                        domain: _domainController.text.isNotEmpty ? _domainController.text : '',
+                                        participant_id: _participantIdController.text.isNotEmpty ? _participantIdController.text : null,
                                       );
                   
                                       showLoader(context);
