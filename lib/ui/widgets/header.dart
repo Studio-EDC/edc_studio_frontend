@@ -106,7 +106,9 @@ class EDCHeader extends StatelessWidget {
                     child: TextButton(
                       onPressed: () => context.go(_pageToPath(item)),
                       child: Text(
-                        item.tr(),
+                        item == 'federated_catalogs'
+                            ? 'federated_catalogs_label'.tr()
+                            : item.tr(),
                         style: TextStyle(
                           color: isActive
                               ? Colors.white

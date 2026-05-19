@@ -28,7 +28,7 @@ class MenuDrawer extends StatelessWidget {
               route: '/federated-participants'),
           _buildNavTile(context,
               icon: Icons.travel_explore,
-              label: 'federated_catalogs'.tr(),
+              label: 'federated_catalogs_label'.tr(),
               route: '/federated-catalogs'),
           _buildNavTile(context,
               icon: Icons.layers, label: 'assets'.tr(), route: '/assets'),

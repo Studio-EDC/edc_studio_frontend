@@ -1,7 +1,7 @@
 {
   "edc_list": "EDC List",
   "federated_participants": "Federated participants",
-  "federated_catalogs": "Federated catalogs",
+  "federated_catalogs_label": "Federated catalogs",
   "assets": "Assets",
   "policies": "Policies",
   "contracts": "Contracts",
