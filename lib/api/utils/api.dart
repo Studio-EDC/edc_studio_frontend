@@ -10,6 +10,8 @@ class ApiRoutes {
   static final String localBase = dotenv.env['ENDPOINT_BASE'] ?? '';
 
   static final edc = '$localBase/connectors';
+  static final federatedCatalogInstances =
+      '$localBase/federated-catalog-instances';
   static final federatedParticipants = '$localBase/federated-participants';
   static final assets = '$localBase/assets';
   static final policies = '$localBase/policies';

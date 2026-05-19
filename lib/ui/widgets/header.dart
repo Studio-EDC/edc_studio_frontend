@@ -17,6 +17,8 @@ class EDCHeader extends StatelessWidget {
         return '/';
       case 'federated_participants':
         return '/federated-participants';
+      case 'federated_catalogs':
+        return '/federated-catalogs';
       case 'policies':
         return '/policies';
       case 'assets':
@@ -37,6 +39,7 @@ class EDCHeader extends StatelessWidget {
     final navItems = [
       'edc_list',
       'federated_participants',
+      'federated_catalogs',
       'assets',
       'policies',
       'contracts',

@@ -7,6 +7,8 @@ import 'package:edc_studio/ui/pages/contracts/new_contract.dart';
 import 'package:edc_studio/ui/pages/edc/edc_detail.dart';
 import 'package:edc_studio/ui/pages/edc/edc_list.dart';
 import 'package:edc_studio/ui/pages/edc/new_edc.dart';
+import 'package:edc_studio/ui/pages/federated_catalogs/federated_catalog_editor.dart';
+import 'package:edc_studio/ui/pages/federated_catalogs/federated_catalog_list.dart';
 import 'package:edc_studio/ui/pages/federated_participants/federated_participant_editor.dart';
 import 'package:edc_studio/ui/pages/federated_participants/federated_participant_list.dart';
 import 'package:edc_studio/ui/pages/files/files_list.dart';
@@ -66,6 +68,30 @@ GoRouter createRouter() {
             key: state.pageKey,
             child: const NewEDCPage(),
           ),
+        ),
+        GoRoute(
+          path: '/federated-catalogs',
+          pageBuilder: (context, state) => _buildFadeTransition(
+            key: state.pageKey,
+            child: const FederatedCatalogListPage(),
+          ),
+        ),
+        GoRoute(
+          path: '/federated-catalogs/new',
+          pageBuilder: (context, state) => _buildFadeTransition(
+            key: state.pageKey,
+            child: const FederatedCatalogEditorPage(),
+          ),
+        ),
+        GoRoute(
+          path: '/federated-catalogs/:id',
+          pageBuilder: (context, state) {
+            final id = state.pathParameters['id']!;
+            return _buildFadeTransition(
+              key: state.pageKey,
+              child: FederatedCatalogEditorPage(instanceId: id),
+            );
+          },
         ),
         GoRoute(
           path: '/federated-participants',
